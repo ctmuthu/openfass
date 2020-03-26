@@ -15,8 +15,6 @@ sleep 1
 
 sudo apt-key fingerprint 0EBFCD88
 
-echo "Muthu"
-
 sleep 1
 
 sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
@@ -25,7 +23,6 @@ sleep 1
 
 sudo apt-get update -y
 
-echo "Muthu2"
 
 #sudo apt-get install -y docker-ce=17.03.2~ce-0~ubuntu-xenial
   #containerd.io=1.2.10-3 \

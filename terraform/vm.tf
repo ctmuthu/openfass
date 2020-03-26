@@ -57,6 +57,14 @@ resource "aws_instance" "Master" {
     source      = "./kubeadm.sh"
     destination = "/home/ubuntu/kubeadm.sh"
   }
+  provisioner "file" {
+    source      = "./weave.sh"
+    destination = "/home/ubuntu/weave.sh"
+  }
+  provisioner "file" {
+    source      = "./openfaas.sh"
+    destination = "/home/ubuntu/openfaas.sh"
+  }
   connection {
     type        = "ssh"
     user        = "ubuntu"
@@ -78,12 +86,13 @@ resource "aws_instance" "Master" {
       "mkdir -p $HOME/.kube",
       "sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config",
       "sudo chown $(id -u):$(id -g) $HOME/.kube/config",
-      "kubectl apply -f 'https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')'",
+      "sudo sh weave.sh",
       "sudo kubeadm token create --print-join-command | grep 'kubeadm join' | grep 'kubeadm join' > join.sh",
       "scp -oStrictHostKeyChecking=no -i id_rsa join.sh ubuntu@${aws_instance.Worker[0].private_ip}:/home/ubuntu/join.sh",
       "scp -oStrictHostKeyChecking=no -i id_rsa join.sh ubuntu@${aws_instance.Worker[1].private_ip}:/home/ubuntu/join.sh",
       "ssh -oStrictHostKeyChecking=no -i id_rsa ubuntu@${aws_instance.Worker[0].private_ip} 'sudo sh join.sh; '",
-      "ssh -oStrictHostKeyChecking=no -i id_rsa ubuntu@${aws_instance.Worker[1].private_ip} 'sudo sh join.sh; '"
+      "ssh -oStrictHostKeyChecking=no -i id_rsa ubuntu@${aws_instance.Worker[1].private_ip} 'sudo sh join.sh; '",
+      "sudo sh openfaas.sh"
       ]
   }
   tags = {
