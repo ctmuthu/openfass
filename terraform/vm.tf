@@ -113,3 +113,7 @@ resource "aws_instance" "Master" {
     Name = var.master_nodes[count.index]
   }
 }
+
+output "master_ip" {
+  value = aws_instance.Master[0].public_ip
+}

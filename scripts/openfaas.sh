@@ -12,6 +12,8 @@ kubectl -n openfaas create secret generic basic-auth \
 --from-literal=basic-auth-user=admin \
 --from-literal=basic-auth-password="$PASSWORD"
 
+sudo cp ../prometheus/prometheus-cfg.yml ../faas-netes/yaml/prometheus-cfg.yml
+
 cd faas-netes && \
 kubectl apply -f ./yaml
 
