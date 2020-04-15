@@ -22,5 +22,5 @@ resource "grafana_dashboard" "Dashboard2" {
 }
 
 resource "grafana_dashboard" "Kube_Dashboard" {
-  config_json = "${file("kubernetes_dashboard.json")}"
+  config_json = "${file("pod-metrics_rev2.json")}"
 }

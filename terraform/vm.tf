@@ -50,29 +50,15 @@ resource "aws_instance" "Master" {
   subnet_id     = "${aws_subnet.private_subnet.id}"
   #private_ip = var.master_nodes_private_ip[count.index]
   provisioner "local-exec" {
-    command = "cd .. && tar -zcvf scripts.tar.gz scripts"
-  }
-  provisioner "local-exec" {
-    command = "cd .. && tar -zcvf grafana.tar.gz grafana"
-  }
-  provisioner "local-exec" {
-    command = "cd .. && tar -zcvf prometheus.tar.gz prometheus"
+    command = "cd .. && tar -zcvf folders.tar.gz $(ls -d */)"
   }
   provisioner "file" {
     source      = "~/.ssh/id_rsa"
     destination = "/home/ubuntu/id_rsa"
   }
   provisioner "file" {
-    source      = "../scripts.tar.gz"
-    destination = "/home/ubuntu/scripts.tar.gz"
-  }
-  provisioner "file" {
-    source      = "../prometheus.tar.gz"
-    destination = "/home/ubuntu/prometheus.tar.gz"
-  }
-  provisioner "file" {
-    source      = "../grafana.tar.gz"
-    destination = "/home/ubuntu/grafana.tar.gz"
+    source      = "../folders.tar.gz"
+    destination = "/home/ubuntu/folders.tar.gz"
   }
   connection {
     type        = "ssh"
@@ -85,13 +71,14 @@ resource "aws_instance" "Master" {
       "sudo apt-get -y update",
       "sudo bash -c 'echo 1 > /proc/sys/net/ipv4/ip_forward'",
       "cd /home/ubuntu",
-      "tar -zxvf scripts.tar.gz",
-      "tar -zxvf grafana.tar.gz",
-      "tar -zxvf prometheus.tar.gz",
+      "tar -zxvf folders.tar.gz",
+      "rm -rf *.tar.gz",
       "sudo chmod 600 id_rsa",
       "sudo sh ./scripts/kubeadm.sh",
       "scp -oStrictHostKeyChecking=no -i id_rsa ./scripts/kubeadm.sh ubuntu@${aws_instance.Worker[0].private_ip}:/home/ubuntu/kubeadm.sh",
       "scp -oStrictHostKeyChecking=no -i id_rsa ./scripts/kubeadm.sh ubuntu@${aws_instance.Worker[1].private_ip}:/home/ubuntu/kubeadm.sh",
+      "scp -R -oStrictHostKeyChecking=no -i id_rsa ./kubernetes-metric-server ubuntu@${aws_instance.Worker[0].private_ip}:/home/ubuntu/kubernetes-metric-server",
+      "scp -R -oStrictHostKeyChecking=no -i id_rsa ./kubernetes-metric-server ubuntu@${aws_instance.Worker[1].private_ip}:/home/ubuntu/kubernetes-metric-server",
       "ssh -oStrictHostKeyChecking=no -i id_rsa ubuntu@${aws_instance.Worker[0].private_ip} 'sudo sh kubeadm.sh; '",
       "ssh -oStrictHostKeyChecking=no -i id_rsa ubuntu@${aws_instance.Worker[1].private_ip} 'sudo sh kubeadm.sh; '",
       "sudo kubeadm init",
@@ -102,12 +89,16 @@ resource "aws_instance" "Master" {
       "sudo kubeadm token create --print-join-command | grep 'kubeadm join' | grep 'kubeadm join' > join.sh",
       "scp -oStrictHostKeyChecking=no -i id_rsa join.sh ubuntu@${aws_instance.Worker[0].private_ip}:/home/ubuntu/join.sh",
       "scp -oStrictHostKeyChecking=no -i id_rsa join.sh ubuntu@${aws_instance.Worker[1].private_ip}:/home/ubuntu/join.sh",
-      "ssh -oStrictHostKeyChecking=no -i id_rsa ubuntu@${aws_instance.Worker[0].private_ip} 'sudo sh join.sh; '",
-      "ssh -oStrictHostKeyChecking=no -i id_rsa ubuntu@${aws_instance.Worker[1].private_ip} 'sudo sh join.sh; '",
+      "ssh -oStrictHostKeyChecking=no -i id_rsa ubuntu@${aws_instance.Worker[0].private_ip} 'sudo sh join.sh ; '",
+      "ssh -oStrictHostKeyChecking=no -i id_rsa ubuntu@${aws_instance.Worker[1].private_ip} 'sudo sh join.sh ; '",
+      "echo 'nameserver 10.96.0.10' > sudo /etc/resolv.conf",
       "sudo sh ./scripts/openfaas.sh",
       "sudo sh ./prometheus/prometheus.sh",
       "sudo sh ./grafana/grafana.sh"
       ]
+  }
+  provisioner "local-exec" {
+    command = "cd .. && rm -rf *.tar.gz"
   }
   tags = {
     Name = var.master_nodes[count.index]
@@ -117,3 +108,6 @@ resource "aws_instance" "Master" {
 output "master_ip" {
   value = aws_instance.Master[0].public_ip
 }
+// "ssh -oStrictHostKeyChecking=no -i id_rsa ubuntu@${aws_instance.Worker[0].private_ip} 'sudo sh join.sh && kubectl apply -f kubernetes-metric-server/ ; '",
+      // "ssh -oStrictHostKeyChecking=no -i id_rsa ubuntu@${aws_instance.Worker[1].private_ip} 'sudo sh join.sh && kubectl apply -f kubernetes-metric-server/ ; '",
+      
