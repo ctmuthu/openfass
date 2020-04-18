@@ -3,7 +3,7 @@ import { sleep } from 'k6';
 const data = JSON.parse(open("../terraform/config.json"));
 export let options = {
     vus: 100,
-    duration: '90s',
+    duration: '60s',
   };
 
 export default function() {

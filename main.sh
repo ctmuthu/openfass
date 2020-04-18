@@ -5,5 +5,5 @@ cd ../grafana
 terraform destroy --auto-approve && terraform apply --auto-approve
 sleep 60
 cd ../k6
-k6 run script.js
+k6 run --out influxdb=http://138.246.234.122:8086/myk6db script.js
 cat ../terraform/config.json
