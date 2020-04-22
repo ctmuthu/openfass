@@ -21,17 +21,17 @@ resource "grafana_data_source" "influxdb" {
 }
 
 resource "grafana_dashboard" "Dashboard1" {
-  config_json = "${file("faas_rev4.json")}"
+  config_json = file("faas_rev4.json")
 }
 
 resource "grafana_dashboard" "Dashboard2" {
-  config_json = "${file("faas_rev2.json")}"
+  config_json = file("faas_rev2.json")
 }
 
 resource "grafana_dashboard" "Kube_Dashboard" {
-  config_json = "${file("pod-metrics_rev2.json")}"
+  config_json = file("pod-metrics_rev2.json")
 }
 
 resource "grafana_dashboard" "K6_Dashboard" {
-  config_json = "${file("k6-load-testing-results_rev3.json")}"
+  config_json = file("k6-load-testing-results_rev3.json")
 }

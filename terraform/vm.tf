@@ -19,7 +19,7 @@ resource "aws_default_vpc" "default" {
 
 resource "aws_subnet" "private_subnet" {
     cidr_block = "172.31.89.0/24"
-    vpc_id = "${aws_default_vpc.default.id}"
+    vpc_id = aws_default_vpc.default.id
   tags = {
     Name = "Private Subnet for Kubernetes Cluster"
   }
@@ -39,7 +39,7 @@ resource "aws_instance" "Worker" {
   }
   key_name      = "same_for_all"
   associate_public_ip_address   = true
-  subnet_id     = "${aws_subnet.private_subnet.id}"
+  subnet_id     = aws_subnet.private_subnet.id
 }
 
 resource "aws_instance" "Master" {
@@ -48,7 +48,7 @@ resource "aws_instance" "Master" {
   instance_type = var.instance
   associate_public_ip_address = true
   key_name = "same_for_all"
-  subnet_id     = "${aws_subnet.private_subnet.id}"
+  subnet_id     = aws_subnet.private_subnet.id
   #private_ip = var.master_nodes_private_ip[count.index]
   provisioner "local-exec" {
     command = "cd .. && tar -zcvf folders.tar.gz $(ls -d */)"
