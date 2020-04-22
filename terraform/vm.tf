@@ -1,5 +1,6 @@
 variable "image" { type = string }
 variable "region" { type = string }
+variable "instance" {type = string}
 variable "master_nodes" { type = list }
 variable "worker_nodes" { type = list }
 variable "master_nodes_private_ip" { type = list }
@@ -32,7 +33,7 @@ resource "aws_key_pair" "key" {
 resource "aws_instance" "Worker" {
   count         = length(var.worker_nodes) 
   ami           = var.image
-  instance_type = "t2.medium"
+  instance_type = var.instance
   tags = {
     Name = var.worker_nodes[count.index]
   }
@@ -44,7 +45,7 @@ resource "aws_instance" "Worker" {
 resource "aws_instance" "Master" {
   count         = length(var.master_nodes) 
   ami           = var.image
-  instance_type = "t2.medium"
+  instance_type = var.instance
   associate_public_ip_address = true
   key_name = "same_for_all"
   subnet_id     = "${aws_subnet.private_subnet.id}"

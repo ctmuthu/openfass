@@ -10,8 +10,7 @@ export let options = {
   };
 
 export default function() {
-  var url = 'http://'.concat(`${data.master_ip}`, ':31112/function/figlet');
-  var payload = "muthu";
+  var url = 'http://'.concat(`${data.master_ip}`, ':31112/function/sentimentanalysis');
+  var payload = "Personally I like functions to do one thing and only one thing well, it makes them more readable.";
   http.post(url,payload);
 }
-
