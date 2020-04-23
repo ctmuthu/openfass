@@ -1,0 +1,43 @@
+\chapter{\abstractname}
+
+%TODO: Abstract
+
+% Cloud computing has become an inevitable paradigm in Information Technology. 
+% Among cloud computing services Serverless Computing or Functions as a Service (Faas) has expanded the market of effective computing utilizations.
+% Cloud service provider offers and dynamically manages the allocation of computing resources in serverless computing. 
+% The serverless architectures allows the developers to focus on business logic exclusively without worrying about preparing the runtime, managing deployment and infrastructure related concerns.
+% But decreased transparency is a major problem in this model.
+% As this model hides the utilization of computing services in the background from the developer, the developer will not be able to observe the cost difference between Infrastructure as a Service and Serverless computing services.
+% Only on quantifying both the pricing models the consultant will get to decide, which service to pick for a particular application. 
+% The price per function invocation are currently at \$ 0.0000002, which is economical and it lowers the cost of deploying cloud code by charging for execution time rather than resource allocation. 
+% But, the price based on the number of invocations alone does not truly reflect the cost of providing this sort of service.
+% The price is also depends on the execution time and memory used per execution.
+% By this pricing model, you can see how the cost mounts quickly.
+% Number of executions and memory used can be optimized and kept in control.
+% But the execution time depends on initialization, invocation and overheads.
+% In these dependencies, initialization time is the time taken by the service provider to deploy the function in a new container in cloud.
+% Initialization has been performed at three different scenarios, first, when the function is invoked for the first time, second, when the number of invocation exceeds the number of invocations handled by a single container, third, if there is no idle container available waiting to run the code. 
+% % From the developers perspective, this initialization time can be optimized, but it is not widely used.
+% In this work, we are planning to work with OpenFaaS on top of kubernetes and create a model that estimates the work flow and cost by extracting information on the computing devices spanned based on the number of executions, estimated execution time and the memory used to execute.   
+
+
+\makeatletter
+\ifthenelse{\pdf@strcmp{\languagename}{english}=0}
+{\renewcommand{\abstractname}{Kurzfassung}}
+{\renewcommand{\abstractname}{Abstract}}
+\makeatother
+
+\chapter{\abstractname}
+
+%TODO: Abstract in other language
+\begin{otherlanguage}{ngerman} % TODO: select other language, either german or english !
+
+\end{otherlanguage}
+
+
+% Undo the name switch
+\makeatletter
+\ifthenelse{\pdf@strcmp{\languagename}{english}=0}
+{\renewcommand{\abstractname}{Abstract}}
+{\renewcommand{\abstractname}{Kurzfassung}}
+\makeatother

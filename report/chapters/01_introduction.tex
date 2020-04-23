@@ -1,0 +1,256 @@
+% !TeX root = ../main.tex
+% Add the above to each chapter to make compiling the PDF easier in some editors.
+
+\chapter{Introduction}\label{chapter:introduction}
+
+% % Cloud computing is the on-demand consumption of compute power, storage, database, applications, and any IT resources through the Internet following pay-as-you-go pricing model. 
+% % The most basic way to define what the ‘Cloud’ is that it is a computer located somewhere else that is accessed via the Internet and utilized in some way. 
+% % Web services is also another name for what people call the cloud. 
+% % The cloud is comprised of server computers located in different locations around the world. 
+% % When we use a cloud service like Amazon Web Services (AWS) or Google Cloud Architecture or Microsoft Azure, we are actually utilizing the computers belonging to these Cloud Service Providers [CSPs].
+
+% % The principle of cloud computing is remaining as it is, but, the need for shared working principle, enhancements in fast response of the services, agility of resource provisioning, and minimized management hurdles has been the targets of hyper scale CSPs. 
+% % Inspecting the level of capital investment and management involved to reach the above objectives, there are many researches proposed several reference models. 
+% % Hyper scale data centers will grow from 338 in number at the end of 2016 to 628 by 2021. 
+% % They will represent 53 percent of all installed data center servers by 2021. 
+% % This kind of drastic increase in the computational requirements, there is a need for transforming the ‘traditional data centers’ into ‘hyper scale datacenters’ sophisticated with high levels of abstraction and virtualization. 
+% % Recent technical advancement in the virtualization technologies which are very promising to achieve hyper scale data centres easily.
+
+% % In the initial stages virtualization used as the mean for software and service consolidation by which attained the maximum utilization of the resources and easy management. 
+% % During the initial phase, there was a common sharing of hardware. 
+% % In the next phase, there was a pool of Virtual Machines (VMs) created on a server and each VM carry a copy of an operating system. 
+% % Later, it advanced into the concept of containers where it included, OS level virtualization. 
+% % The containers are the platform sufficient enough to hold the resources needed for running a specific application. 
+% % It achieved higher abstraction of resources comparing with VMs. 
+% % In containerization, resource provisioning is much faster than VMs.
+
+% % Apart from the efficiencies and faster rate of provisioning of resources through containerization, further enhancements are constrained with the basic infrastructural elements called servers. 
+% % Serverless computing is a model of pooling and utilizing the resources which includes OS, runtime environments and hardware.
+
+% Serverless computing or Function-as-a-Service (FaaS) is defined as a software architecture where an application is decomposed into ‘triggers’ (events) and ‘actions’ (functions), and there is a platform that provides a seamless hosting and execution environment. 
+% The application developer’s concern only for light weighted and stateless functions that can be executed through an API based on the on-demand principle. 
+% The application consumes the resources to the point of execution and later the resources are released. 
+% The price model includes only the amount of time in which the resources were in use and the application developer need not to pay for resources until they are executed, thus it is referred to as ‘serverless’.
+
+% In serverless computing, the responsibilities of the cloud service provider include the management of the datacenter, server and the runtime environment. 
+% A contrast to the other cloud models, the more responsibility is vested on the shoulder of cloud service provider and the developer is relieved with the management and maintenance complications any further.\cite{rajan2018serverless}
+
+% Cold start refers to the state our function was when serving a particular invocation request. 
+% A serverless function is served by one or multiple micro-containers. 
+% When a request comes in, our function will check whether there is a container already running to serve the invocation. 
+% When an idle container is already available, we call it a “warm” container. 
+% If there isn’t a container readily available, the function will spin up a new one and this is what we call a “cold start”.
+
+% When a function in a cold state is invoked, the request will take additional time to be completed, because there’s a latency in starting up of a new container. 
+% That’s the problem with cold starts: they make our application respond slower. 
+% In the “instant-age” of the 21st century, this could be a big problem.
+
+% The state of the art solution for the cold start problem is keeping functions warm.
+% But we hope decreased transparency is the actual problem for the cold start problem.
+% Therefore in this report, we are trying to predict the response time of a function by analyzing different metrics and overcome the cold start problem by predicting the number of containers required for a function in a particular time.  
+
+% \subsubsection{Types of Metrics:}
+
+% \begin{enumerate}
+%     \item User Centric
+%     \item FaaS Platform Centric
+%     \item IaaS Platform Centric
+% \end{enumerate}
+
+% \begin{table}[htpb]
+%     \caption[Metrics table]{Types of Metrics}\label{tab:sample}
+%     \centering
+%     \begin{tabular}{l l l}
+%       \toprule
+%         User Centric & FaaS Platform Centric & IaaS Platform Centric \\
+%       \midrule
+%         Cost, & Number of Functions, & Number of Core,\\
+%         Response time, & Number of Containers, & Number of Virtual Machines,\\
+%         Number of Requests/ & Number of Invocations & Memory used,\\
+%         Workload & Execution time (Cold start/ & Storage used \\
+%         & Warm start & \\
+%         & + Response time) & \\ 
+%       \bottomrule
+%     \end{tabular}
+%   \end{table}
+
+
+\section{Problem:}
+
+Cloud users tend to move towards serverless computing as the cloud service provider offers and dynamically manages the allocation of computing resources and allows the developers to focus on business logic exclusively without worrying about preparing the runtime, managing deployment and infrastructure related concerns.
+That inturn becomes a problem of "reduced transparency", which causes reduced understandability of the underlying system. 
+Causing increase in execution time and cost of a function invocation.
+
+\section{Objective:}
+
+In this work, we are trying to create a model with the metrics, that can predict the resources required for a particular response time. 
+Also the model is designed to predict the number of containers required for a particular function based on the number of function invocation and response time. 
+
+\section{Outline:}
+
+\subsubsection{Example data table:}
+\begin{table}[htpb]
+    \caption[Data table]{Data Metrics}\label{tab:sample}
+    \centering
+    \begin{tabular}{l l l l l l l l l}
+      \toprule
+        CPU & Memory & Invocations & Cold & Warm & Response & Execution& Function & Containers \\
+        (Core) & (GB) & Count & time(s) & time(s) & time(s) & time(s) & Memory(MB) & Count \\
+      \midrule
+        2 & 4 & 4 & 5 & 0 & 10 & 15 & 128 & 1 \\
+        2 & 4 & 4000 & 5 & 0 & 10 & 15 & 256 & 5 \\
+        4 & 4 & 4 & 5 & 0 & 10 & 7 & 128 & 1 \\
+        4 & 4 & 4000 & 5 & 0 & 10 & 8 & 256 & 5 \\ 
+      \bottomrule
+    \end{tabular}
+  \end{table}
+
+  Data like this are collected and used to create a model that can predict the resource requirements for a particular response time.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% Use with pdfLaTeX and Biber.
+
+% \section{Section}
+% Citation test (with Biber)~\parencite{latex}.
+
+% \subsection{Subsection}
+
+% See~\autoref{tab:sample}, \autoref{fig:sample-drawing}, \autoref{fig:sample-plot}, \autoref{fig:sample-listing}, \autoref{fig:tum}, \autoref{fig:tumslide}.
+
+% \begin{table}[htpb]
+%   \caption[Example table]{An example for a simple table.}\label{tab:sample}
+%   \centering
+%   \begin{tabular}{l l l l}
+%     \toprule
+%       A & B & C & D \\
+%     \midrule
+%       1 & 2 & 1 & 2 \\
+%       2 & 3 & 2 & 3 \\
+%     \bottomrule
+%   \end{tabular}
+% \end{table}
+
+% \begin{figure}[htpb]
+%   \centering
+%   % This should probably go into a file in figures/
+%   \begin{tikzpicture}[node distance=3cm]
+%     \node (R0) {$R_1$};
+%     \node (R1) [right of=R0] {$R_2$};
+%     \node (R2) [below of=R1] {$R_4$};
+%     \node (R3) [below of=R0] {$R_3$};
+%     \node (R4) [right of=R1] {$R_5$};
+
+%     \path[every node]
+%       (R0) edge (R1)
+%       (R0) edge (R3)
+%       (R3) edge (R2)
+%       (R2) edge (R1)
+%       (R1) edge (R4);
+%   \end{tikzpicture}
+%   \caption[Example drawing]{An example for a simple drawing.}\label{fig:sample-drawing}
+% \end{figure}
+
+% \begin{figure}[htpb]
+%   \centering
+
+%   \pgfplotstableset{col sep=&, row sep=\\}
+%   % This should probably go into a file in data/
+%   \pgfplotstableread{
+%     a & b    \\
+%     1 & 1000 \\
+%     2 & 1500 \\
+%     3 & 1600 \\
+%   }\exampleA
+%   \pgfplotstableread{
+%     a & b    \\
+%     1 & 1200 \\
+%     2 & 800 \\
+%     3 & 1400 \\
+%   }\exampleB
+%   % This should probably go into a file in figures/
+%   \begin{tikzpicture}
+%     \begin{axis}[
+%         ymin=0,
+%         legend style={legend pos=south east},
+%         grid,
+%         thick,
+%         ylabel=Y,
+%         xlabel=X
+%       ]
+%       \addplot table[x=a, y=b]{\exampleA};
+%       \addlegendentry{Example A};
+%       \addplot table[x=a, y=b]{\exampleB};
+%       \addlegendentry{Example B};
+%     \end{axis}
+%   \end{tikzpicture}
+%   \caption[Example plot]{An example for a simple plot.}\label{fig:sample-plot}
+% \end{figure}
+
+% \begin{figure}[htpb]
+%   \centering
+%   \begin{tabular}{c}
+%   \begin{lstlisting}[language=SQL]
+%     SELECT * FROM tbl WHERE tbl.str = "str"
+%   \end{lstlisting}
+%   \end{tabular}
+%   \caption[Example listing]{An example for a source code listing.}\label{fig:sample-listing}
+% \end{figure}
+
+% \begin{figure}[htpb]
+%   \centering
+%   \includegraphics[width=0.8\textwidth]{tum}
+%   \caption[Something else can be written here for listing this, otherwise the caption will be written!]{Includegraphics searches for the filename without extension first in logos, then in figures.} \label{fig:tum}
+% \end{figure}
+
+% \begin{figure}[htpb]
+%   \centering
+%   \includegraphics[width=0.8\textwidth]{figures/tum}
+%   \caption{For pictures with the same name, the direct folder needs to be chosen.} \label{fig:tumslide}
+% \end{figure}
+
+% \begin{figure}[!tbp]
+%   \centering
+%   \subfloat[TUM Logo][The logo.]{\includegraphics[height=0.2\textheight]{tum}\label{fig:tum1}}
+%   \hfill
+%   \subfloat[TUM Slide][The famous slide.]{\includegraphics[height=0.2\textheight]{figures/tum}\label{fig:tum2}}
+%   \caption{Two TUM pictures side by side.}
+%   \label{fig:sidebyside}
+% \end{figure}
+
+% This is how the glossary will be used.
+
+% \Glspl{ddye}, \gls{r0}, \gls{R0}, and \gls{kdeac}. Also, the \glspl{tum} has many \glspl{computer}, not only one \Gls{computer}. Subsequent acronym usage will only print the short version of \glspl{tuma} (take care of plural, if needed!), like here with \gls{tuma}, too. It can also be --> \glsdisp{tum}{hidden}\footnote{Example for a hidden TUM glossary entry.} <--.
+
+% \todo{Now it is your turn to write your thesis.
+
+% This will be a few tough weeks.}
+
+% \done{Nevertheless, celebrate it when it is done!}
