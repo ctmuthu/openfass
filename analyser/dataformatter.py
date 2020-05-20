@@ -30,7 +30,8 @@ def newCalculateDifferenceBetweenDatapoints(containerSec):
             if every5thItem == 2:
                 divider = item - last5thTimeStamp
                 value = (containerSec[item] - last5thValue)
-                results[item] = (value / divider.total_seconds()) * 100
+                #if(value >= 0):
+                results[item] = (value / divider.total_seconds())
                 last5thValue = containerSec[item]
                 last5thTimeStamp = item
                 every5thItem = 0
@@ -43,9 +44,13 @@ def processQueryResult(queryResult):
     data = queryResult.get_points()
     for item in data:
         datetime_object = datetime.strptime(item['time'], '%Y-%m-%dT%H:%M:%SZ')
-        if(item.get("sum")):
+        if("sum" in item):
             value.append(item["sum"])
-        else:
+        elif("max" in item):
             value.append(item["max"])
+        elif("mean" in item):
+            value.append(item["mean"])
+        else:
+            print(item)
         dt.append(datetime_object)
     return dt, value
