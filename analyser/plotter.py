@@ -4,52 +4,40 @@ def plot(dt,value):
     plt.plot(dt,value)
     plt.show()
 
-def multiplot(cpuDT, cpuSec, memDT, memUsage, reqDT, reqCount, res200DT, res200Count, res502DT, res502Count, resDT, resTime, replicaDT, replicas):
+def multiplot(cpuDT, cpuSec, memDT, memUsage, reqDT, reqCount, res200DT, res200Count, res502DT, res502Count, resDT, resTime):
     #print(cpuDT, cpuSec, memDT, memUsage, reqDT, reqCount, res200DT, res200Count, res502DT, res502Count, resDT, resTime)
     
     plt.figure()
 
-    plt.subplot(331)
+    plt.subplot(321)
     plt.plot(cpuDT, cpuSec)
-    plt.ylabel('% CPU Utilization')
+    plt.ylabel('CPU Total Seconds')
     plt.grid(True)
 
-    plt.subplot(332)
+    plt.subplot(322)
     plt.plot(memDT, memUsage)
-    plt.ylabel('% Memory utilization')
+    plt.ylabel('Pod memory usage')
     plt.grid(True)
 
-    plt.subplot(333)
+    plt.subplot(323)
     plt.plot(reqDT, reqCount)
-    plt.ylabel('Function requests per second')
+    plt.ylabel('HTTP requests')
     plt.grid(True)
 
-    plt.subplot(334)
+    plt.subplot(324)
     plt.plot(res200DT, res200Count)
-    plt.ylabel('Successful Function invocation')
+    plt.ylabel('Successful Response 200')
     plt.grid(True)
 
-    plt.subplot(335)
+    plt.subplot(325)
     plt.plot(res502DT, res502Count)
-    plt.ylabel('Unsuccessful function invocations')
+    plt.ylabel('Failed requests 502')
     plt.grid(True)
 
-    plt.subplot(336)
+    plt.subplot(326)
     plt.plot(resDT, resTime)
-    plt.ylabel('Average function execution time')
+    plt.ylabel('Response time')
     plt.grid(True)
-
-    # reqCount_modified = reqCount[:len(resTime)]
-
-    plt.subplot(337)
-    plt.plot(replicaDT, replicas)
-    plt.ylabel('Number of Replicas')
-    plt.grid(True)
-
-    # plt.subplot(337)
-    # plt.plot(res502Count, res200Count)
-    # plt.ylabel('Average function execution time from openfaas')
-    # plt.grid(True)
 
     plt.savefig('./analyser/graph.png')
     plt.show()
