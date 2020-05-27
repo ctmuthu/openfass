@@ -30,7 +30,7 @@ def newCalculateDifferenceBetweenDatapoints(containerSec):
             if every5thItem == 2:
                 divider = item - last5thTimeStamp
                 value = (containerSec[item] - last5thValue)
-                results[item] = (value / divider.total_seconds()) * 100
+                results[item] = (value / divider.total_seconds()) * 100/2
                 last5thValue = containerSec[item]
                 last5thTimeStamp = item
                 every5thItem = 0

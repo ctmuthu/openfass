@@ -27,15 +27,17 @@ def query(client):
     res200DT, res200Count = execQuery(client['prometheus'], "SELECT max(value) FROM gateway_function_invocation_total WHERE time >= 1589705537000ms and time <= 1589706704000ms and code = '200' GROUP BY time(10s) fill(none);")
     res502DT, res502Count = execQuery(client['prometheus'], "SELECT max(value) FROM gateway_function_invocation_total WHERE time >= 1589705537000ms and time <= 1589706704000ms and code = '502' GROUP BY time(10s) fill(none);")
     resDT, resTime = execQuery(client['myk6db'], "SELECT max(value) FROM http_req_duration WHERE time >= 1589705537000ms and time <= 1589706704000ms and value > 0 GROUP BY time(10s) fill(none)")
-    memUsage_modified = [value/4000000000 for value in memUsage]
+    memUsage_modified = [value/(1024*1024*1024*8) for value in memUsage]
     # datalength = {'cpuDT': len(cpuDT), 'cpuSec': len(cpuSec), 'memDT': len(memDT), 'memUsage_modified': len(memUsage_modified),
     #                 'reqDT': len(reqDT), 'reqCount': len(reqCount), 'res200DT': len(res200DT), 'res200Count': len(res200Count), 'res502DT': len(res502DT), 
     #                    'res502Count': len(res502Count), 'resDT': len(resDT), 'resTime': len(resTime)}
     # print(datalength)
-    tableData = {'cpuDT': pd.Series(cpuDT), 'cpuSec': pd.Series(cpuSec), 'memDT': pd.Series(memDT), 'memUsage_modified': pd.Series(memUsage_modified),
-                    'reqDT': pd.Series(reqDT), 'reqCount': pd.Series(reqCount), 'res200DT': pd.Series(res200DT), 'res200Count': pd.Series(res200Count), 'res502DT': pd.Series(res502DT), 
-                       'res502Count': pd.Series(res502Count), 'resDT': pd.Series(resDT), 'resTime': pd.Series(resTime)}
+    resTime = [value/(1000*60) for value in resTime]
+    tableData = {'cpuDT': pd.Series(cpuDT), 'cpuSec': pd.Series(cpuSec), 'memUsage_modified': pd.Series(memUsage_modified),
+                     'reqCount': pd.Series(reqCount),  'res200Count': pd.Series(res200Count), 
+                       'res502Count': pd.Series(res502Count),  'resTime': pd.Series(resTime)}
     tab.toTable(tableData)
+    resTime = [value/(1000*60) for value in resTime]
     plot.multiplot(cpuDT_modified, cpuSec_modified, memDT, memUsage_modified, reqDT, reqCount, res200DT, res200Count, res502DT, res502Count, resDT, resTime)
 
 def main(host, port): 
