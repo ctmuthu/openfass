@@ -2,3 +2,4 @@
 */terraform*
 terraform/config.json
 output*
+report/main.*

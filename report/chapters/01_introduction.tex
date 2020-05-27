@@ -27,6 +27,22 @@
 % % Apart from the efficiencies and faster rate of provisioning of resources through containerization, further enhancements are constrained with the basic infrastructural elements called servers. 
 % % Serverless computing is a model of pooling and utilizing the resources which includes OS, runtime environments and hardware.
 
+Cloud computing as defined by the cloud providers is an on-demand delivery of Information Technology (IT) resources like compute power, storage, database, applications over the Internet with pay-as-you-go pricing. 
+% These IT resources reduced the computation time and ideal resource cost, wherein increasing the demand of network bandwidth for communication, 
+% But in a swift speed cloud computing took over the field of Data Science and Internet of Things services.
+% In the initial stages, multiple users were allowed to use the same hardware with different permissions in order to make an efficient use of resources. 
+Function as a Service (Faas) is a serverless backend cloud computing platform provided by the cloud providers. 
+This platform allows the users to develope, run and manage multiple lightweight functions constituting an application without worrying about preparing the runtime, managing deployment and infrastructure related concerns.
+Thus in FaaS, the responsibilities of the cloud service provider include the management of the datacenter, server and the runtime environment.
+In contradiction to other cloud models, the more responsibility is vested on the shoulder of Cloud Service Provider (CSP) and the developer is relieved from the management and maintenance complications any further.
+Since the responsibility of management and maintenance is vested in the shoulder of CSP, the response time of every function partially relies on both the developer and the CSP.
+
+Response time is the total amount of time a function or a service takes to respond to a request. 
+Response time depends on the network delay and function execution delay.
+Function execution depends on the memory and Central Processing Uint (CPU) power availability.
+Utilization of CPU power and memory can be spiked by different aspects like deploying multiple functions in the same node and continuously increasing the event load of a particular function.
+These aspects influence the response time to a function request, thus resulting in the significant drop of the quality of the service provided by the FaaS platform.
+
 % Serverless computing or Function-as-a-Service (FaaS) is defined as a software architecture where an application is decomposed into ‘triggers’ (events) and ‘actions’ (functions), and there is a platform that provides a seamless hosting and execution environment. 
 % The application developer’s concern only for light weighted and stateless functions that can be executed through an API based on the on-demand principle. 
 % The application consumes the resources to the point of execution and later the resources are released. 
@@ -77,35 +93,77 @@
 
 \section{Problem:}
 
-Cloud users tend to move towards serverless computing as the cloud service provider offers and dynamically manages the allocation of computing resources and allows the developers to focus on business logic exclusively without worrying about preparing the runtime, managing deployment and infrastructure related concerns.
-That inturn becomes a problem of "reduced transparency", which causes reduced understandability of the underlying system. 
-Causing increase in execution time and cost of a function invocation.
+The increasing response time for function requests causes a significant drop in the quality of service. 
+The plan of this proposal is to define a stable response time by defining a model which is capable of stating the required resources to acquire a stable response time.
+The figure below states the increase in request per minute increases the cpu rate and memory utilization which inturn defines the constant increase in response time.
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[width=1\textwidth]{figures/graph2}
+  \caption{CPU Rate increases with the increase in number of requests} \label{fig:tumslide}
+\end{figure}
+
+\begin{figure}[htpb]
+  \centering
+  \includegraphics[width=1\textwidth]{figures/graph1}
+  \caption{Response time increases with the increase in memory utilization and CPU rate} \label{fig:tumslide}
+\end{figure}
 
 \section{Objective:}
 
-In this work, we are trying to create a model with the metrics, that can predict the resources required for a particular response time. 
-Also the model is designed to predict the number of containers required for a particular function based on the number of function invocation and response time. 
+The plan of this proposal is to define a model, that can predict the resources required for a particular response time. 
+Using the metrics below,
 
-\section{Outline:}
+\subsubsection{Types of Metrics:}
 
-\subsubsection{Example data table:}
+\begin{enumerate}
+    \item User Centric
+    \item FaaS Platform Centric
+    \item IaaS Platform Centric
+\end{enumerate}
+
 \begin{table}[htpb]
-    \caption[Data table]{Data Metrics}\label{tab:sample}
+    \caption[Metrics table]{Types of Metrics}\label{tab:sample}
     \centering
-    \begin{tabular}{l l l l l l l l l}
+    \begin{tabular}{l l l}
       \toprule
-        CPU & Memory & Invocations & Cold & Warm & Response & Execution& Function & Containers \\
-        (Core) & (GB) & Count & time(s) & time(s) & time(s) & time(s) & Memory(MB) & Count \\
+        User Centric & FaaS Platform Centric & IaaS Platform Centric \\
       \midrule
-        2 & 4 & 4 & 5 & 0 & 10 & 15 & 128 & 1 \\
-        2 & 4 & 4000 & 5 & 0 & 10 & 15 & 256 & 5 \\
-        4 & 4 & 4 & 5 & 0 & 10 & 7 & 128 & 1 \\
-        4 & 4 & 4000 & 5 & 0 & 10 & 8 & 256 & 5 \\ 
+        Cost, & Number of Functions, & Number of Core,\\
+        Response time, & Number of Containers, & Number of Virtual Machines,\\
+        Number of Requests/ & Number of Invocations & Memory used,\\
+        Workload & Execution time (Cold start/ & Storage used \\
+        & Warm start & \\
+        & + Response time) & \\ 
       \bottomrule
     \end{tabular}
   \end{table}
 
-  Data like this are collected and used to create a model that can predict the resource requirements for a particular response time.
+\section{Outline:}
+
+\subsubsection{Sample data table:}
+\begin{table}[htpb]
+  \caption[Data table]{Data Metrics}\label{tab:sample}
+    \begin{tabular}{lllllll}
+    Time               & CPU Rate              & Mem Utiliz    & HttpReq & res200 & res502 & resTime              \\
+    2020-05-17 08:52:10 & 0.12                & 0.00029 & 38.0      & 21.0        & 17.0        & 0.0078         \\
+    2020-05-17 08:52:20 & 0.26                & 0.00058 & 92.0     & 43.0        & 49.0        & 0.0077 \\
+    2020-05-17 08:52:30 & 0.28                & 0.00058 & 150.0     & 66.0        & 84.0        & 0.0082 \\
+    2020-05-17 08:52:40 & 0.29 & 0.00059 & 208.0     & 88.0        & 120.0       & 0.0080 \\
+    2020-05-17 08:52:50 & 0.31                & 0.00060 & 273.0     & 110.0       & 163.0       & 0.0077 \\
+    2020-05-17 09:03:00 & 1645.40  & 0.96464    & 3600.0     & 787.0       & 2813.0      & 0.8150   \\
+    2020-05-17 09:03:10 & 1674.07  & 0.92836    & 3646.0     & 787.0       & 2859.0      & 0.8344   \\
+    2020-05-17 09:03:20 & 1706.42  & 0.98191    & 3689.0     & 787.0       & 2902.0      & 0.8551   \\
+    2020-05-17 09:03:30 & 1735.42             & 1.01262     & 3737.0     & 787.0       & 2950.0      & 0.8497         \\
+    2020-05-17 09:03:40 & 1765.65  & 1.05117     & 3778.0     & 787.0       & 2991.0      & 0.8479   \\
+    2020-05-17 09:03:50 & 1795.48             & 1.02082    & 3831.0     & 787.0       & 3044.0      & 0.8678   \\
+    2020-05-17 09:04:00 & 1825.44             & 0.99666    & 3885.0     & 787.0       & 3098.0      & 0.8744   \\
+    2020-05-17 09:04:10 & 1854.94  & 1.08041    & 3911.0     & 787.0       & 3124.0      & 0.9041  
+    \end{tabular}
+\end{table}
+
+
+%   Data like this are collected and used to create a model that can predict the resource requirements for a particular response time.
 
 
 
