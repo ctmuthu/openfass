@@ -3,9 +3,12 @@ import { sleep } from 'k6';
 const data = JSON.parse(open("../terraform/config.json"));
 export let options = {
   stages: [
-    { duration: "10s", target: 1, rps: 0.0167 },
-    { duration: "20s", target: 10, rps: 0.0167 },
-    { duration: "30s", target: 100, rps: 0.0167 },
+    { duration: "1m", target: 1},
+    { duration: "20s", target: 10},
+    { duration: "30s", target: 50},
+    { duration: "40s", target: 100},
+    { duration: "50s", target: 200},
+    { duration: "60s", target: 300},
 ]
   };
 

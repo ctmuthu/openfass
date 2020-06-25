@@ -1,9 +1,9 @@
 import http from 'k6/http';
 import { sleep } from 'k6';
 const data = JSON.parse(open("../terraform/config.json"));
-//var myArgs = process.argv.slice(2);
-//console.log(myArgs);
-//export let options = {
+var myArgs = process.argv.slice(2);
+console.log(myArgs);
+export let options = {
 /*stages: [
     { duration: "1m", target: 1, rps: 1},
     { duration: "2m", target: 10, rps: 10},
@@ -12,15 +12,15 @@ const data = JSON.parse(open("../terraform/config.json"));
     { duration: "5m", target: 300},
     { duration: "6m", target: 400},
 ] */ 
-//	vus: 100,
-//	duration: '120s',
+	vus: 1,
+	duration: '10s',
 	//iteration: 300
-//};
+};
 
 export default function() {
-//for (let i = 0; i < 10; i++) {
+for (let i = 0; i < 5; i++) {
   var url = 'http://'.concat(`${data.master_ip}`, ':31112/function/sentimentanalysis');
   var payload = "Personally I like functions to do one thing and only one thing well, it makes them more readable.";
   http.post(url,payload);
-//}
+}
 }

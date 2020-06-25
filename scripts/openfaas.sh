@@ -30,24 +30,26 @@ export OPENFAAS_URL=http://127.0.0.1:31112
 
 echo -n $(cat password.txt) | faas-cli login --password-stdin
 
-faas-cli store deploy figlet
+#faas-cli store deploy sentimentanalysis
+#faas-cli store deploy figlet
 
-sleep 10
+#sleep 10
 
-faas-cli store deploy sentimentanalysis
 
-sleep 10
+#sleep 10
 
-faas-cli store deploy colorise
+#faas-cli store deploy colorise
 
-sleep 10
+#sleep 10
 
-faas-cli deploy --image=theaxer/classify:latest --name=classify
+#faas-cli deploy --image=theaxer/classify:latest --name=classify
 
-sleep 10
+#sleep 10
 
-faas-cli store deploy face-blur
+#faas-cli store deploy face-blur
 
-sleep 10
+#sleep 10
 
 faas-cli store deploy face-detect-pigo
+
+sleep 10
