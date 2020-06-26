@@ -44,7 +44,8 @@
             "step": 15,
             "formatter": "",
             "percent": ""
-        },
+        }
+    },
         "model_functions": {
             "instance1": {
                 "function_name": "sentimentanalysis",
@@ -100,6 +101,4 @@
 
 
         
-    },
-    
-}
+    }
