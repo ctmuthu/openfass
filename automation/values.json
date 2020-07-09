@@ -1,5 +1,5 @@
 {
-  "master_ip": "3.209.56.47",
+  "master_ip": "54.84.180.135",
   "clusterconfig": {
     "instance": "\"t2.large\"",
     "image": "\"ami-055df5de4f42cf331\"",
@@ -20,8 +20,8 @@
     "api": "api/v1/query_range?query="
   },
   "time": {
-    "start": "1593159795",
-    "end": "1593161100"
+    "start": "1594341740.996708",
+    "end": "1594341751.512077"
   },
   "container_image": "sentimentanalysis",
   "query": {
@@ -61,24 +61,28 @@
         "store": true,
         "image": null
       },
-      "start": 0,
-      "total_time": "60m",
       "pre_test": {
-        "install": "installation.py"
+        "cluster_deployment": false,
+        "function_deployment": true
       },
       "function_deployment": {
         "function_params": "",
         "deployment": "f_deployment.py"
       },
       "test": {
-        "VUs": 10,
-        "function_params": "",
-        "test_run": "k6_run_script.py"
+        "start": 0,
+        "function_params": "\"Personally I like functions to do one thing and only one thing well, it makes them more readable.\"",
+        "test_run": "k6_run_script.py",
+        "k6": {
+          "duration": "5s",
+          "vus": 1,
+          "rps": 1
+        }
       },
       "post_test": {
-        "query": "data_collection_script.py",
-        "plot": "plot.py",
-        "modeling": "model.py"
+        "data_extraction": true,
+        "plot": true,
+        "modeling": true
       }
     },
     "instance2": {
@@ -87,19 +91,23 @@
         "store": true,
         "image": null
       },
-      "start": 0,
-      "total_time": "60m",
       "pre_test": {
-        "install": "installation.py"
+        "cluster_deployment": false,
+        "function_deployment": true
       },
       "function_deployment": {
         "function_params": "",
         "deployment": "f_deployment.py"
       },
       "test": {
-        "VUs": 10,
-        "function_params": "",
-        "test_run": "k6_run_script.py"
+        "start": 4,
+        "function_params": "\"Personally I like functions to do one thing and only one thing well, it makes them more readable.\"",
+        "test_run": "k6_run_script.py",
+        "k6": {
+          "duration": "10s",
+          "vus": 1,
+          "rps": 1
+        }
       },
       "post_test": {
         "query": "data_collection_script.py",
@@ -112,9 +120,20 @@
         "store": false,
         "image": "theaxer/classify:latest"
       },
-      "VUs": 8,
-      "start": 90,
-      "total_time": "30m"
+      "pre_test": {
+        "cluster_deployment": false,
+        "function_deployment": false
+      },
+      "test": {
+        "start": 4,
+        "function_params": "\"Muthu\"",
+        "test_run": "k6_run_script.py",
+        "k6": {
+          "duration": "2s",
+          "vus": 1,
+          "rps": 1
+        }
+      }
     }
   }
 }

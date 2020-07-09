@@ -2,9 +2,8 @@ import os
 import json
 #import shutil
 
-if __name__ == '__main__':
+def cluster_deployment():
     cwd = os.getcwd()
-
     terraform_dir = os.path.join(cwd, "terraform")
     automation_dir = os.path.join(cwd, "automation")
     grafana_dir = os.path.join(cwd, "grafana")

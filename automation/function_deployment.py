@@ -10,34 +10,31 @@ def ssh(master_ip, cmd):
         result = ssh.stdout.readlines()
         if result == []:
             error = ssh.stderr.readlines()
-            print >>sys.stderr, "ERROR: %s" % error
+            print ( "ERROR: %s" % error)
         else:
-            print(result)
+            print(cmd)
     except Exception as e:
         print(e)
 
 
-if __name__ == '__main__':
-    cwd = os.getcwd()
-
-    terraform_dir = os.path.join(cwd, "terraform")
-    automation_dir = os.path.join(cwd, "automation")
-    datafile = open(os.path.join(automation_dir, 'values.json'), "r")
-    datastore = json.loads(datafile.read())
-    master_ip = datastore["master_ip"]
-    #print(datastore["model_functions"])
-    for instance in datastore["model_functions"]:
-        function_deployment = "faas-cli "
-        function = datastore["model_functions"][instance]["function"]
-        print(function["name"])
-        if (function["store"] == True):
-            function_deployment += "store deploy " + function["name"]
-        else:
-            function_deployment += "deploy --image=" + function["image"] + " --name=" + function["name"]
+def function_deployment(master_ip, instance):
+    function_deployment = "faas-cli "
+    function = instance["function"]
+    print(function["name"])
+    if (function["store"] == True):
+        function_deployment += "store deploy " + function["name"]
+    else:
+        function_deployment += "deploy --image=" + function["image"] + " --name=" + function["name"]
         #cmd = "export OPENFAAS_URL=http://127.0.0.1:31112"
         #ssh(master_ip, cmd)
-        cmd = "faas-cli login --tls-no-verify --username admin --password $(cat password.txt) --gateway http://127.0.0.1:31112"
-        ssh(master_ip, cmd)
-        function_deployment += " --gateway http://127.0.0.1:31112"
-        cmd = function_deployment
-        ssh(master_ip, cmd)
+    cmd = "faas-cli login --tls-no-verify --username admin --password $(cat password.txt) --gateway http://127.0.0.1:31112"
+    ssh(master_ip, cmd)
+    function_deployment += " --gateway http://127.0.0.1:31112"
+    cmd = function_deployment
+    ssh(master_ip, cmd)
+    #k6.k6_run(master_ip, instance)
+
+def delete_function(master_ip, instance):
+    function = instance["function"]
+    cmd = "faas-cli remove " + function["name"] + " --gateway http://127.0.0.1:31112"
+    ssh(master_ip, cmd)
