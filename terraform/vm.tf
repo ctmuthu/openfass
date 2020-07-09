@@ -3,8 +3,6 @@ variable "region" { type = string }
 variable "instance" {type = string}
 variable "master_nodes" { type = list }
 variable "worker_nodes" { type = list }
-variable "master_nodes_private_ip" { type = list }
-variable "worker_nodes_private_ip" { type = list }
 
 provider "aws" {
   profile = "default"

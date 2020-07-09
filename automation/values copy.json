@@ -1,0 +1,124 @@
+{
+    "master_ip": "52.91.241.225",
+    "clusterconfig":{
+        "instance": "\"t2.large\"",
+        "image": "\"ami-055df5de4f42cf331\"",
+        "master_nodes": "[\"master\"]",
+        "worker_nodes": "[\"worker1\", \"worker2\"]",
+        "region": "\"us-east-1\""
+    },
+    "database": {
+        "host": "138.246.234.122",
+        "port": "8086",
+        "username": "admin",
+        "password": "admin",
+        "name": "prometheus"
+    },
+    "prometheus": {
+        "host": "138.246.234.122",
+        "port": 9090,
+        "api": "api/v1/query_range?query="
+    },
+    "time": {
+        "start": "1593159795",
+        "end": "1593161100"
+    },
+    "container_image": "sentimentanalysis",
+    "query": {
+        "cpu": {
+            "name": "cpu",
+            "query": "avg(irate(container_cpu_user_seconds_total{container_label_io_kubernetes_container_name=~%22sentimentanalysis%22}[5m]))",
+            "step": 15,
+            "formatter": "",
+            "percent": 50
+        },
+        "mem": {
+            "name": "mem",
+            "query": "sum(container_memory_working_set_bytes{container_label_io_kubernetes_container_name=~%22sentimentanalysis%22})",
+            "step": 15,
+            "formatter": 2147483648,
+            "percent": 14.28
+        },
+        "responsetime": {
+            "name": "responsetime",
+            "query": "(rate(gateway_functions_seconds_sum%5B20s%5D)%20%2F%20rate(gateway_functions_seconds_count%5B20s%5D))",
+            "step": 15,
+            "formatter": "",
+            "percent": 1.66
+        },
+        "replica": {
+            "name": "replica",
+            "query": "gateway_service_count",
+            "step": 15,
+            "formatter": "",
+            "percent": ""
+        }
+    },
+    "model_functions": {
+        "instance1": {
+                "function": {
+                    "name": "sentimentanalysis",
+                    "store": true,
+                    "image": null
+                },
+                "start": 0,
+                "total_time": "60m",
+                "pre_test": {
+                    "install": "installation.py"
+                },
+                "function_deployment": {
+                    "function_params": "",
+                    "deployment": "f_deployment.py"
+                },
+                "test": {
+                    "VUs": 10,
+                    "function_params": "",
+                    "test_run": "k6_run_script.py"
+                },
+                "post_test": {
+                    "query": "data_collection_script.py",
+                    "plot": "plot.py",
+                    "modeling": "model.py"
+                }
+            },
+            "instance2": {
+                "function": {
+                    "name": "sentimentanalysis",
+                    "store": true,
+                    "image": null
+                },
+                "start": 0,
+                "total_time": "60m",
+                "pre_test": {
+                    "install": "installation.py"
+                },
+                "function_deployment": {
+                    "function_params": "",
+                    "deployment": "f_deployment.py"
+                },
+                "test": {
+                    "VUs": 10,
+                    "function_params": "",
+                    "test_run": "k6_run_script.py"
+                },
+                "post_test": {
+                    "query": "data_collection_script.py",
+                    "plot": "plot.py"
+                }
+            },
+            "instance3": {
+                "function": {
+                    "name": "classify",
+                    "store": false,
+                    "image": "theaxer/classify:latest"
+                },
+                "VUs": 8,
+                "start": 90,
+                "total_time": "30m"
+            }
+
+        }
+
+
+        
+    }
