@@ -3,7 +3,6 @@ import requests
 
 def query(datasource):
     for i in datastore["query"]:
-        query = str(datastore["query"][i]["query"])
         url = "http://"+ str(datastore["prometheus"]["host"])+ ":" + str(datastore["prometheus"]["port"]) + "/" \
             + str(datastore["prometheus"]["api"]) + str(datastore["query"][i]["query"]) + "&start=" \
                 + str(datastore["time"]["start"]) \

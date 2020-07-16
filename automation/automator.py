@@ -2,6 +2,7 @@ import os
 import json
 from subprocess import Popen, PIPE
 import datetime as dt
+import requests
 
 class Deployment:
 
@@ -26,6 +27,8 @@ class Deployment:
                 self.function_deployment()
                 self.k6_run()
                 self.delete_function()
+            if (self.instance["post_test"]["data_extraction"] == True):
+                self.query()
     
     def update_tfvars_file(self):
         var_file = open(os.path.join(self.terraform_dir, 'var.tfvars'),"r")
@@ -95,18 +98,34 @@ class Deployment:
         function = self.instance["function"]["name"]
         payload = self.instance["test"]["function_params"]
         file_name = self.instance["test"]["test_run"]
-        k6 ="MASTER_IP=" + self.master_ip + " PAYLOAD=" + payload + " FUNCTION=" + function + " k6 run k6_run_script.js"
+        k6 ="MASTER_IP=" + self.master_ip + " PAYLOAD=" + payload + " FUNCTION=" + function + " k6 run k6_run_script.js --out influxdb=http://138.246.234.122:8086/myk6db"
         for options in self.instance["test"]["k6"]:
-            k6 += " --" + options + " " +str(self.instance["test"]["k6"][options])
-        start_time = dt.datetime.now()
+            if(type(self.instance["test"]["k6"][options]) == list):
+                for i in self.instance["test"]["k6"][options]:
+                    k6 += " --" + options + " " +str(i)
+            else:
+                k6 += " --" + options + " " +str(self.instance["test"]["k6"][options])
+        start_time = dt.datetime.now(tz=dt.timezone.utc)
         start_time = start_time.replace(tzinfo=dt.timezone.utc).timestamp()
+        print(k6)
         os.system(k6)
-        end_time = dt.datetime.now()
+        end_time = dt.datetime.now(tz=dt.timezone.utc)
         end_time = end_time.replace(tzinfo=dt.timezone.utc).timestamp()
         os.chdir(self.cwd)
         self.datastore["time"]["start"]= str(start_time)
         self.datastore["time"]["end"] = str(end_time)
         self.write_to_json()
+
+    def query(self):
+        for i in self.datastore["query"]:
+            url = "http://"+ str(self.datastore["prometheus"]["host"])+ ":" + str(self.datastore["prometheus"]["port"]) + "/" \
+                + str(self.datastore["prometheus"]["api"]) + str(self.datastore["query"][i]["query"]) + "&start=" \
+                    + str(self.datastore["time"]["start"]) \
+                        + "&end=" + str(self.datastore["time"]["end"]) \
+                            + "&step=15"
+            print(url)
+            receive = requests.get(url)
+            print(receive.json())
 
     def write_to_json(self):
         os.remove(os.path.join(self.automation_dir, self.value))

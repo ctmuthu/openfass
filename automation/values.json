@@ -1,5 +1,5 @@
 {
-  "master_ip": "54.84.180.135",
+  "master_ip": "3.228.21.197",
   "clusterconfig": {
     "instance": "\"t2.large\"",
     "image": "\"ami-055df5de4f42cf331\"",
@@ -20,13 +20,14 @@
     "api": "api/v1/query_range?query="
   },
   "time": {
-    "start": "1594341740.996708",
-    "end": "1594341751.512077"
+    "start": "1594842168.58493",
+    "end": "1594842474.12509"
   },
   "container_image": "sentimentanalysis",
   "query": {
     "cpu": {
       "name": "cpu",
+      "container_image": "sentimentanalysis",
       "query": "avg(irate(container_cpu_user_seconds_total{container_label_io_kubernetes_container_name=~%22sentimentanalysis%22}[5m]))",
       "step": 15,
       "formatter": "",
@@ -74,9 +75,13 @@
         "function_params": "\"Personally I like functions to do one thing and only one thing well, it makes them more readable.\"",
         "test_run": "k6_run_script.py",
         "k6": {
-          "duration": "5s",
-          "vus": 1,
-          "rps": 1
+          "stage": [
+            "1m:10",
+            "1m:100",
+            "1m:200",
+            "1m:300",
+            "1m:400"
+          ]
         }
       },
       "post_test": {
@@ -93,7 +98,7 @@
       },
       "pre_test": {
         "cluster_deployment": false,
-        "function_deployment": true
+        "function_deployment": false
       },
       "function_deployment": {
         "function_params": "",
@@ -110,8 +115,9 @@
         }
       },
       "post_test": {
-        "query": "data_collection_script.py",
-        "plot": "plot.py"
+        "data_extraction": false,
+        "plot": false,
+        "modeling": false
       }
     },
     "instance3": {
@@ -133,6 +139,11 @@
           "vus": 1,
           "rps": 1
         }
+      },
+      "post_test": {
+        "data_extraction": false,
+        "plot": false,
+        "modeling": false
       }
     }
   }
