@@ -49,7 +49,7 @@ resource "aws_instance" "Master" {
   subnet_id     = aws_subnet.private_subnet.id
   #private_ip = var.master_nodes_private_ip[count.index]
   provisioner "local-exec" {
-    command = "cd .. && tar -zcvf folders.tar.gz $(ls -d */)"
+    command = "cd ../cloudRunners && tar -zcvf ../folders.tar.gz $(ls -d */)"
   }
   provisioner "file" {
     source      = "~/.ssh/id_rsa"
@@ -91,9 +91,7 @@ resource "aws_instance" "Master" {
       "ssh -oStrictHostKeyChecking=no -i id_rsa ubuntu@${aws_instance.Worker[0].private_ip} 'sudo sh join.sh ; '",
       "ssh -oStrictHostKeyChecking=no -i id_rsa ubuntu@${aws_instance.Worker[1].private_ip} 'sudo sh join.sh ; '",
       "echo 'nameserver 10.96.0.10' > sudo /etc/resolv.conf",
-      "sudo sh ./scripts/openfaas.sh",
-      "sudo sh ./prometheus/prometheus.sh",
-      "sudo sh ./grafana/grafana.sh"
+      "sudo sh ./scripts/openfaas.sh"
       ]
   }
   provisioner "local-exec" {

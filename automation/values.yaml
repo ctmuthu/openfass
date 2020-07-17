@@ -1,0 +1,119 @@
+clusterconfig:
+    image: '"ami-055df5de4f42cf331"'
+    instance: '"t2.large"'
+    master_nodes: '["master"]'
+    region: '"us-east-1"'
+    worker_nodes: '["worker1", "worker2"]'
+container_image: sentimentanalysis
+database:
+    host: 138.246.234.101
+    name: prometheus
+    password: admin
+    port: '8086'
+    username: admin
+master_ip: 3.227.20.184
+model_functions:
+    instance1:
+        function:
+            image: null
+            name: sentimentanalysis
+            store: true
+        function_deployment:
+            deployment: f_deployment.py
+            function_params: ''
+        post_test:
+            data_extraction: true
+            modeling: true
+            plot: true
+        pre_test:
+            cluster_deployment: true
+            function_deployment: true
+        test:
+            function_params: '"Personally I like functions to do one thing and only
+                one thing well, it makes them more readable."'
+            k6:
+                stage:
+                - 1m:10
+                - 1m:100
+                - 1m:200
+                - 1m:300
+                - 1m:400
+            start: 0
+            test_run: k6_run_script.py
+    instance2:
+        function:
+            image: null
+            name: sentimentanalysis
+            store: true
+        function_deployment:
+            deployment: f_deployment.py
+            function_params: ''
+        post_test:
+            data_extraction: false
+            modeling: false
+            plot: false
+        pre_test:
+            cluster_deployment: false
+            function_deployment: false
+        test:
+            function_params: '"Personally I like functions to do one thing and only
+                one thing well, it makes them more readable."'
+            k6:
+                duration: 1m
+                rps: 10
+                vus: 1
+            start: 4
+            test_run: k6_run_script.py
+    instance3:
+        function:
+            image: theaxer/classify:latest
+            name: classify
+            store: false
+        post_test:
+            data_extraction: false
+            modeling: false
+            plot: false
+        pre_test:
+            cluster_deployment: false
+            function_deployment: false
+        test:
+            function_params: '"Muthu"'
+            k6:
+                duration: 2s
+                rps: 1
+                vus: 1
+            start: 4
+            test_run: k6_run_script.py
+prometheus:
+    api: api/v1/query_range?query=
+    host: 138.246.234.101
+    port: 9090
+query:
+    cpu:
+        container_image: sentimentanalysis
+        formatter: ''
+        name: cpu
+        percent: 50
+        query: sum(rate(container_cpu_usage_seconds_total{container_label_io_kubernetes_container_name=~%22sentimentanalysis%22}[1m]))
+        step: 5
+    mem:
+        formatter: 2147483648
+        name: mem
+        percent: 14.28
+        query: sum(container_memory_working_set_bytes{container_label_io_kubernetes_container_name=~%22sentimentanalysis%22})
+        step: 5
+    replica:
+        formatter: ''
+        name: replica
+        percent: ''
+        query: gateway_service_count
+        step: 5
+    responsetime:
+        formatter: ''
+        name: responsetime
+        percent: 1.66
+        query: (rate(gateway_functions_seconds_sum%5B20s%5D)%20%2F%20rate(gateway_functions_seconds_count%5B20s%5D))
+        step: 5
+time:
+    end: '1594975003.323244'
+    start: '1594974988.180643'
