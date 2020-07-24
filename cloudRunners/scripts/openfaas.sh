@@ -1,8 +1,8 @@
-kubectl apply -f kubernetes-metric-server/
-kubectl apply -f kube-state-metrics/
-kubectl apply -k cadvisor/
+sudo kubectl apply -f kubernetes-metric-server/
+sudo kubectl apply -f kube-state-metrics/
+sudo kubectl apply -k cadvisor/
 
-kubectl apply -f metrics-server-exporter/
+# kubectl apply -f metrics-server-exporter/
 
 curl -sL https://cli.openfaas.com | sudo sh
 
@@ -12,17 +12,17 @@ echo $PASSWORD > password.txt
 
 echo $PASSWORD
 
-kubectl -n openfaas create secret generic basic-auth \
+sudo kubectl -n openfaas create secret generic basic-auth \
 --from-literal=basic-auth-user=admin \
 --from-literal=basic-auth-password="$PASSWORD"
 
 #sudo cp ../prometheus/prometheus-cfg.yml ../faas-netes/yaml/prometheus-cfg.yml
 
-kubectl apply -f faas-netes/
+sudo kubectl apply -f faas-netes/
 
 sleep 60
 
-kubectl port-forward svc/gateway -n openfaas 31112:8080 &
+sudo kubectl port-forward svc/gateway -n openfaas 31112:8080 &
 
 sleep 10
 

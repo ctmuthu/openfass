@@ -1,19 +1,19 @@
-clusterconfig:
-    image: '"ami-055df5de4f42cf331"'
-    instance: '"t2.large"'
-    master_nodes: '["master"]'
-    region: '"us-east-1"'
-    worker_nodes: '["worker1", "worker2"]'
 container_image: sentimentanalysis
 database:
-    host: 138.246.234.101
+    host: 138.246.234.122
     name: prometheus
     password: admin
-    port: '8086'
+    port: 8086
     username: admin
-master_ip: 3.227.20.184
+master_ip: 3.237.171.133
 model_functions:
     instance1:
+        clusterconfig:
+            image: '"ami-055df5de4f42cf331"'
+            instance: '"t2.large"'
+            master_nodes: '["master"]'
+            region: '"us-east-1"'
+            worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
             name: sentimentanalysis
@@ -21,33 +21,7 @@ model_functions:
         function_deployment:
             deployment: f_deployment.py
             function_params: ''
-        post_test:
-            data_extraction: true
-            modeling: true
-            plot: true
-        pre_test:
-            cluster_deployment: true
-            function_deployment: true
-        test:
-            function_params: '"Personally I like functions to do one thing and only
-                one thing well, it makes them more readable."'
-            k6:
-                stage:
-                - 1m:10
-                - 1m:100
-                - 1m:200
-                - 1m:300
-                - 1m:400
-            start: 0
-            test_run: k6_run_script.py
-    instance2:
-        function:
-            image: null
-            name: sentimentanalysis
-            store: true
-        function_deployment:
-            deployment: f_deployment.py
-            function_params: ''
+        k8: true
         post_test:
             data_extraction: false
             modeling: false
@@ -59,16 +33,82 @@ model_functions:
             function_params: '"Personally I like functions to do one thing and only
                 one thing well, it makes them more readable."'
             k6:
-                duration: 1m
-                rps: 10
-                vus: 1
+                customized:
+                    stage: 5
+            start: 0
+            test_run: k6_run_script.py
+    instance2:
+        clusterconfig:
+            image: '"ami-055df5de4f42cf331"'
+            instance: '"t2.xlarge"'
+            master_nodes: '["master"]'
+            region: '"us-east-1"'
+            worker_nodes: '["worker1", "worker2"]'
+        function:
+            image: null
+            name: sentimentanalysis
+            store: true
+        function_deployment:
+            deployment: f_deployment.py
+            function_params: ''
+        k8: true
+        post_test:
+            data_extraction: false
+            modeling: false
+            plot: false
+        pre_test:
+            cluster_deployment: false
+            function_deployment: false
+        test:
+            function_params: '"Personally I like functions to do one thing and only
+                one thing well, it makes them more readable."'
+            k6:
+                customized:
+                    stage: 120
             start: 4
             test_run: k6_run_script.py
     instance3:
+        clusterconfig:
+            image: '"ami-055df5de4f42cf331"'
+            instance: '"t2.micro"'
+            master_nodes: '["master"]'
+            region: '"us-east-1"'
+            worker_nodes: '["worker1", "worker2"]'
+        function:
+            image: null
+            name: sentimentanalysis
+            store: true
+        function_deployment:
+            deployment: f_deployment.py
+            function_params: ''
+        k8: false
+        post_test:
+            data_extraction: true
+            modeling: true
+            plot: true
+        pre_test:
+            cluster_deployment: false
+            function_deployment: true
+        test:
+            function_params: '"Personally I like functions to do one thing and only
+                one thing well, it makes them more readable."'
+            k6:
+                customized:
+                    stage: 5
+            start: 4
+            test_run: k6_run_script.py
+    instance4:
+        clusterconfig:
+            image: '"ami-055df5de4f42cf331"'
+            instance: '"t2.micro"'
+            master_nodes: '["master"]'
+            region: '"us-east-1"'
+            worker_nodes: '["worker1", "worker2"]'
         function:
             image: theaxer/classify:latest
             name: classify
             store: false
+        k8: false
         post_test:
             data_extraction: false
             modeling: false
@@ -79,14 +119,26 @@ model_functions:
         test:
             function_params: '"Muthu"'
             k6:
-                duration: 2s
-                rps: 1
+                duration: 1m
+                rps: 10
+                stage:
+                - 1m:10
+                - 1m:10
+                - 1m:20
+                - 1m:20
+                - 1m:30
+                - 1m:40
+                - 1m:50
+                - 1m:60
+                - 1m:70
+                - 1m:80
+                - 1m:90
                 vus: 1
             start: 4
             test_run: k6_run_script.py
 prometheus:
     api: api/v1/query_range?query=
-    host: 138.246.234.101
+    host: 138.246.234.122
     port: 9090
 query:
     cpu:
@@ -95,25 +147,43 @@ query:
         name: cpu
         percent: 50
         query: sum(rate(container_cpu_usage_seconds_total{container_label_io_kubernetes_container_name=~%22sentimentanalysis%22}[1m]))
-        step: 5
+        step: 15
     mem:
         formatter: 2147483648
         name: mem
         percent: 14.28
         query: sum(container_memory_working_set_bytes{container_label_io_kubernetes_container_name=~%22sentimentanalysis%22})
-        step: 5
+        step: 15
     replica:
         formatter: ''
         name: replica
         percent: ''
         query: gateway_service_count
-        step: 5
+        step: 15
+    requests:
+        formatter: ''
+        name: requests
+        percent: 1.66
+        query: sum(sum_over_time(http_reqs%5B1m%5D))
+        step: 15
     responsetime:
         formatter: ''
         name: responsetime
         percent: 1.66
-        query: (rate(gateway_functions_seconds_sum%5B20s%5D)%20%2F%20rate(gateway_functions_seconds_count%5B20s%5D))
-        step: 5
+        query: http_req_duration%7Bstatus%3D%22200%22%7D%2F1000
+        step: 15
+    totalcpu:
+        formatter: ''
+        name: totalcpu
+        percent: ''
+        query: sum(machine_cpu_cores%7Bkubernetes_io_hostname%3D~%22%5E.*%24%22%7D)
+        step: 15
+    totalmemory:
+        formatter: ''
+        name: totalmemory
+        percent: ''
+        query: sum%20(machine_memory_bytes%7Bkubernetes_io_hostname%3D~%22%5E.*%24%22%7D)
+        step: 15
 time:
-    end: '1594975003.323244'
-    start: '1594974988.180643'
+    end: '1595586523.236645'
+    start: '1595586222.619673'

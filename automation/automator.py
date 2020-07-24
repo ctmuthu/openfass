@@ -1,6 +1,7 @@
 import os
 import json
 import yaml
+import time
 from subprocess import Popen, PIPE
 import datetime as dt
 import requests
@@ -19,6 +20,7 @@ class Deployment:
         self.automation_dir = os.path.join(self.cwd, "automation")
         self.grafana_dir = os.path.join(self.cwd, "grafana")
         self.k6_dir = os.path.join(self.cwd, "k6")
+        self.k3_dir = os.path.join(self.cwd, "k3s")
         #self.df = pd.DataFrame()
 
         self.datafile = open(os.path.join(self.automation_dir, self.value), "r")
@@ -41,32 +43,48 @@ class Deployment:
                 self.plot()
             if (self.instance["post_test"]["modeling"] == True):
                 self.model()
-    
+            # if (self.instance["pre_test"]["cluster_deployment"] == True):
+            #     self.destroy_cluster()
+
     def update_tfvars_file(self):
-        var_file = open(os.path.join(self.terraform_dir, 'var.tfvars'),"r")
+        if (self.instance["k8"]):
+            var_file = open(os.path.join(self.terraform_dir, 'var.tfvars'),"r")
+        else:
+            var_file = open(os.path.join(self.k3_dir, 'var.tfvars'),"r")
         var_file_content = ""
         for line in var_file:
             line = line.split("=")
-            line[1] = self.datastore["clusterconfig"][line[0]]
+            line[1] = self.instance["clusterconfig"][line[0]]
             line = '='.join(str(item) for item in line)
             var_file_content += line + '\n'
         var_file.close()
-        var_file = open(os.path.join(self.terraform_dir, 'var.tfvars'),"w+")
+        if (self.instance["k8"]):
+            var_file = open(os.path.join(self.terraform_dir, 'var.tfvars'),"w+")
+        else:
+            var_file = open(os.path.join(self.k3_dir, 'var.tfvars'),"w+")
         var_file.write(var_file_content)
         var_file.close()
 
     def cluster_deployment(self):
-        os.chdir(self.terraform_dir)
-        os.system("terraform destroy -var-file=var_old.tfvars -auto-approve && sleep 20 && terraform apply -var-file=var.tfvars -auto-approve && terraform output -json | jq 'with_entries(.value |= .value)' > config.json")
-        os.system("cp var.tfvars var_old.tfvars")
+        if (self.instance["k8"]):
+            os.chdir(self.terraform_dir)
+        else:
+            os.chdir(self.k3_dir)
+        os.system("terraform destroy -var-file=../var_old.tfvars -auto-approve && sleep 20 && terraform apply -var-file=var.tfvars -auto-approve && terraform output -json | jq 'with_entries(.value |= .value)' > ../config.json")
+        os.system("cp var.tfvars ../var_old.tfvars")
         os.chdir(self.grafana_dir)
         os.system("terraform destroy --auto-approve && terraform apply --auto-approve")
         os.chdir(self.cwd)
         #print(cwd)
-        configfile = open(os.path.join(self.terraform_dir, 'config.json'),"r")
+        configfile = open(os.path.join(self.cwd, 'config.json'),"r")
         configstore = json.loads(configfile.read())
         self.datastore["master_ip"] = configstore["master_ip"]
         self.write_to_json()
+
+    def destroy_cluster(self):
+        os.chdir(self.terraform_dir)
+        os.system("terraform destroy -var-file=var_old.tfvars -auto-approve")
+        time.sleep(12)
     
     def ssh(self, cmd):
         try:
@@ -109,16 +127,22 @@ class Deployment:
         function = self.instance["function"]["name"]
         payload = self.instance["test"]["function_params"]
         file_name = self.instance["test"]["test_run"]
-        k6 ="MASTER_IP=" + self.master_ip + " PAYLOAD=" + payload + " FUNCTION=" + function + " k6 run k6_run_script.js --out influxdb=http://138.246.234.122:8086/myk6db"
+        k6 ="MASTER_IP=" + self.master_ip + " PAYLOAD=" + payload + " FUNCTION=" + function +  \
+            " k6 run k6_run_script.js --out influxdb=http://"  \
+            + str(self.datastore["database"]["host"])  \
+            + ":" + str(self.datastore["database"]["port"]) +"/" + self.datastore["database"]["name"]
         for options in self.instance["test"]["k6"]:
-            if(type(self.instance["test"]["k6"][options]) == list):
+            if(options == "customized"):
+                for m in range(1, self.instance["test"]["k6"][options]["stage"]+1):
+                    k6 += " --stage" + " 1m:" + str(m)
+            elif(type(self.instance["test"]["k6"][options]) == list):
                 for i in self.instance["test"]["k6"][options]:
                     k6 += " --" + options + " " +str(i)
             else:
                 k6 += " --" + options + " " +str(self.instance["test"]["k6"][options])
         start_time = dt.datetime.now(tz=dt.timezone.utc)
         start_time = start_time.replace(tzinfo=dt.timezone.utc).timestamp()
-        print(k6)
+        #print(k6)
         os.system(k6)
         end_time = dt.datetime.now(tz=dt.timezone.utc)
         end_time = end_time.replace(tzinfo=dt.timezone.utc).timestamp()
@@ -129,28 +153,33 @@ class Deployment:
 
     def query(self):
         self.df = pd.DataFrame()
+        #print(self.datastore["query"])
         for i in self.datastore["query"]:
             url = "http://"+ str(self.datastore["prometheus"]["host"])+ ":" + str(self.datastore["prometheus"]["port"]) + "/" \
                 + str(self.datastore["prometheus"]["api"]) + str(self.datastore["query"][i]["query"]) + "&start=" \
                     + str(self.datastore["time"]["start"]) \
                         + "&end=" + str(self.datastore["time"]["end"]) \
-                            + "&step=15"
+                            + "&step=" + str(self.datastore["query"][i]["step"])
             #print(url)
             receive = requests.get(url)
+            #print(receive.json())
             self.data_formatter(receive.json(), self.datastore["query"][i]["name"])
-        filename = self.instance["function"]["name"] + ".csv"
+        filename = self.instance["function"]["name"] + self.datastore["time"]["start"] + "_" + self.datastore["time"]["end"] + ".csv"
         self.df.to_csv(os.path.join(self.automation_dir, filename), index=True)
 
     def data_formatter(self, result, column):
         #print(result["data"]["result"][0]["values"])
         self.time = []
         data = []
-        for value in result["data"]["result"][0]["values"]:
-            datetime_object = dt.datetime.fromtimestamp(value[0])
-            self.time.append(datetime_object)
-            data.append(float(value[1]))
-        #print(self.time,data)
-        self.toTable(column, data)
+        try:
+            for value in result["data"]["result"][0]["values"]:
+                datetime_object = dt.datetime.fromtimestamp(value[0])
+                self.time.append(datetime_object)
+                data.append(float(value[1]))
+            #print(self.time,data)
+            self.toTable(column, data)
+        except Exception:
+            print("Query returned empty")
 
     def toTable(self, column, data):
         if self.df.empty:
@@ -159,8 +188,10 @@ class Deployment:
             self.df.set_index("Time", inplace = True)
             self.length = len(self.df.cpu.values)
         else:
+            #print(column)
             df2 = pd.DataFrame({'Time': pd.Series(self.time), 'Value': pd.Series(data)})
             df2.set_index("Time", inplace = True)
+            #print(df2.Value.values)
             if (self.length < len(df2.Value.values)):
                 df2.drop(df2.index[:len(df2.Value.values)-self.length], inplace=True)
             self.df[column] = df2.Value.values
@@ -177,7 +208,8 @@ class Deployment:
             plt.subplot(int(plot_array+str(col+1)))
             plt.plot(self.df.index,self.df[self.df.columns[col]])
             plt.xlabel(self.df.columns[col])
-        filename = self.instance["function"]["name"] + ".png"
+        filename = self.instance["function"]["name"] + self.datastore["time"]["start"] + "_" + self.datastore["time"]["end"] + ".png"
+        #plt.show()
         plt.savefig(os.path.join(self.automation_dir, filename))
 
     def model(self):
@@ -192,7 +224,7 @@ class Deployment:
         predictions = model.predict(X) 
         print_model = model.summary()
         print(print_model)
-        filename = self.instance["function"]["name"] + "_model.txt"
+        filename = self.instance["function"]["name"] + self.datastore["time"]["start"] + "_" + self.datastore["time"]["end"] + "_model.txt"
         file = open(os.path.join(self.automation_dir, filename), "w")
         file.write(str(print_model))
         file.close()
