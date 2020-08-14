@@ -5,7 +5,7 @@ database:
     password: admin
     port: 8086
     username: admin
-master_ip: 3.237.171.133
+master_ip: 54.160.12.136
 model_functions:
     instance1:
         clusterconfig:
@@ -23,9 +23,9 @@ model_functions:
             function_params: ''
         k8: true
         post_test:
-            data_extraction: false
-            modeling: false
-            plot: false
+            data_extraction: true
+            modeling: true
+            plot: true
         pre_test:
             cluster_deployment: false
             function_deployment: false
@@ -34,7 +34,7 @@ model_functions:
                 one thing well, it makes them more readable."'
             k6:
                 customized:
-                    stage: 5
+                    stage: 20
             start: 0
             test_run: k6_run_script.py
     instance2:
@@ -83,12 +83,12 @@ model_functions:
             function_params: ''
         k8: false
         post_test:
-            data_extraction: true
-            modeling: true
-            plot: true
+            data_extraction: false
+            modeling: false
+            plot: false
         pre_test:
             cluster_deployment: false
-            function_deployment: true
+            function_deployment: false
         test:
             function_params: '"Personally I like functions to do one thing and only
                 one thing well, it makes them more readable."'
@@ -146,13 +146,13 @@ query:
         formatter: ''
         name: cpu
         percent: 50
-        query: sum(rate(container_cpu_usage_seconds_total{container_label_io_kubernetes_container_name=~%22sentimentanalysis%22}[1m]))
+        query: sum(rate(container_cpu_usage_seconds_total{container=~%22sentimentanalysis%22}[1m]))%2F6*100
         step: 15
     mem:
         formatter: 2147483648
         name: mem
         percent: 14.28
-        query: sum(container_memory_working_set_bytes{container_label_io_kubernetes_container_name=~%22sentimentanalysis%22})
+        query: sum(container_memory_working_set_bytes{container=~%22sentimentanalysis%22})%2F(1024*1024*1024*8)*100
         step: 15
     replica:
         formatter: ''
@@ -172,18 +172,18 @@ query:
         percent: 1.66
         query: http_req_duration%7Bstatus%3D%22200%22%7D%2F1000
         step: 15
-    totalcpu:
+    totalcpuUtilization:
         formatter: ''
-        name: totalcpu
+        name: totalcpuUtilization
         percent: ''
-        query: sum(machine_cpu_cores%7Bkubernetes_io_hostname%3D~%22%5E.*%24%22%7D)
+        query: sum(instance%3Anode_cpu_utilisation%3Arate1m%7Bjob%3D%22node-exporter%22%7D)%2F3*100
         step: 15
-    totalmemory:
+    totalmemoryUtilization:
         formatter: ''
-        name: totalmemory
+        name: totalmemoryUtilization
         percent: ''
-        query: sum%20(machine_memory_bytes%7Bkubernetes_io_hostname%3D~%22%5E.*%24%22%7D)
+        query: sum(instance%3Anode_memory_utilisation%3Aratio%7Bjob%3D%22node-exporter%22%7D)%2F3*100
         step: 15
 time:
-    end: '1595586523.236645'
-    start: '1595586222.619673'
+    end: '1597386533.604389'
+    start: '1597385332.713849'

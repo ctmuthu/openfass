@@ -73,13 +73,16 @@ resource "aws_instance" "Master" {
       "tar -zxvf folders.tar.gz",
       "rm -rf *.tar.gz",
       "sudo chmod 600 id_rsa",
+      "sudo sh ./scripts/docker.sh",
       "sudo sh ./scripts/kubeadm.sh",
-      "scp -oStrictHostKeyChecking=no -i id_rsa ./scripts/kubeadm.sh ubuntu@${aws_instance.Worker[0].private_ip}:/home/ubuntu/kubeadm.sh",
-      "scp -oStrictHostKeyChecking=no -i id_rsa ./scripts/kubeadm.sh ubuntu@${aws_instance.Worker[1].private_ip}:/home/ubuntu/kubeadm.sh",
-      "scp -R -oStrictHostKeyChecking=no -i id_rsa ./kubernetes-metric-server ubuntu@${aws_instance.Worker[0].private_ip}:/home/ubuntu/kubernetes-metric-server",
-      "scp -R -oStrictHostKeyChecking=no -i id_rsa ./kubernetes-metric-server ubuntu@${aws_instance.Worker[1].private_ip}:/home/ubuntu/kubernetes-metric-server",
-      "ssh -oStrictHostKeyChecking=no -i id_rsa ubuntu@${aws_instance.Worker[0].private_ip} 'sudo sh kubeadm.sh; '",
-      "ssh -oStrictHostKeyChecking=no -i id_rsa ubuntu@${aws_instance.Worker[1].private_ip} 'sudo sh kubeadm.sh; '",
+      "scp -r -oStrictHostKeyChecking=no -i id_rsa ./scripts ubuntu@${aws_instance.Worker[0].private_ip}:/home/ubuntu/",
+      "scp -r -oStrictHostKeyChecking=no -i id_rsa ./scripts ubuntu@${aws_instance.Worker[1].private_ip}:/home/ubuntu/",
+      "#scp -r -oStrictHostKeyChecking=no -i id_rsa ./kubernetes-metric-server ubuntu@${aws_instance.Worker[0].private_ip}:/home/ubuntu/kubernetes-metric-server",
+      "#scp -r -oStrictHostKeyChecking=no -i id_rsa ./kubernetes-metric-server ubuntu@${aws_instance.Worker[1].private_ip}:/home/ubuntu/kubernetes-metric-server",
+      "#scp -r -oStrictHostKeyChecking=no -i id_rsa ./node-exporter ubuntu@${aws_instance.Worker[0].private_ip}:/home/ubuntu/node-exporter",
+      "#scp -r -oStrictHostKeyChecking=no -i id_rsa ./node-exporter ubuntu@${aws_instance.Worker[1].private_ip}:/home/ubuntu/node-exporter",
+      "ssh -oStrictHostKeyChecking=no -i id_rsa ubuntu@${aws_instance.Worker[0].private_ip} 'sudo sh scripts/docker.sh && sudo sh scripts/kubeadm.sh'",
+      "ssh -oStrictHostKeyChecking=no -i id_rsa ubuntu@${aws_instance.Worker[1].private_ip} 'sudo sh scripts/docker.sh && sudo sh scripts/kubeadm.sh'",
       "sudo kubeadm init",
       "mkdir -p $HOME/.kube",
       "sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config",
@@ -91,7 +94,10 @@ resource "aws_instance" "Master" {
       "ssh -oStrictHostKeyChecking=no -i id_rsa ubuntu@${aws_instance.Worker[0].private_ip} 'sudo sh join.sh ; '",
       "ssh -oStrictHostKeyChecking=no -i id_rsa ubuntu@${aws_instance.Worker[1].private_ip} 'sudo sh join.sh ; '",
       "echo 'nameserver 10.96.0.10' > sudo /etc/resolv.conf",
-      "sudo sh ./scripts/openfaas.sh"
+      "sudo sh ./scripts/openfaas.sh",
+      "#sh ./scripts/run_prometheus.sh",
+      "#ssh -oStrictHostKeyChecking=no -i id_rsa ubuntu@${aws_instance.Worker[0].private_ip} 'sh ./scripts/run_prometheus.sh'",
+      "#ssh -oStrictHostKeyChecking=no -i id_rsa ubuntu@${aws_instance.Worker[1].private_ip} 'sh ./scripts/run_prometheus.sh'"
       ]
   }
   provisioner "local-exec" {

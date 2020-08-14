@@ -85,12 +85,15 @@ resource "aws_instance" "Master" {
       "tar -zxvf folders.tar.gz",
       "rm -rf *.tar.gz",
       "sudo chmod 600 id_rsa",
-      "curl -sfL https://get.k3s.io | sh -",
+      "sudo sh ./scripts/docker.sh",
+      "curl -sfL https://get.k3s.io | sh -s - --docker --kubelet-arg containerd=/run/k3s/containerd/containerd.sock",
       "sudo cat /var/lib/rancher/k3s/server/node-token > node-token",
+      "scp -r -oStrictHostKeyChecking=no -i id_rsa ./scripts/* ubuntu@${aws_instance.Worker1.private_ip}:/home/ubuntu/",
+      "scp -r -oStrictHostKeyChecking=no -i id_rsa ./scripts/* ubuntu@${aws_instance.Worker2.private_ip}:/home/ubuntu/",
       "scp -oStrictHostKeyChecking=no -i id_rsa ./node-token ubuntu@${aws_instance.Worker1.private_ip}:/home/ubuntu/node-token",
       "scp -oStrictHostKeyChecking=no -i id_rsa ./node-token ubuntu@${aws_instance.Worker2.private_ip}:/home/ubuntu/node-token",
-      "ssh -oStrictHostKeyChecking=no -i id_rsa ubuntu@${aws_instance.Worker1.private_ip} 'curl -sfL https://get.k3s.io | K3S_URL=https://${aws_instance.Master[0].private_ip}:6443 K3S_TOKEN=$(sudo cat /home/ubuntu/node-token) sh - '",
-      "ssh -oStrictHostKeyChecking=no -i id_rsa ubuntu@${aws_instance.Worker2.private_ip} 'curl -sfL https://get.k3s.io | K3S_URL=https://${aws_instance.Master[0].private_ip}:6443 K3S_TOKEN=$(sudo cat /home/ubuntu/node-token) sh - '",
+      "ssh -oStrictHostKeyChecking=no -i id_rsa ubuntu@${aws_instance.Worker1.private_ip} 'sudo sh docker.sh; curl -sfL https://get.k3s.io | K3S_URL=https://${aws_instance.Master[0].private_ip}:6443 K3S_TOKEN=$(sudo cat /home/ubuntu/node-token) sh -s - --docker --kubelet-arg containerd=/run/k3s/containerd/containerd.sock'",
+      "ssh -oStrictHostKeyChecking=no -i id_rsa ubuntu@${aws_instance.Worker2.private_ip} 'sudo sh docker.sh; curl -sfL https://get.k3s.io | K3S_URL=https://${aws_instance.Master[0].private_ip}:6443 K3S_TOKEN=$(sudo cat /home/ubuntu/node-token) sh -s - --docker --kubelet-arg containerd=/run/k3s/containerd/containerd.sock'",
       "echo 'nameserver 10.96.0.10' > sudo /etc/resolv.conf",
       "sudo sh ./scripts/openfaas.sh"
       ]

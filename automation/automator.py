@@ -10,6 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import statsmodels.api as sm
 from sklearn import linear_model
+from pylab import rcParams
 
 class Deployment:
 
@@ -37,6 +38,7 @@ class Deployment:
                 self.function_deployment()
                 self.k6_run()
                 self.delete_function()
+                pass
             if (self.instance["post_test"]["data_extraction"] == True):
                 self.query()
             if (self.instance["post_test"]["plot"] == True):
@@ -70,7 +72,9 @@ class Deployment:
             os.chdir(self.terraform_dir)
         else:
             os.chdir(self.k3_dir)
-        os.system("terraform destroy -var-file=../var_old.tfvars -auto-approve && sleep 20 && terraform apply -var-file=var.tfvars -auto-approve && terraform output -json | jq 'with_entries(.value |= .value)' > ../config.json")
+        os.system("rm -rf terraform.* && rm -rf .terraform/")
+        os.system("terraform init")
+        os.system("terraform apply -var-file=var.tfvars -auto-approve && terraform output -json | jq 'with_entries(.value |= .value)' > ../config.json")
         os.system("cp var.tfvars ../var_old.tfvars")
         os.chdir(self.grafana_dir)
         os.system("terraform destroy --auto-approve && terraform apply --auto-approve")
@@ -82,8 +86,11 @@ class Deployment:
         self.write_to_json()
 
     def destroy_cluster(self):
-        os.chdir(self.terraform_dir)
-        os.system("terraform destroy -var-file=var_old.tfvars -auto-approve")
+        if (self.instance["k8"]):
+            os.chdir(self.terraform_dir)
+        else:
+            os.chdir(self.k3_dir)
+        os.system("terraform destroy -var-file=../var_old.tfvars -auto-approve")
         time.sleep(12)
     
     def ssh(self, cmd):
@@ -160,7 +167,7 @@ class Deployment:
                     + str(self.datastore["time"]["start"]) \
                         + "&end=" + str(self.datastore["time"]["end"]) \
                             + "&step=" + str(self.datastore["query"][i]["step"])
-            #print(url)
+            print(url)
             receive = requests.get(url)
             #print(receive.json())
             self.data_formatter(receive.json(), self.datastore["query"][i]["name"])
@@ -197,18 +204,25 @@ class Deployment:
             self.df[column] = df2.Value.values
 
     def plot(self):
+        rcParams['figure.figsize'] = 25, 15
+        rcParams["legend.loc"] = 'upper left'
+        rcParams['axes.labelsize'] = 16
+        rcParams['axes.titlesize'] = 20
+        rcParams["font.size"] = 16
         ax = []
         fig = plt.subplots()
         #print(self.df.columns)
+        filename = self.instance["function"]["name"] + self.datastore["time"]["start"] + "_" + self.datastore["time"]["end"] + ".csv"
+        self.df = pd.read_csv(os.path.join(self.automation_dir, filename))
         if len(self.df.columns) <= 4:
             plot_array = "22"
         else:
             plot_array = "33"
-        for col in range(0,len(self.df.columns)):
-            plt.subplot(int(plot_array+str(col+1)))
+        for col in range(1,len(self.df.columns)):
+            plt.subplot(int(plot_array+str(col)))
             plt.plot(self.df.index,self.df[self.df.columns[col]])
-            plt.xlabel(self.df.columns[col])
-        filename = self.instance["function"]["name"] + self.datastore["time"]["start"] + "_" + self.datastore["time"]["end"] + ".png"
+            plt.ylabel(self.df.columns[col])
+        filename = "updated" + self.instance["function"]["name"] + self.datastore["time"]["start"] + "_" + self.datastore["time"]["end"] + ".png"
         #plt.show()
         plt.savefig(os.path.join(self.automation_dir, filename))
 

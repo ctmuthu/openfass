@@ -22,22 +22,64 @@ data:
       #   scrape_interval: 5s
       #   static_configs:
       #     - targets: ['localhost:9090']
-      - job_name: 'metric-server-exporter'
-        scrape_interval: 5s
-        static_configs:
-          - targets: ['metrics-server-exporter.kube-system.svc.cluster.local:9104']
       - job_name: 'kube-state-metrics'
         scrape_interval: 5s
         static_configs:
-          - targets: ['kube-state-metrics.kube-system.svc.cluster.local:8080']
+          - targets: ['kube-state-metrics.monitoring.svc.cluster.local:8080']
       - job_name: 'kube-state-metrics2'
         scrape_interval: 5s
         static_configs:
-          - targets: ['kube-state-metrics.kube-system.svc.cluster.local:8081']
-      - job_name: 'node-exporter'
-        scrape_interval: 5s
-        static_configs:
-          - targets: ['node-exporter.openfaas.svc.cluster.local:9100']
+          - targets: ['kube-state-metrics.monitoring.svc.cluster.local:8081']
+      - job_name: 'kube-prometheus-exporter-node'
+        scrape_interval: 15s
+        scrape_timeout: 10s
+        metrics_path: /metrics
+        scheme: http
+        kubernetes_sd_configs:
+        - role: endpoints
+          namespaces:
+            names:
+            - monitoring
+        relabel_configs:
+        - source_labels: [__meta_kubernetes_service_label_app]
+          separator: ;
+          regex: exporter-node
+          replacement: $1
+          action: keep
+        - source_labels: [__meta_kubernetes_endpoint_port_name]
+          separator: ;
+          regex: metrics
+          replacement: $1
+          action: keep
+        - source_labels: [__meta_kubernetes_namespace]
+          separator: ;
+          regex: (.*)
+          target_label: namespace
+          replacement: $1
+          action: replace
+        - source_labels: [__meta_kubernetes_pod_name]
+          separator: ;
+          regex: (.*)
+          target_label: pod
+          replacement: $1
+          action: replace
+        - source_labels: [__meta_kubernetes_service_name]
+          separator: ;
+          regex: (.*)
+          target_label: service
+          replacement: $1
+          action: replace
+        - source_labels: [__meta_kubernetes_service_name]
+          separator: ;
+          regex: (.*)
+          target_label: job
+          replacement: ${1}
+          action: replace
+        - separator: ;
+          regex: (.*)
+          target_label: endpoint
+          replacement: metrics
+          action: replace
       - job_name: 'kubernetes-cadvisor'
         scrape_interval: 5s
         static_configs:
@@ -74,8 +116,6 @@ data:
           - alertmanager:9093
     remote_write:
     - url: "http://138.246.234.122:8086/api/v1/prom/write?db=prometheus"
-    remote_read:
-    - url: "http://138.246.234.122:8086/api/v1/prom/read?db=prometheus"
   alert.rules.yml: |
     groups:
       - name: openfaas

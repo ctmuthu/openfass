@@ -1,6 +1,22 @@
-sudo kubectl apply -f kubernetes-metric-server/
-sudo kubectl apply -f kube-state-metrics/
-sudo kubectl apply -k cadvisor/
+#sudo kubectl apply -f kubernetes-metric-server/
+sudo kubectl apply -f scripts/01-namespaces.yaml
+sleep 20
+#sudo kubectl apply -f kube-state-metrics/
+#sudo kubectl apply -k cadvisor/
+#sudo kubectl apply -f node-exporter/
+# Create the operator to instanciate all CRDs
+kubectl -n monitoring apply -f ./monitoring/prometheus-operator/
+
+# Deploy monitoring components
+kubectl -n monitoring apply -f ./monitoring/node-exporter/
+kubectl -n monitoring apply -f ./monitoring/kube-state-metrics/
+kubectl -n monitoring apply -f ./monitoring/alertmanager
+
+# Deploy prometheus instance and all the service monitors for targets
+kubectl -n monitoring apply -f ./monitoring/prometheus-cluster-monitoring/
+
+# Dashboarding
+kubectl -n monitoring create -f ./monitoring/grafana/
 
 # kubectl apply -f metrics-server-exporter/
 
