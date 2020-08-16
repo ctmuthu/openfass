@@ -1,4 +1,3 @@
-container_image: sentimentanalysis
 database:
     host: 138.246.234.122
     name: prometheus
@@ -37,6 +36,10 @@ model_functions:
                     stage: 120
             start: 0
             test_run: k6_run_script.py
+        time:
+            end: '1597583495.336461'
+            start: '1597576291.696977'
+
     instance2:
         clusterconfig:
             image: '"ami-055df5de4f42cf331"'
@@ -67,6 +70,9 @@ model_functions:
                     stage: 120
             start: 4
             test_run: k6_run_script.py
+        time:
+            end: '1597583495.336461'
+            start: '1597576291.696977'
     instance3:
         clusterconfig:
             image: '"ami-055df5de4f42cf331"'
@@ -97,6 +103,9 @@ model_functions:
                     stage: 5
             start: 4
             test_run: k6_run_script.py
+        time:
+            end: '1597583495.336461'
+            start: '1597576291.696977'
     instance4:
         clusterconfig:
             image: '"ami-055df5de4f42cf331"'
@@ -136,84 +145,97 @@ model_functions:
                 vus: 1
             start: 4
             test_run: k6_run_script.py
+        time:
+            end: '1597583495.336461'
+            start: '1597576291.696977'
 prometheus:
     api: api/v1/query_range?query=
     host: 138.246.234.122
     port: 9090
 query:
     cpu:
-        container_image: sentimentanalysis
+        query_split: true
         formatter: ''
         name: cpu
         percent: 50
-        query: sum(rate(container_cpu_usage_seconds_total{container=~%22sentimentanalysis%22}[1m]))%2F6*100
+        query: sum(rate(container_cpu_usage_seconds_total{container=~%22
+        query1: '%22}[1m]))%2F6*100'
         step: 15
     diskio:
+        query_split: false
         formatter: ''
         name: diskio
         percent: ''
         query: rate(node_disk_io_time_seconds_total%7Bjob%3D%22node-exporter%22%2C%20device%3D~%22nvme.%2B%7Crbd.%2B%7Csd.%2B%7Cvd.%2B%7Cxvd.%2B%7Cdm-.%2B%7Cdasd.%2B%22%7D%5B60s%5D)
         step: 15
     diskioRead:
+        query_split: false
         formatter: ''
         name: diskioRead
         percent: ''
         query: rate(node_disk_read_bytes_total%7Bjob%3D%22node-exporter%22%2C%20device%3D~%22nvme.%2B%7Crbd.%2B%7Csd.%2B%7Cvd.%2B%7Cxvd.%2B%7Cdm-.%2B%7Cdasd.%2B%22%7D%5B60s%5D)
         step: 15
     diskioWritten:
+        query_split: false
         formatter: ''
         name: diskioWritten
         percent: ''
         query: rate(node_disk_written_bytes_total%7Bjob%3D%22node-exporter%22%2C%20device%3D~%22nvme.%2B%7Crbd.%2B%7Csd.%2B%7Cvd.%2B%7Cxvd.%2B%7Cdm-.%2B%7Cdasd.%2B%22%7D%5B60s%5D)
         step: 15
     mem:
+        query_split: true
         formatter: 2147483648
         name: mem
         percent: 14.28
-        query: sum(container_memory_working_set_bytes{container=~%22sentimentanalysis%22})%2F(1024*1024*1024*8)*100
+        query: sum(container_memory_working_set_bytes{container=~%22
+        query1: '%22})%2F(1024*1024*1024*8)*100'
         step: 15
     networkReceived:
+        query_split: false
         formatter: ''
         name: networkReceived
         percent: ''
         query: rate(node_network_receive_bytes_total%7Bjob%3D%22node-exporter%22%2C%20device%3D%22eth0%22%7D%5B60s%5D)
         step: 15
     networkTransmitted:
+        query_split: false
         formatter: ''
         name: networkTransmitted
         percent: ''
         query: rate(node_network_transmit_bytes_total%7Bjob%3D%22node-exporter%22%2C%20device%3D%22eth0%22%7D%5B60s%5D)
         step: 15
     replica:
+        query_split: false
         formatter: ''
         name: replica
         percent: ''
         query: gateway_service_count
         step: 15
     requests:
+        query_split: false
         formatter: ''
         name: requests
         percent: 1.66
         query: sum(sum_over_time(http_reqs%5B1m%5D))
         step: 15
     responsetime:
+        query_split: false
         formatter: ''
         name: responsetime
         percent: 1.66
         query: max(http_req_duration)%2F1000
         step: 15
     totalcpuUtilization:
+        query_split: false
         formatter: ''
         name: totalcpuUtilization
         percent: ''
         query: sum(instance%3Anode_cpu_utilisation%3Arate1m%7Bjob%3D%22node-exporter%22%7D)%2F3*100
         step: 15
     totalmemoryUtilization:
+        query_split: false
         formatter: ''
         name: totalmemoryUtilization
         percent: ''
         query: sum(instance%3Anode_memory_utilisation%3Aratio%7Bjob%3D%22node-exporter%22%7D)%2F3*100
         step: 15
-time:
-    end: '1597583495.336461'
-    start: '1597576291.696977'

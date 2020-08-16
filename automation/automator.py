@@ -155,24 +155,32 @@ class Deployment:
         end_time = dt.datetime.now(tz=dt.timezone.utc)
         end_time = end_time.replace(tzinfo=dt.timezone.utc).timestamp()
         os.chdir(self.cwd)
-        self.datastore["time"]["start"]= str(start_time)
-        self.datastore["time"]["end"] = str(end_time)
+        self.instance["time"]["start"]= str(start_time)
+        self.instance["time"]["end"] = str(end_time)
         self.write_to_json()
 
     def query(self):
         self.df = pd.DataFrame()
         #print(self.datastore["query"])
         for i in self.datastore["query"]:
-            url = "http://"+ str(self.datastore["prometheus"]["host"])+ ":" + str(self.datastore["prometheus"]["port"]) + "/" \
-                + str(self.datastore["prometheus"]["api"]) + str(self.datastore["query"][i]["query"]) + "&start=" \
-                    + str(self.datastore["time"]["start"]) \
-                        + "&end=" + str(self.datastore["time"]["end"]) \
-                            + "&step=" + str(self.datastore["query"][i]["step"])
+            if self.datastore["query"][i]["query_split"] == False:
+                url = "http://"+ str(self.datastore["prometheus"]["host"])+ ":" + str(self.datastore["prometheus"]["port"]) + "/" \
+                    + str(self.datastore["prometheus"]["api"]) + str(self.datastore["query"][i]["query"]) + "&start=" \
+                        + str(self.instance["time"]["start"]) \
+                        + "&end=" + str(self.instance["time"]["end"]) \
+                        + "&step=" + str(self.datastore["query"][i]["step"])
+            else:
+                url = "http://"+ str(self.datastore["prometheus"]["host"])+ ":" + str(self.datastore["prometheus"]["port"]) + "/" \
+                    + str(self.datastore["prometheus"]["api"]) + str(self.datastore["query"][i]["query"]) \
+                        + self.instance["function"]["name"] + str(self.datastore["query"][i]["query1"]) + "&start=" \
+                        + str(self.instance["time"]["start"]) \
+                        + "&end=" + str(self.instance["time"]["end"]) \
+                        + "&step=" + str(self.datastore["query"][i]["step"])
             print(url)
             receive = requests.get(url)
             #print(receive.json())
             self.data_formatter(receive.json(), self.datastore["query"][i]["name"])
-        filename = self.instance["function"]["name"] + self.datastore["time"]["start"] + "_" + self.datastore["time"]["end"] + ".csv"
+        filename = self.instance["function"]["name"] + self.instance["time"]["start"] + "_" + self.instance["time"]["end"] + ".csv"
         self.df.to_csv(os.path.join(self.automation_dir, filename), index=True)
 
     def data_formatter(self, result, column):
@@ -213,7 +221,7 @@ class Deployment:
         ax = []
         fig = plt.subplots()
         #print(self.df.columns)
-        filename = self.instance["function"]["name"] + self.datastore["time"]["start"] + "_" + self.datastore["time"]["end"] + ".csv"
+        filename = self.instance["function"]["name"] + self.instance["time"]["start"] + "_" + self.instance["time"]["end"] + ".csv"
         self.df = pd.read_csv(os.path.join(self.automation_dir, filename))
         #self.df.set_index("Time", inplace = True)
         if len(self.df.columns) <= 4:
@@ -231,7 +239,7 @@ class Deployment:
             #print(self.df.index,self.df[self.df.columns[col]])
             ax.plot(self.df.index,self.df[self.df.columns[col]])
             ax.set_title(self.df.columns[col])
-        filename = "updated" + self.instance["function"]["name"] + self.datastore["time"]["start"] + "_" + self.datastore["time"]["end"] + ".png"
+        filename = "updated" + self.instance["function"]["name"] + self.instance["time"]["start"] + "_" + self.instance["time"]["end"] + ".png"
         #plt.show()
         plt.savefig(os.path.join(self.automation_dir, filename))
 
@@ -247,7 +255,7 @@ class Deployment:
         predictions = model.predict(X) 
         print_model = model.summary()
         print(print_model)
-        filename = self.instance["function"]["name"] + self.datastore["time"]["start"] + "_" + self.datastore["time"]["end"] + "_model.txt"
+        filename = self.instance["function"]["name"] + self.instance["time"]["start"] + "_" + self.instance["time"]["end"] + "_model.txt"
         file = open(os.path.join(self.automation_dir, filename), "w")
         file.write(str(print_model))
         file.close()
