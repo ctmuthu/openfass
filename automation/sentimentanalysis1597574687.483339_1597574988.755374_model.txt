@@ -1,0 +1,26 @@
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:           responsetime   R-squared:                       0.639
+Model:                            OLS   Adj. R-squared:                  0.583
+Method:                 Least Squares   F-statistic:                     11.49
+Date:                Sun, 16 Aug 2020   Prob (F-statistic):            0.00134
+Time:                        10:50:02   Log-Likelihood:                 15.899
+No. Observations:                  16   AIC:                            -25.80
+Df Residuals:                      13   BIC:                            -23.48
+Df Model:                           2                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          0.1819      0.077      2.349      0.035       0.015       0.349
+cpu            0.0056      0.003      1.631      0.127      -0.002       0.013
+mem            0.3424      0.102      3.368      0.005       0.123       0.562
+==============================================================================
+Omnibus:                        1.598   Durbin-Watson:                   1.236
+Prob(Omnibus):                  0.450   Jarque-Bera (JB):                0.365
+Skew:                          -0.307   Prob(JB):                        0.833
+Kurtosis:                       3.412   Cond. No.                         97.6
+==============================================================================
+
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.

@@ -186,8 +186,8 @@ class Deployment:
                 data.append(float(value[1]))
             #print(self.time,data)
             self.toTable(column, data)
-        except Exception:
-            print("Query returned empty")
+        except Exception as e:
+            print(e)
 
     def toTable(self, column, data):
         if self.df.empty:

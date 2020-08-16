@@ -5,7 +5,7 @@ database:
     password: admin
     port: 8086
     username: admin
-master_ip: 54.208.159.247
+master_ip: 54.196.128.130
 model_functions:
     instance1:
         clusterconfig:
@@ -27,14 +27,14 @@ model_functions:
             modeling: true
             plot: true
         pre_test:
-            cluster_deployment: true
-            function_deployment: true
+            cluster_deployment: false
+            function_deployment: false
         test:
             function_params: '"Personally I like functions to do one thing and only
                 one thing well, it makes them more readable."'
             k6:
                 customized:
-                    stage: 5
+                    stage: 120
             start: 0
             test_run: k6_run_script.py
     instance2:
@@ -200,7 +200,7 @@ query:
         formatter: ''
         name: responsetime
         percent: 1.66
-        query: http_req_duration%7Bstatus%3D%22200%22%7D%2F1000
+        query: max(http_req_duration)%2F1000
         step: 15
     totalcpuUtilization:
         formatter: ''
@@ -215,5 +215,5 @@ query:
         query: sum(instance%3Anode_memory_utilisation%3Aratio%7Bjob%3D%22node-exporter%22%7D)%2F3*100
         step: 15
 time:
-    end: '1597569042.40839'
-    start: '1597566382.091118'
+    end: '1597583495.336461'
+    start: '1597576291.696977'
