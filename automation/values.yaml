@@ -49,22 +49,21 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: sentimentanalysis
+            name: figlet
             store: true
         function_deployment:
             deployment: f_deployment.py
             function_params: ''
         k8: true
         post_test:
-            data_extraction: false
-            modeling: false
-            plot: false
+            data_extraction: true
+            modeling: true
+            plot: true
         pre_test:
-            cluster_deployment: false
-            function_deployment: false
+            cluster_deployment: true
+            function_deployment: true
         test:
-            function_params: '"Personally I like functions to do one thing and only
-                one thing well, it makes them more readable."'
+            function_params: '"Muthu"'
             k6:
                 customized:
                     stage: 120

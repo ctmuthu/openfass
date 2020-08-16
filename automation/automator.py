@@ -45,8 +45,8 @@ class Deployment:
                 self.plot()
             if (self.instance["post_test"]["modeling"] == True):
                 self.model()
-            # if (self.instance["pre_test"]["cluster_deployment"] == True):
-            #     self.destroy_cluster()
+            if (self.instance["pre_test"]["cluster_deployment"] == True):
+                self.destroy_cluster()
 
     def update_tfvars_file(self):
         if (self.instance["k8"]):
@@ -92,7 +92,7 @@ class Deployment:
         else:
             os.chdir(self.k3_dir)
         os.system("terraform destroy -var-file=../var_old.tfvars -auto-approve")
-        time.sleep(12)
+        time.sleep(30)
     
     def ssh(self, cmd):
         try:
