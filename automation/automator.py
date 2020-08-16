@@ -204,7 +204,7 @@ class Deployment:
             self.df[column] = df2.Value.values
 
     def plot(self):
-        rcParams['figure.figsize'] = 25, 15
+        rcParams['figure.figsize'] = 30, 20
         rcParams["legend.loc"] = 'upper left'
         rcParams['axes.labelsize'] = 16
         rcParams['axes.titlesize'] = 20
@@ -214,14 +214,22 @@ class Deployment:
         #print(self.df.columns)
         filename = self.instance["function"]["name"] + self.datastore["time"]["start"] + "_" + self.datastore["time"]["end"] + ".csv"
         self.df = pd.read_csv(os.path.join(self.automation_dir, filename))
+        #self.df.set_index("Time", inplace = True)
         if len(self.df.columns) <= 4:
-            plot_array = "22"
-        else:
+            fig, axs = plt.subplots(2, 2)
+        elif len(self.df.columns) <= 9:
+            fig, axs = plt.subplots(3, 3)
             plot_array = "33"
-        for col in range(1,len(self.df.columns)):
-            plt.subplot(int(plot_array+str(col)))
-            plt.plot(self.df.index,self.df[self.df.columns[col]])
-            plt.ylabel(self.df.columns[col])
+        else:
+            fig, axs = plt.subplots(4, 3)
+            plot_array = "44"
+        for col, ax in zip(range(1,len(self.df.columns)), axs.flatten()):
+        #for col in range(1,len(self.df.columns)):
+            #plt.subplot(int(plot_array+str(col)))
+            #print(col)
+            #print(self.df.index,self.df[self.df.columns[col]])
+            ax.plot(self.df.index,self.df[self.df.columns[col]])
+            ax.set_title(self.df.columns[col])
         filename = "updated" + self.instance["function"]["name"] + self.datastore["time"]["start"] + "_" + self.datastore["time"]["end"] + ".png"
         #plt.show()
         plt.savefig(os.path.join(self.automation_dir, filename))

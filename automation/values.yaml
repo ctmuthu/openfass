@@ -5,7 +5,7 @@ database:
     password: admin
     port: 8086
     username: admin
-master_ip: 54.160.12.136
+master_ip: 54.208.159.247
 model_functions:
     instance1:
         clusterconfig:
@@ -27,8 +27,8 @@ model_functions:
             modeling: true
             plot: true
         pre_test:
-            cluster_deployment: false
-            function_deployment: false
+            cluster_deployment: true
+            function_deployment: true
         test:
             function_params: '"Personally I like functions to do one thing and only
                 one thing well, it makes them more readable."'
@@ -148,11 +148,41 @@ query:
         percent: 50
         query: sum(rate(container_cpu_usage_seconds_total{container=~%22sentimentanalysis%22}[1m]))%2F6*100
         step: 15
+    diskio:
+        formatter: ''
+        name: diskio
+        percent: ''
+        query: rate(node_disk_io_time_seconds_total%7Bjob%3D%22node-exporter%22%2C%20device%3D~%22nvme.%2B%7Crbd.%2B%7Csd.%2B%7Cvd.%2B%7Cxvd.%2B%7Cdm-.%2B%7Cdasd.%2B%22%7D%5B60s%5D)
+        step: 15
+    diskioRead:
+        formatter: ''
+        name: diskioRead
+        percent: ''
+        query: rate(node_disk_read_bytes_total%7Bjob%3D%22node-exporter%22%2C%20device%3D~%22nvme.%2B%7Crbd.%2B%7Csd.%2B%7Cvd.%2B%7Cxvd.%2B%7Cdm-.%2B%7Cdasd.%2B%22%7D%5B60s%5D)
+        step: 15
+    diskioWritten:
+        formatter: ''
+        name: diskioWritten
+        percent: ''
+        query: rate(node_disk_written_bytes_total%7Bjob%3D%22node-exporter%22%2C%20device%3D~%22nvme.%2B%7Crbd.%2B%7Csd.%2B%7Cvd.%2B%7Cxvd.%2B%7Cdm-.%2B%7Cdasd.%2B%22%7D%5B60s%5D)
+        step: 15
     mem:
         formatter: 2147483648
         name: mem
         percent: 14.28
         query: sum(container_memory_working_set_bytes{container=~%22sentimentanalysis%22})%2F(1024*1024*1024*8)*100
+        step: 15
+    networkReceived:
+        formatter: ''
+        name: networkReceived
+        percent: ''
+        query: rate(node_network_receive_bytes_total%7Bjob%3D%22node-exporter%22%2C%20device%3D%22eth0%22%7D%5B60s%5D)
+        step: 15
+    networkTransmitted:
+        formatter: ''
+        name: networkTransmitted
+        percent: ''
+        query: rate(node_network_transmit_bytes_total%7Bjob%3D%22node-exporter%22%2C%20device%3D%22eth0%22%7D%5B60s%5D)
         step: 15
     replica:
         formatter: ''
@@ -185,5 +215,5 @@ query:
         query: sum(instance%3Anode_memory_utilisation%3Aratio%7Bjob%3D%22node-exporter%22%7D)%2F3*100
         step: 15
 time:
-    end: '1597386533.604389'
-    start: '1597385332.713849'
+    end: '1597569042.40839'
+    start: '1597566382.091118'

@@ -3,8 +3,8 @@
 Dep. Variable:           responsetime   R-squared:                       0.648
 Model:                            OLS   Adj. R-squared:                  0.638
 Method:                 Least Squares   F-statistic:                     68.09
-Date:                Fri, 14 Aug 2020   Prob (F-statistic):           1.68e-17
-Time:                        10:10:24   Log-Likelihood:                 2.9403
+Date:                Sun, 16 Aug 2020   Prob (F-statistic):           1.68e-17
+Time:                        09:11:34   Log-Likelihood:                 2.9403
 No. Observations:                  77   AIC:                            0.1194
 Df Residuals:                      74   BIC:                             7.151
 Df Model:                           2                                         
