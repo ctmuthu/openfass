@@ -34,7 +34,7 @@ model_functions:
                 one thing well, it makes them more readable."'
             k6:
                 customized:
-                    stage: 20
+                    stage: 5
             start: 0
             test_run: k6_run_script.py
     instance2:
