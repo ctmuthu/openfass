@@ -79,7 +79,7 @@ resource "aws_instance" "Master" {
   }
   provisioner "remote-exec" {
     inline = [
-      "sudo apt-get -y update",
+      "#sudo apt-get -y update",
       "sudo bash -c 'echo 1 > /proc/sys/net/ipv4/ip_forward'",
       "cd /home/ubuntu",
       "tar -zxvf folders.tar.gz",
@@ -94,8 +94,7 @@ resource "aws_instance" "Master" {
       "scp -oStrictHostKeyChecking=no -i id_rsa ./node-token ubuntu@${aws_instance.Worker2.private_ip}:/home/ubuntu/node-token",
       "ssh -oStrictHostKeyChecking=no -i id_rsa ubuntu@${aws_instance.Worker1.private_ip} 'sudo sh docker.sh; curl -sfL https://get.k3s.io | K3S_URL=https://${aws_instance.Master[0].private_ip}:6443 K3S_TOKEN=$(sudo cat /home/ubuntu/node-token) sh -s - --docker --kubelet-arg containerd=/run/k3s/containerd/containerd.sock'",
       "ssh -oStrictHostKeyChecking=no -i id_rsa ubuntu@${aws_instance.Worker2.private_ip} 'sudo sh docker.sh; curl -sfL https://get.k3s.io | K3S_URL=https://${aws_instance.Master[0].private_ip}:6443 K3S_TOKEN=$(sudo cat /home/ubuntu/node-token) sh -s - --docker --kubelet-arg containerd=/run/k3s/containerd/containerd.sock'",
-      "echo 'nameserver 10.96.0.10' > sudo /etc/resolv.conf",
-      "sudo sh ./scripts/openfaas.sh"
+      "sudo sh ./scripts/k3s.sh"
       ]
   }
   provisioner "local-exec" {

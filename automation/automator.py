@@ -45,8 +45,8 @@ class Deployment:
                 self.plot()
             if (self.instance["post_test"]["modeling"] == True):
                 self.model()
-            if (self.instance["pre_test"]["cluster_deployment"] == True):
-                self.destroy_cluster()
+            #if (self.instance["pre_test"]["cluster_deployment"] == True):
+            #    self.destroy_cluster()
 
     def update_tfvars_file(self):
         if (self.instance["k8"]):
@@ -78,7 +78,7 @@ class Deployment:
         os.system("cp var.tfvars ../var_old.tfvars")
         os.chdir(self.grafana_dir)
         os.system("rm -rf terraform.* && rm -rf .terraform/")
-        os.system("terraform init && terraform apply --auto-approve")
+        #os.system("terraform init && terraform apply --auto-approve")
         os.chdir(self.cwd)
         #print(cwd)
         configfile = open(os.path.join(self.cwd, 'config.json'),"r")

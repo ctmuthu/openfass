@@ -5,18 +5,18 @@ sleep 20
 #sudo kubectl apply -k cadvisor/
 #sudo kubectl apply -f node-exporter/
 # Create the operator to instanciate all CRDs
-kubectl -n monitoring apply -f ./monitoring/prometheus-operator/
+sudo kubectl -n monitoring apply -f ./monitoring/prometheus-operator/
 
 # Deploy monitoring components
-kubectl -n monitoring apply -f ./monitoring/node-exporter/
-kubectl -n monitoring apply -f ./monitoring/kube-state-metrics/
-kubectl -n monitoring apply -f ./monitoring/alertmanager
+sudo kubectl -n monitoring apply -f ./monitoring/node-exporter/
+sudo kubectl -n monitoring apply -f ./monitoring/kube-state-metrics/
+#sudo kubectl -n monitoring apply -f ./monitoring/alertmanager
 
 # Deploy prometheus instance and all the service monitors for targets
-kubectl -n monitoring apply -f ./monitoring/prometheus-cluster-monitoring/
+sudo kubectl -n monitoring apply -f ./monitoring/prometheus-cluster-monitoring/
 
 # Dashboarding
-kubectl -n monitoring create -f ./monitoring/grafana/
+sudo kubectl -n monitoring create -f ./monitoring/grafana/
 
 # kubectl apply -f metrics-server-exporter/
 
