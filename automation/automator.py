@@ -162,6 +162,9 @@ class Deployment:
     def query(self):
         self.df = pd.DataFrame()
         #print(self.datastore["query"])
+        self.datastore["query"]["cpu"]["formatter"] = self.instance["clusterconfig"]["core"]
+        self.datastore["query"]["mem"]["formatter"] = 1024*1024*1024*self.instance["clusterconfig"]["memory"]
+        self.write_to_json()
         for i in self.datastore["query"]:
             if self.datastore["query"][i]["query_split"] == False:
                 url = "http://"+ str(self.datastore["prometheus"]["host"])+ ":" + str(self.datastore["prometheus"]["port"]) + "/" \
@@ -172,7 +175,8 @@ class Deployment:
             else:
                 url = "http://"+ str(self.datastore["prometheus"]["host"])+ ":" + str(self.datastore["prometheus"]["port"]) + "/" \
                     + str(self.datastore["prometheus"]["api"]) + str(self.datastore["query"][i]["query"]) \
-                        + self.instance["function"]["name"] + str(self.datastore["query"][i]["query1"]) + "&start=" \
+                        + self.instance["function"]["name"] + str(self.datastore["query"][i]["query1"]) \
+                        + str(self.datastore["query"][i]["formatter"]) + "*100&start=" \
                         + str(self.instance["time"]["start"]) \
                         + "&end=" + str(self.instance["time"]["end"]) \
                         + "&step=" + str(self.datastore["query"][i]["step"])

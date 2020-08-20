@@ -18,72 +18,6 @@ data:
     rule_files:
         - 'alert.rules.yml'
     scrape_configs:
-      # - job_name: 'prometheus'
-      #   scrape_interval: 5s
-      #   static_configs:
-      #     - targets: ['localhost:9090']
-      - job_name: 'kube-state-metrics'
-        scrape_interval: 5s
-        static_configs:
-          - targets: ['kube-state-metrics.monitoring.svc.cluster.local:8080']
-      - job_name: 'kube-state-metrics2'
-        scrape_interval: 5s
-        static_configs:
-          - targets: ['kube-state-metrics.monitoring.svc.cluster.local:8081']
-      - job_name: 'kube-prometheus-exporter-node'
-        scrape_interval: 15s
-        scrape_timeout: 10s
-        metrics_path: /metrics
-        scheme: http
-        kubernetes_sd_configs:
-        - role: endpoints
-          namespaces:
-            names:
-            - monitoring
-        relabel_configs:
-        - source_labels: [__meta_kubernetes_service_label_app]
-          separator: ;
-          regex: exporter-node
-          replacement: $1
-          action: keep
-        - source_labels: [__meta_kubernetes_endpoint_port_name]
-          separator: ;
-          regex: metrics
-          replacement: $1
-          action: keep
-        - source_labels: [__meta_kubernetes_namespace]
-          separator: ;
-          regex: (.*)
-          target_label: namespace
-          replacement: $1
-          action: replace
-        - source_labels: [__meta_kubernetes_pod_name]
-          separator: ;
-          regex: (.*)
-          target_label: pod
-          replacement: $1
-          action: replace
-        - source_labels: [__meta_kubernetes_service_name]
-          separator: ;
-          regex: (.*)
-          target_label: service
-          replacement: $1
-          action: replace
-        - source_labels: [__meta_kubernetes_service_name]
-          separator: ;
-          regex: (.*)
-          target_label: job
-          replacement: ${1}
-          action: replace
-        - separator: ;
-          regex: (.*)
-          target_label: endpoint
-          replacement: metrics
-          action: replace
-      - job_name: 'kubernetes-cadvisor'
-        scrape_interval: 5s
-        static_configs:
-          - targets: ['cadvisor.cadvisor.svc.cluster.local:9110']
       - job_name: 'kubernetes-pods'
         scrape_interval: 5s
         honor_labels: false
@@ -109,11 +43,6 @@ data:
           regex: ([^:]+)(?::\d+)?;(\d+)
           replacement: $1:$2
           target_label: __address__
-    alerting:
-      alertmanagers:
-      - static_configs:
-        - targets:
-          - alertmanager:9093
     remote_write:
     - url: "http://138.246.234.122:8086/api/v1/prom/write?db=prometheus"
   alert.rules.yml: |

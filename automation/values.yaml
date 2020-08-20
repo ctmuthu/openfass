@@ -4,56 +4,21 @@ database:
     password: admin
     port: 8086
     username: admin
-master_ip: 54.196.128.130
+master_ip: 100.25.223.193
 model_functions:
     instance1:
         clusterconfig:
+            core: 6
             image: '"ami-055df5de4f42cf331"'
             instance: '"t2.large"'
             master_nodes: '["master"]'
-            region: '"us-east-1"'
-            worker_nodes: '["worker1", "worker2"]'
-        function:
-            image: null
-            name: sentimentanalysis
-            store: true
-        function_deployment:
-            deployment: f_deployment.py
-            function_params: ''
-        k8: true
-        post_test:
-            data_extraction: true
-            modeling: true
-            plot: true
-        pre_test:
-            cluster_deployment: false
-            function_deployment: false
-        test:
-            function_params: '"Personally I like functions to do one thing and only
-                one thing well, it makes them more readable."'
-            k6:
-                customized:
-                    stage: 120
-            start: 0
-            test_run: k6_run_script.py
-        time:
-            end: '1597583495.336461'
-            start: '1597576291.696977'
-
-    instance2:
-        clusterconfig:
-            image: '"ami-055df5de4f42cf331"'
-            instance: '"t2.xlarge"'
-            master_nodes: '["master"]'
+            memory: 8
             region: '"us-east-1"'
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
             name: figlet
             store: true
-        function_deployment:
-            deployment: f_deployment.py
-            function_params: ''
         k8: true
         post_test:
             data_extraction: true
@@ -67,82 +32,96 @@ model_functions:
             k6:
                 customized:
                     stage: 120
-            start: 4
             test_run: k6_run_script.py
         time:
-            end: '1597583495.336461'
-            start: '1597576291.696977'
-    instance3:
+            end: '1597925237.17516'
+            start: '1597924936.31233'
+    instance2:
         clusterconfig:
+            core: 12
             image: '"ami-055df5de4f42cf331"'
-            instance: '"t2.micro"'
+            instance: '"t2.xlarge"'
             master_nodes: '["master"]'
+            memory: 16
             region: '"us-east-1"'
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: sentimentanalysis
+            name: figlet
             store: true
-        function_deployment:
-            deployment: f_deployment.py
-            function_params: ''
-        k8: false
+        k8: true
         post_test:
-            data_extraction: false
-            modeling: false
-            plot: false
+            data_extraction: true
+            modeling: true
+            plot: true
         pre_test:
-            cluster_deployment: false
-            function_deployment: false
+            cluster_deployment: true
+            function_deployment: true
         test:
-            function_params: '"Personally I like functions to do one thing and only
-                one thing well, it makes them more readable."'
+            function_params: '"Muthu"'
             k6:
                 customized:
-                    stage: 5
-            start: 4
+                    stage: 120
             test_run: k6_run_script.py
         time:
-            end: '1597583495.336461'
-            start: '1597576291.696977'
+            end: '1597926132.652252'
+            start: '1597925831.986178'
+    instance3:
+        clusterconfig:
+            core: 24
+            image: '"ami-055df5de4f42cf331"'
+            instance: '"t2.2xlarge"'
+            master_nodes: '["master"]'
+            memory: 32
+            region: '"us-east-1"'
+            worker_nodes: '["worker1", "worker2"]'
+        function:
+            image: null
+            name: figlet
+            store: true
+        k8: true
+        post_test:
+            data_extraction: true
+            modeling: true
+            plot: true
+        pre_test:
+            cluster_deployment: true
+            function_deployment: true
+        test:
+            function_params: '"Muthu"'
+            k6:
+                customized:
+                    stage: 120
+            test_run: k6_run_script.py
+        time:
+            end: '1597927549.743627'
+            start: '1597927334.41771'
     instance4:
         clusterconfig:
+            core: 6
             image: '"ami-055df5de4f42cf331"'
-            instance: '"t2.micro"'
+            instance: '"t2.medium"'
             master_nodes: '["master"]'
+            memory: 12
             region: '"us-east-1"'
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: theaxer/classify:latest
             name: classify
             store: false
-        k8: false
+        k8: true
         post_test:
-            data_extraction: false
-            modeling: false
-            plot: false
+            data_extraction: true
+            modeling: true
+            plot: true
         pre_test:
-            cluster_deployment: false
-            function_deployment: false
+            cluster_deployment: true
+            function_deployment: true
         test:
             function_params: '"Muthu"'
             k6:
-                duration: 1m
-                rps: 10
-                stage:
-                - 1m:10
-                - 1m:10
-                - 1m:20
-                - 1m:20
-                - 1m:30
-                - 1m:40
-                - 1m:50
-                - 1m:60
-                - 1m:70
-                - 1m:80
-                - 1m:90
-                vus: 1
-            start: 4
+                customized:
+                    stage: 120
             test_run: k6_run_script.py
         time:
             end: '1597583495.336461'
@@ -153,88 +132,88 @@ prometheus:
     port: 9090
 query:
     cpu:
-        query_split: true
-        formatter: ''
+        formatter: 24
         name: cpu
         percent: 50
         query: sum(rate(container_cpu_usage_seconds_total{container=~%22
-        query1: '%22}[1m]))%2F6*100'
+        query1: '%22}[1m]))%2F'
+        query_split: true
         step: 15
     diskio:
-        query_split: false
         formatter: ''
         name: diskio
         percent: ''
         query: rate(node_disk_io_time_seconds_total%7Bjob%3D%22node-exporter%22%2C%20device%3D~%22nvme.%2B%7Crbd.%2B%7Csd.%2B%7Cvd.%2B%7Cxvd.%2B%7Cdm-.%2B%7Cdasd.%2B%22%7D%5B60s%5D)
+        query_split: false
         step: 15
     diskioRead:
-        query_split: false
         formatter: ''
         name: diskioRead
         percent: ''
         query: rate(node_disk_read_bytes_total%7Bjob%3D%22node-exporter%22%2C%20device%3D~%22nvme.%2B%7Crbd.%2B%7Csd.%2B%7Cvd.%2B%7Cxvd.%2B%7Cdm-.%2B%7Cdasd.%2B%22%7D%5B60s%5D)
+        query_split: false
         step: 15
     diskioWritten:
-        query_split: false
         formatter: ''
         name: diskioWritten
         percent: ''
         query: rate(node_disk_written_bytes_total%7Bjob%3D%22node-exporter%22%2C%20device%3D~%22nvme.%2B%7Crbd.%2B%7Csd.%2B%7Cvd.%2B%7Cxvd.%2B%7Cdm-.%2B%7Cdasd.%2B%22%7D%5B60s%5D)
+        query_split: false
         step: 15
     mem:
-        query_split: true
-        formatter: 2147483648
+        formatter: 34359738368
         name: mem
         percent: 14.28
         query: sum(container_memory_working_set_bytes{container=~%22
-        query1: '%22})%2F(1024*1024*1024*8)*100'
+        query1: '%22})%2F'
+        query_split: true
         step: 15
     networkReceived:
-        query_split: false
         formatter: ''
         name: networkReceived
         percent: ''
         query: rate(node_network_receive_bytes_total%7Bjob%3D%22node-exporter%22%2C%20device%3D%22eth0%22%7D%5B60s%5D)
+        query_split: false
         step: 15
     networkTransmitted:
-        query_split: false
         formatter: ''
         name: networkTransmitted
         percent: ''
         query: rate(node_network_transmit_bytes_total%7Bjob%3D%22node-exporter%22%2C%20device%3D%22eth0%22%7D%5B60s%5D)
+        query_split: false
         step: 15
     replica:
-        query_split: false
         formatter: ''
         name: replica
         percent: ''
         query: gateway_service_count
+        query_split: false
         step: 15
     requests:
-        query_split: false
         formatter: ''
         name: requests
         percent: 1.66
         query: sum(sum_over_time(http_reqs%5B1m%5D))
+        query_split: false
         step: 15
     responsetime:
-        query_split: false
         formatter: ''
         name: responsetime
         percent: 1.66
         query: max(http_req_duration)%2F1000
+        query_split: false
         step: 15
     totalcpuUtilization:
-        query_split: false
         formatter: ''
         name: totalcpuUtilization
         percent: ''
         query: sum(instance%3Anode_cpu_utilisation%3Arate1m%7Bjob%3D%22node-exporter%22%7D)%2F3*100
+        query_split: false
         step: 15
     totalmemoryUtilization:
-        query_split: false
         formatter: ''
         name: totalmemoryUtilization
         percent: ''
         query: sum(instance%3Anode_memory_utilisation%3Aratio%7Bjob%3D%22node-exporter%22%7D)%2F3*100
+        query_split: false
         step: 15
