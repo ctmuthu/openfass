@@ -17,7 +17,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: figlet
+            name: sentimentanalysis
             store: true
         k8: true
         post_test:
@@ -28,7 +28,8 @@ model_functions:
             cluster_deployment: true
             function_deployment: true
         test:
-            function_params: '"Muthu"'
+            function_params: '"Personally I like functions to do one thing and only
+                one thing well, it makes them more readable."'
             k6:
                 customized:
                     stage: 120
@@ -47,7 +48,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: figlet
+            name: sentimentanalysis
             store: true
         k8: true
         post_test:
@@ -58,7 +59,8 @@ model_functions:
             cluster_deployment: true
             function_deployment: true
         test:
-            function_params: '"Muthu"'
+            function_params: '"Personally I like functions to do one thing and only
+                one thing well, it makes them more readable."'
             k6:
                 customized:
                     stage: 120
@@ -77,7 +79,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: figlet
+            name: sentimentanalysis
             store: true
         k8: true
         post_test:
@@ -88,7 +90,8 @@ model_functions:
             cluster_deployment: true
             function_deployment: true
         test:
-            function_params: '"Muthu"'
+            function_params: '"Personally I like functions to do one thing and only
+                one thing well, it makes them more readable."'
             k6:
                 customized:
                     stage: 120
@@ -106,9 +109,9 @@ model_functions:
             region: '"us-east-1"'
             worker_nodes: '["worker1", "worker2"]'
         function:
-            image: theaxer/classify:latest
-            name: classify
-            store: false
+            image: null
+            name: sentimentanalysis
+            store: true
         k8: true
         post_test:
             data_extraction: true
@@ -118,7 +121,8 @@ model_functions:
             cluster_deployment: true
             function_deployment: true
         test:
-            function_params: '"Muthu"'
+            function_params: '"Personally I like functions to do one thing and only
+                one thing well, it makes them more readable."'
             k6:
                 customized:
                     stage: 120
