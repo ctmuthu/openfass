@@ -43,6 +43,11 @@ data:
           regex: ([^:]+)(?::\d+)?;(\d+)
           replacement: $1:$2
           target_label: __address__
+    alerting:
+      alertmanagers:
+      - static_configs:
+        - targets:
+          - alertmanager:9093
     remote_write:
     - url: "http://138.246.234.122:8086/api/v1/prom/write?db=prometheus"
   alert.rules.yml: |
