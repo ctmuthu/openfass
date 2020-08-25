@@ -20,7 +20,7 @@ spec:
       labels:
         app: gateway
     spec:
-      serviceAccountName: faas-controller
+      serviceAccountName: openfaas-controller
       volumes:
       - name: faas-netes-temp-volume
         emptyDir: {}
@@ -33,8 +33,7 @@ spec:
             requests:
               cpu: 50m
               memory: 120Mi
-            
-        image: openfaas/gateway:0.18.13
+        image: openfaas/gateway:0.18.18
         imagePullPolicy: Always
         securityContext:
           readOnlyRootFilesystem: true
@@ -97,9 +96,8 @@ spec:
             requests:
               cpu: 50m
               memory: 120Mi
-            
-        image: openfaas/faas-netes:0.10.1
-        imagePullPolicy: 
+        image: openfaas/faas-netes:0.12.2
+        imagePullPolicy: Always
         securityContext:
           readOnlyRootFilesystem: true
           runAsUser: 10001
@@ -110,6 +108,8 @@ spec:
           value: "openfaas-fn"
         - name: read_timeout
           value: "60s"
+        - name: profiles_namespace
+          value: "openfaas"
         - name: write_timeout
           value: "60s"
         - name: image_pull_policy
@@ -138,4 +138,3 @@ spec:
           protocol: TCP
       nodeSelector:
         beta.kubernetes.io/arch: amd64
-        

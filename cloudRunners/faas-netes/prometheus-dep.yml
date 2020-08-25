@@ -1,5 +1,4 @@
 ---
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -19,15 +18,14 @@ spec:
         app: prometheus
       annotations:
         sidecar.istio.io/inject: "true"
-        checksum/prometheus-config: "3da0b694e4fbf6160f4eb71680545246c883eb72308dacbf7a5978f684f8e007"
+        checksum/prometheus-config: "23f8494ef849336211d7d74236bedba758511085a27b238f4ce019bfd3859a9d"
     spec:
-      serviceAccountName: faas-prometheus
+      serviceAccountName: openfaas-prometheus
       containers:
       - name: prometheus
         resources:
             requests:
               memory: 512Mi
-            
         image: prom/prometheus:v2.11.0
         command:
           - "prometheus"
@@ -70,4 +68,3 @@ spec:
           emptyDir: {}
       nodeSelector:
         beta.kubernetes.io/arch: amd64
-        
