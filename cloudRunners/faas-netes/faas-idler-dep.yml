@@ -39,7 +39,7 @@ spec:
               value: 2m
           command:
             - /home/app/faas-idler
-            - -dry-run=true
+            - -dry-run=false
           volumeMounts:
             - name: auth
               readOnly: true

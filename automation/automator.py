@@ -119,7 +119,7 @@ class Deployment:
             function_deployment += "deploy --image=" + function["image"] + " --name=" + function["name"]
         cmd = "faas-cli login --tls-no-verify --username admin --password $(cat password.txt) --gateway http://127.0.0.1:31112"
         self.ssh(cmd)
-        function_deployment += " --gateway http://127.0.0.1:31112"
+        function_deployment += " --gateway http://127.0.0.1:31112 --label 'com.openfaas.scale.zero=true' --label 'com.openfaas.scale.max=50'"
         cmd = function_deployment
         self.ssh(cmd)
 
