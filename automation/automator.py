@@ -283,6 +283,8 @@ class Deployment:
         os.system(compress)
         bot.send_document(chat_id=chat_id, document=open(os.path.join(self.output_dir, filename), 'rb'))
         os.system("rm -rf OutputtoTelegram/*")
+        delete_tar = "rm -rf " + filename
+        os.system(delete_tar)
 
 if __name__ == '__main__':
     Deployment('values.yaml')
