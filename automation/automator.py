@@ -31,6 +31,7 @@ class Deployment:
         self.datastore = yaml.load(self.datafile, Loader=yaml.FullLoader)
         #print(self.datastore)
         for instance in self.datastore["model_functions"]:
+            self.instance_name = instance
             self.instance = self.datastore["model_functions"][instance]
             if (self.instance["pre_test"]["cluster_deployment"] == True):
                 self.update_tfvars_file()
@@ -278,9 +279,11 @@ class Deployment:
 
     def telegram_send(self, chat_id="749187782", token='1300315664:AAGxGYytlA9Dk1xnZjpF7w_qmk-2gbs_2k4'):
         bot = telegram.Bot(token=token)
-        filename = self.instance + self.instance["function"]["name"] + self.instance["time"]["start"] + "_" + self.instance["time"]["end"] + ".zip"
+        filename = self.instance_name + self.instance["function"]["name"] + self.instance["time"]["start"] + "_" + self.instance["time"]["end"] + ".zip"
+        os.chdir(self.output_dir)
         compress = "tar -zcvf " + filename + " " +self.output_dir
         os.system(compress)
+        os.chdir(self.cwd)
         bot.send_document(chat_id=chat_id, document=open(os.path.join(self.output_dir, filename), 'rb'))
         os.system("rm -rf OutputtoTelegram/*")
         delete_tar = "rm -rf " + filename
