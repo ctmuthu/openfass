@@ -11,12 +11,14 @@ import matplotlib.pyplot as plt
 import statsmodels.api as sm
 from sklearn import linear_model
 from pylab import rcParams
+import telegram
 
 class Deployment:
 
     def __init__(self, values_file):
         self.value = values_file
         self.cwd = os.getcwd()
+        self.output_dir = os.path.join(self.cwd, "OutputtoTelegram")
         self.terraform_dir = os.path.join(self.cwd, "terraform")
         self.automation_dir = os.path.join(self.cwd, "automation")
         self.grafana_dir = os.path.join(self.cwd, "grafana")
@@ -47,6 +49,7 @@ class Deployment:
                 self.model()
             if (self.instance["pre_test"]["cluster_deployment"] == True):
                 self.destroy_cluster()
+            self.telegram_send()
 
     def update_tfvars_file(self):
         if (self.instance["k8"]):
@@ -188,7 +191,7 @@ class Deployment:
             #print(receive.json())
             self.data_formatter(receive.json(), self.datastore["query"][i]["name"])
         filename = self.instance["function"]["name"] + self.instance["time"]["start"] + "_" + self.instance["time"]["end"] + ".csv"
-        self.df.to_csv(os.path.join(self.automation_dir, filename), index=True)
+        self.df.to_csv(os.path.join(self.output_dir, filename), index=True)
 
     def data_formatter(self, result, column):
         #print(result["data"]["result"][0]["values"])
@@ -229,7 +232,7 @@ class Deployment:
         fig = plt.subplots()
         #print(self.df.columns)
         filename = self.instance["function"]["name"] + self.instance["time"]["start"] + "_" + self.instance["time"]["end"] + ".csv"
-        self.df = pd.read_csv(os.path.join(self.automation_dir, filename))
+        self.df = pd.read_csv(os.path.join(self.output_dir, filename))
         #self.df.set_index("Time", inplace = True)
         if len(self.df.columns) <= 4:
             fig, axs = plt.subplots(2, 2)
@@ -248,7 +251,7 @@ class Deployment:
             ax.set_title(self.df.columns[col])
         filename = "updated" + self.instance["function"]["name"] + self.instance["time"]["start"] + "_" + self.instance["time"]["end"] + ".png"
         #plt.show()
-        plt.savefig(os.path.join(self.automation_dir, filename))
+        plt.savefig(os.path.join(self.output_dir, filename))
 
     def model(self):
         X = self.df[['cpu','mem']] 
@@ -263,7 +266,7 @@ class Deployment:
         print_model = model.summary()
         print(print_model)
         filename = self.instance["function"]["name"] + self.instance["time"]["start"] + "_" + self.instance["time"]["end"] + "_model.txt"
-        file = open(os.path.join(self.automation_dir, filename), "w")
+        file = open(os.path.join(self.output_dir, filename), "w")
         file.write(str(print_model))
         file.close()
 
@@ -272,6 +275,14 @@ class Deployment:
         self.datafile = open(os.path.join(self.automation_dir, self.value), "w")
         yaml.dump(self.datastore, self.datafile, indent=4)
         self.datafile.close()
+
+    def telegram_send(self, chat_id, token='1300315664:AAGxGYytlA9Dk1xnZjpF7w_qmk-2gbs_2k4'):
+        bot = telegram.Bot(token=token)
+        filename = self.instance + self.instance["function"]["name"] + self.instance["time"]["start"] + "_" + self.instance["time"]["end"] + ".zip"
+        compress = "tar -zcvf " + filename + " " +self.output_dir
+        os.system(compress)
+        bot.send_document(chat_id=chat_id, document=open(os.path.join(self.output_dir, filename), 'rb'))
+        os.system("rm -rf OutputtoTelegram/*")
 
 if __name__ == '__main__':
     Deployment('values.yaml')
