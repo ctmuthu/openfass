@@ -276,7 +276,7 @@ class Deployment:
         yaml.dump(self.datastore, self.datafile, indent=4)
         self.datafile.close()
 
-    def telegram_send(self, chat_id, token='1300315664:AAGxGYytlA9Dk1xnZjpF7w_qmk-2gbs_2k4'):
+    def telegram_send(self, chat_id="749187782", token='1300315664:AAGxGYytlA9Dk1xnZjpF7w_qmk-2gbs_2k4'):
         bot = telegram.Bot(token=token)
         filename = self.instance + self.instance["function"]["name"] + self.instance["time"]["start"] + "_" + self.instance["time"]["end"] + ".zip"
         compress = "tar -zcvf " + filename + " " +self.output_dir
