@@ -34,7 +34,7 @@ spec:
             - name: prometheus_port
               value: "9090"
             - name: inactivity_duration
-              value: 30m
+              value: 5m
             - name: reconcile_interval
               value: 2m
           command:
