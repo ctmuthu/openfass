@@ -91,13 +91,13 @@ class Deployment:
         self.write_to_json()
 
     def destroy_cluster(self):
-        time.sleep(600)
+        time.sleep(300)
         if (self.instance["k8"]):
             os.chdir(self.terraform_dir)
         else:
             os.chdir(self.k3_dir)
         os.system("terraform destroy -var-file=../var_old.tfvars -auto-approve")
-        time.sleep(600)
+        time.sleep(300)
     
     def ssh(self, cmd):
         try:
