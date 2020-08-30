@@ -4,7 +4,7 @@ database:
     password: admin
     port: 8086
     username: admin
-master_ip: 100.25.223.193
+master_ip: 3.236.16.117
 model_functions:
     instance1:
         clusterconfig:
@@ -18,12 +18,17 @@ model_functions:
         function:
             image: null
             name: figlet
+            openfaas:
+                com.openfaas.scale.factor: 2
+                com.openfaas.scale.max: 20
+                com.openfaas.scale.min: 1
+                com.openfaas.scale.zero: true
             store: true
         k8: true
         post_test:
-            data_extraction: true
-            modeling: true
-            plot: true
+            data_extraction: false
+            modeling: false
+            plot: false
         pre_test:
             cluster_deployment: true
             function_deployment: true
@@ -34,20 +39,25 @@ model_functions:
                     stage: 120
             test_run: k6_run_script.py
         time:
-            end: '1597925237.17516'
-            start: '1597924936.31233'
+            end: '1598720868.043796'
+            start: '1598713663.69787'
     instance2:
         clusterconfig:
-            core: 12
+            core: 6
             image: '"ami-055df5de4f42cf331"'
-            instance: '"t2.xlarge"'
+            instance: '"t2.large"'
             master_nodes: '["master"]'
-            memory: 16
+            memory: 8
             region: '"us-east-1"'
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
             name: figlet
+            openfaas:
+                com.openfaas.scale.factor: 2
+                com.openfaas.scale.max: 10
+                com.openfaas.scale.min: 1
+                com.openfaas.scale.zero: true
             store: true
         k8: true
         post_test:
@@ -64,20 +74,25 @@ model_functions:
                     stage: 120
             test_run: k6_run_script.py
         time:
-            end: '1597926132.652252'
-            start: '1597925831.986178'
+            end: '1598740620.804923'
+            start: '1598734490.481231'
     instance3:
         clusterconfig:
-            core: 24
+            core: 6
             image: '"ami-055df5de4f42cf331"'
-            instance: '"t2.2xlarge"'
+            instance: '"t2.large"'
             master_nodes: '["master"]'
-            memory: 32
+            memory: 8
             region: '"us-east-1"'
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
             name: figlet
+            openfaas:
+                com.openfaas.scale.factor: 2
+                com.openfaas.scale.max: 25
+                com.openfaas.scale.min: 1
+                com.openfaas.scale.zero: true
             store: true
         k8: true
         post_test:
@@ -94,289 +109,15 @@ model_functions:
                     stage: 120
             test_run: k6_run_script.py
         time:
-            end: '1597927549.743627'
-            start: '1597927334.41771'
-    instance4:
-        clusterconfig:
-            core: 6
-            image: '"ami-055df5de4f42cf331"'
-            instance: '"t2.medium"'
-            master_nodes: '["master"]'
-            memory: 12
-            region: '"us-east-1"'
-            worker_nodes: '["worker1", "worker2"]'
-        function:
-            image: null
-            name: figlet
-            store: true
-        k8: true
-        post_test:
-            data_extraction: true
-            modeling: true
-            plot: true
-        pre_test:
-            cluster_deployment: true
-            function_deployment: true
-        test:
-            function_params: '"Muthu"'
-            k6:
-                customized:
-                    stage: 120
-            test_run: k6_run_script.py
-        time:
-            end: '1597583495.336461'
-            start: '1597576291.696977'
-    instance5:
-        clusterconfig:
-            core: 6
-            image: '"ami-055df5de4f42cf331"'
-            instance: '"t2.large"'
-            master_nodes: '["master"]'
-            memory: 8
-            region: '"us-east-1"'
-            worker_nodes: '["worker1", "worker2"]'
-        function:
-            image: null
-            name: sentimentanalysis
-            store: true
-        k8: true
-        post_test:
-            data_extraction: true
-            modeling: true
-            plot: true
-        pre_test:
-            cluster_deployment: true
-            function_deployment: true
-        test:
-            function_params: '"Personally I like functions to do one thing and only
-                one thing well, it makes them more readable."'
-            k6:
-                customized:
-                    stage: 120
-            test_run: k6_run_script.py
-        time:
-            end: '1597925237.17516'
-            start: '1597924936.31233'
-    instance6:
-        clusterconfig:
-            core: 12
-            image: '"ami-055df5de4f42cf331"'
-            instance: '"t2.xlarge"'
-            master_nodes: '["master"]'
-            memory: 16
-            region: '"us-east-1"'
-            worker_nodes: '["worker1", "worker2"]'
-        function:
-            image: null
-            name: sentimentanalysis
-            store: true
-        k8: true
-        post_test:
-            data_extraction: true
-            modeling: true
-            plot: true
-        pre_test:
-            cluster_deployment: true
-            function_deployment: true
-        test:
-            function_params: '"Personally I like functions to do one thing and only
-                one thing well, it makes them more readable."'
-            k6:
-                customized:
-                    stage: 120
-            test_run: k6_run_script.py
-        time:
-            end: '1597926132.652252'
-            start: '1597925831.986178'
-    instance7:
-        clusterconfig:
-            core: 24
-            image: '"ami-055df5de4f42cf331"'
-            instance: '"t2.2xlarge"'
-            master_nodes: '["master"]'
-            memory: 32
-            region: '"us-east-1"'
-            worker_nodes: '["worker1", "worker2"]'
-        function:
-            image: null
-            name: sentimentanalysis
-            store: true
-        k8: true
-        post_test:
-            data_extraction: true
-            modeling: true
-            plot: true
-        pre_test:
-            cluster_deployment: true
-            function_deployment: true
-        test:
-            function_params: '"Personally I like functions to do one thing and only
-                one thing well, it makes them more readable."'
-            k6:
-                customized:
-                    stage: 120
-            test_run: k6_run_script.py
-        time:
-            end: '1597927549.743627'
-            start: '1597927334.41771'
-    instance8:
-        clusterconfig:
-            core: 6
-            image: '"ami-055df5de4f42cf331"'
-            instance: '"t2.medium"'
-            master_nodes: '["master"]'
-            memory: 12
-            region: '"us-east-1"'
-            worker_nodes: '["worker1", "worker2"]'
-        function:
-            image: null
-            name: sentimentanalysis
-            store: true
-        k8: true
-        post_test:
-            data_extraction: true
-            modeling: true
-            plot: true
-        pre_test:
-            cluster_deployment: true
-            function_deployment: true
-        test:
-            function_params: '"Personally I like functions to do one thing and only
-                one thing well, it makes them more readable."'
-            k6:
-                customized:
-                    stage: 120
-            test_run: k6_run_script.py
-        time:
-            end: '1597583495.336461'
-            start: '1597576291.696977'
-    instance9:
-        clusterconfig:
-            core: 6
-            image: '"ami-055df5de4f42cf331"'
-            instance: '"t2.large"'
-            master_nodes: '["master"]'
-            memory: 8
-            region: '"us-east-1"'
-            worker_nodes: '["worker1", "worker2"]'
-        function:
-            image: null
-            name: colorise
-            store: true
-        k8: true
-        post_test:
-            data_extraction: true
-            modeling: true
-            plot: true
-        pre_test:
-            cluster_deployment: true
-            function_deployment: true
-        test:
-            function_params: '"https://i.kinja-img.com/gawker-media/image/upload/s--hs_50-b2--/c_scale,f_auto,fl_progressive,q_80,w_800/wv7kqqfxxtswupj2zhqi.jpg"'
-            k6:
-                customized:
-                    stage: 120
-            test_run: k6_run_script.py
-        time:
-            end: '1597925237.17516'
-            start: '1597924936.31233'
-    instance10:
-        clusterconfig:
-            core: 12
-            image: '"ami-055df5de4f42cf331"'
-            instance: '"t2.xlarge"'
-            master_nodes: '["master"]'
-            memory: 16
-            region: '"us-east-1"'
-            worker_nodes: '["worker1", "worker2"]'
-        function:
-            image: null
-            name: colorise
-            store: true
-        k8: true
-        post_test:
-            data_extraction: true
-            modeling: true
-            plot: true
-        pre_test:
-            cluster_deployment: true
-            function_deployment: true
-        test:
-            function_params: '"https://i.kinja-img.com/gawker-media/image/upload/s--hs_50-b2--/c_scale,f_auto,fl_progressive,q_80,w_800/wv7kqqfxxtswupj2zhqi.jpg"'
-            k6:
-                customized:
-                    stage: 120
-            test_run: k6_run_script.py
-        time:
-            end: '1597926132.652252'
-            start: '1597925831.986178'
-    instance11:
-        clusterconfig:
-            core: 24
-            image: '"ami-055df5de4f42cf331"'
-            instance: '"t2.2xlarge"'
-            master_nodes: '["master"]'
-            memory: 32
-            region: '"us-east-1"'
-            worker_nodes: '["worker1", "worker2"]'
-        function:
-            image: null
-            name: colorise
-            store: true
-        k8: true
-        post_test:
-            data_extraction: true
-            modeling: true
-            plot: true
-        pre_test:
-            cluster_deployment: true
-            function_deployment: true
-        test:
-            function_params: '"https://i.kinja-img.com/gawker-media/image/upload/s--hs_50-b2--/c_scale,f_auto,fl_progressive,q_80,w_800/wv7kqqfxxtswupj2zhqi.jpg"'
-            k6:
-                customized:
-                    stage: 120
-            test_run: k6_run_script.py
-        time:
-            end: '1597927549.743627'
-            start: '1597927334.41771'
-    instance12:
-        clusterconfig:
-            core: 6
-            image: '"ami-055df5de4f42cf331"'
-            instance: '"t2.medium"'
-            master_nodes: '["master"]'
-            memory: 12
-            region: '"us-east-1"'
-            worker_nodes: '["worker1", "worker2"]'
-        function:
-            image: null
-            name: colorise
-            store: true
-        k8: true
-        post_test:
-            data_extraction: true
-            modeling: true
-            plot: true
-        pre_test:
-            cluster_deployment: true
-            function_deployment: true
-        test:
-            function_params: '"https://i.kinja-img.com/gawker-media/image/upload/s--hs_50-b2--/c_scale,f_auto,fl_progressive,q_80,w_800/wv7kqqfxxtswupj2zhqi.jpg"'
-            k6:
-                customized:
-                    stage: 120
-            test_run: k6_run_script.py
-        time:
-            end: '1597583495.336461'
-            start: '1597576291.696977'
+            end: '1598740620.804923'
+            start: '1598734490.481231'
 prometheus:
     api: api/v1/query_range?query=
     host: 138.246.234.122
     port: 9090
 query:
     cpu:
-        formatter: 24
+        formatter: 6
         name: cpu
         percent: 50
         query: sum(rate(container_cpu_usage_seconds_total{container=~%22
@@ -405,7 +146,7 @@ query:
         query_split: false
         step: 15
     mem:
-        formatter: 34359738368
+        formatter: 8589934592
         name: mem
         percent: 14.28
         query: sum(container_memory_working_set_bytes{container=~%22

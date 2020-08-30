@@ -52,6 +52,7 @@ class Deployment:
                 self.destroy_cluster()
             self.telegram_send()
 
+
     def update_tfvars_file(self):
         if (self.instance["k8"]):
             var_file = open(os.path.join(self.terraform_dir, 'var.tfvars'),"r")
@@ -124,7 +125,9 @@ class Deployment:
             function_deployment += "deploy --image=" + function["image"] + " --name=" + function["name"]
         cmd = "faas-cli login --tls-no-verify --username admin --password $(cat password.txt) --gateway http://127.0.0.1:31112"
         self.ssh(cmd)
-        function_deployment += " --gateway http://127.0.0.1:31112 --label 'com.openfaas.scale.zero=true' --label 'com.openfaas.scale.max=50'"
+        function_deployment += " --gateway http://127.0.0.1:31112"
+        for label in function["openfaas"]:
+            function_deployment += " --label '" + label + "=" + str(function["openfaas"][label]) + "'"
         cmd = function_deployment
         self.ssh(cmd)
 
@@ -147,8 +150,6 @@ class Deployment:
         for options in self.instance["test"]["k6"]:
             if(options == "customized"):
                 for m in range(1, self.instance["test"]["k6"][options]["stage"]+1):
-                    if(m>30): 
-                        m=30
                     k6 += " --stage" + " 1m:" + str(m)
             elif(type(self.instance["test"]["k6"][options]) == list):
                 for i in self.instance["test"]["k6"][options]:
@@ -244,10 +245,6 @@ class Deployment:
             fig, axs = plt.subplots(4, 3)
             plot_array = "44"
         for col, ax in zip(range(1,len(self.df.columns)), axs.flatten()):
-        #for col in range(1,len(self.df.columns)):
-            #plt.subplot(int(plot_array+str(col)))
-            #print(col)
-            #print(self.df.index,self.df[self.df.columns[col]])
             ax.plot(self.df.index,self.df[self.df.columns[col]])
             ax.set_title(self.df.columns[col])
         filename = "updated" + self.instance["function"]["name"] + self.instance["time"]["start"] + "_" + self.instance["time"]["end"] + ".png"
@@ -280,11 +277,15 @@ class Deployment:
     def telegram_send(self, chat_id="749187782", token='1300315664:AAGxGYytlA9Dk1xnZjpF7w_qmk-2gbs_2k4'):
         bot = telegram.Bot(token=token)
         filename = self.instance_name + self.instance["function"]["name"] + self.instance["time"]["start"] + "_" + self.instance["time"]["end"] + ".zip"
-        os.chdir(self.output_dir)
+        copy = "cp " + os.path.join(self.automation_dir, "values.yaml") + " " +self.output_dir
+        os.system(copy)
         compress = "tar -zcvf " + filename + " " +self.output_dir
         os.system(compress)
         os.chdir(self.cwd)
-        bot.send_document(chat_id=chat_id, document=open(os.path.join(self.output_dir, filename), 'rb'))
+        bot.send_document(chat_id=chat_id, document=open(os.path.join(self.cwd, filename), 'rb'))
+        for file in os.listdir(self.output_dir):
+            if '.png' in file:
+                bot.send_photo(chat_id=chat_id, photo=open(os.path.join(self.output_dir, file), 'rb'))
         os.system("rm -rf OutputtoTelegram/*")
         delete_tar = "rm -rf " + filename
         os.system(delete_tar)
