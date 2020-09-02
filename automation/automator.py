@@ -150,6 +150,7 @@ class Deployment:
         for options in self.instance["test"]["k6"]:
             if(options == "customized"):
                 for m in range(1, self.instance["test"]["k6"][options]["stage"]+1):
+                    m=m*5
                     k6 += " --stage" + " 1m:" + str(m)
             elif(type(self.instance["test"]["k6"][options]) == list):
                 for i in self.instance["test"]["k6"][options]:
@@ -204,7 +205,7 @@ class Deployment:
                 datetime_object = dt.datetime.fromtimestamp(value[0])
                 self.time.append(datetime_object)
                 data.append(float(value[1]))
-            #print(self.time,data)
+                #print(self.time,data)
             self.toTable(column, data)
         except Exception as e:
             print(e)
@@ -216,12 +217,17 @@ class Deployment:
             self.df.set_index("Time", inplace = True)
             self.length = len(self.df.cpu.values)
         else:
-            #print(column)
             df2 = pd.DataFrame({'Time': pd.Series(self.time), 'Value': pd.Series(data)})
             df2.set_index("Time", inplace = True)
             #print(df2.Value.values)
             if (self.length < len(df2.Value.values)):
                 df2.drop(df2.index[:len(df2.Value.values)-self.length], inplace=True)
+            print(len(df2.Value.values),self.length)
+            if (len(df2.Value.values) < self.length):
+                for i in range(len(df2.Value.values), self.length):
+                    df_new = pd.DataFrame({'Time': [dt.datetime.now()], 'Value': [1]})
+                    df_new.set_index("Time", inplace = True)
+                    df2 = df2.append(df_new, ignore_index = True)
             self.df[column] = df2.Value.values
 
     def plot(self):
@@ -280,8 +286,8 @@ class Deployment:
         copy = "cp " + os.path.join(self.automation_dir, "values.yaml") + " " +self.output_dir
         os.system(copy)
         compress = "tar -zcvf " + filename + " " +self.output_dir
-        os.system(compress)
         os.chdir(self.cwd)
+        os.system(compress)
         bot.send_document(chat_id=chat_id, document=open(os.path.join(self.cwd, filename), 'rb'))
         for file in os.listdir(self.output_dir):
             if '.png' in file:
