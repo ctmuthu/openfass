@@ -78,7 +78,7 @@ class Deployment:
             os.chdir(self.k3_dir)
         os.system("rm -rf terraform.* && rm -rf .terraform/")
         os.system("terraform init")
-        os.system("DEBUG=TF_LOG terraform apply -var-file=var.tfvars -auto-approve && terraform output -json | jq 'with_entries(.value |= .value)' > ../config.json")
+        os.system("terraform apply -var-file=var.tfvars -auto-approve && terraform output -json | jq 'with_entries(.value |= .value)' > ../config.json")
         os.system("cp var.tfvars ../var_old.tfvars")
         os.chdir(self.grafana_dir)
         os.system("rm -rf terraform.* && rm -rf .terraform/")
