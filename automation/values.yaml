@@ -4,31 +4,31 @@ database:
     password: admin
     port: 8086
     username: admin
-master_ip: 3.236.16.117
+master_ip: 3.228.5.110
 model_functions:
     instance1:
         clusterconfig:
-            core: 6
+            core: 4
             image: '"ami-055df5de4f42cf331"'
-            instance: '"t2.large"'
+            instance: '"t2.medium"'
             master_nodes: '["master"]'
             memory: 8
             region: '"us-east-1"'
-            worker_nodes: '["worker1", "worker2"]'
+            worker_nodes: '["worker1"]'
         function:
             image: null
             name: figlet
             openfaas:
                 com.openfaas.scale.factor: 2
-                com.openfaas.scale.max: 20
+                com.openfaas.scale.max: 50
                 com.openfaas.scale.min: 1
                 com.openfaas.scale.zero: true
             store: true
         k8: true
         post_test:
-            data_extraction: false
-            modeling: false
-            plot: false
+            data_extraction: true
+            modeling: true
+            plot: true
         pre_test:
             cluster_deployment: true
             function_deployment: true
@@ -39,23 +39,23 @@ model_functions:
                     stage: 120
             test_run: k6_run_script.py
         time:
-            end: '1598720868.043796'
-            start: '1598713663.69787'
+            end: '1599841542.432807'
+            start: '1599841241.312723'
     instance2:
         clusterconfig:
-            core: 6
+            core: 4
             image: '"ami-055df5de4f42cf331"'
             instance: '"t2.large"'
             master_nodes: '["master"]'
-            memory: 8
+            memory: 16
             region: '"us-east-1"'
-            worker_nodes: '["worker1", "worker2"]'
+            worker_nodes: '["worker1"]'
         function:
             image: null
             name: figlet
             openfaas:
                 com.openfaas.scale.factor: 2
-                com.openfaas.scale.max: 10
+                com.openfaas.scale.max: 50
                 com.openfaas.scale.min: 1
                 com.openfaas.scale.zero: true
             store: true
@@ -78,19 +78,54 @@ model_functions:
             start: '1598734490.481231'
     instance3:
         clusterconfig:
-            core: 6
+            core: 8
             image: '"ami-055df5de4f42cf331"'
-            instance: '"t2.large"'
+            instance: '"t2.xlarge"'
             master_nodes: '["master"]'
-            memory: 8
+            memory: 32
             region: '"us-east-1"'
-            worker_nodes: '["worker1", "worker2"]'
+            worker_nodes: '["worker1"]'
         function:
             image: null
             name: figlet
             openfaas:
                 com.openfaas.scale.factor: 2
-                com.openfaas.scale.max: 25
+                com.openfaas.scale.max: 50
+                com.openfaas.scale.min: 1
+                com.openfaas.scale.zero: true
+            store: true
+        k8: true
+        post_test:
+            data_extraction: true
+            modeling: true
+            plot: true
+        pre_test:
+            cluster_deployment: true
+            function_deployment: true
+        test:
+            function_params: '"Muthu"'
+            k6:
+                customized:
+                    stage: 120
+            test_run: k6_run_script.py
+        time:
+            end: '1598740620.804923'
+            start: '1598734490.481231'
+    instance4:
+        clusterconfig:
+            core: 16
+            image: '"ami-055df5de4f42cf331"'
+            instance: '"t2.2xlarge"'
+            master_nodes: '["master"]'
+            memory: 64
+            region: '"us-east-1"'
+            worker_nodes: '["worker1"]'
+        function:
+            image: null
+            name: figlet
+            openfaas:
+                com.openfaas.scale.factor: 2
+                com.openfaas.scale.max: 50
                 com.openfaas.scale.min: 1
                 com.openfaas.scale.zero: true
             store: true
@@ -117,7 +152,7 @@ prometheus:
     port: 9090
 query:
     cpu:
-        formatter: 6
+        formatter: 4
         name: cpu
         percent: 50
         query: sum(rate(container_cpu_usage_seconds_total{container=~%22
@@ -188,17 +223,31 @@ query:
         query: max(http_req_duration)%2F1000
         query_split: false
         step: 15
+    totalcpu:
+        formatter: ''
+        name: totalcpu
+        percent: ''
+        query: sum(instance:node_num_cpu:sum)
+        query_split: false
+        step: 15
     totalcpuUtilization:
         formatter: ''
         name: totalcpuUtilization
         percent: ''
-        query: sum(instance%3Anode_cpu_utilisation%3Arate1m%7Bjob%3D%22node-exporter%22%7D)%2F3*100
+        query: sum(instance%3Anode_cpu_utilisation%3Arate1m%7Bjob%3D%22node-exporter%22%7D)%2F2*100
+        query_split: false
+        step: 15
+    totalmemory:
+        formatter: ''
+        name: totalmemory
+        percent: ''
+        query: sum(node_memory_MemTotal_bytes)
         query_split: false
         step: 15
     totalmemoryUtilization:
         formatter: ''
         name: totalmemoryUtilization
         percent: ''
-        query: sum(instance%3Anode_memory_utilisation%3Aratio%7Bjob%3D%22node-exporter%22%7D)%2F3*100
+        query: sum(instance%3Anode_memory_utilisation%3Aratio%7Bjob%3D%22node-exporter%22%7D)%2F2*100
         query_split: false
         step: 15

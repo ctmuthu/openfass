@@ -52,7 +52,6 @@ class Deployment:
                 self.destroy_cluster()
             self.telegram_send()
 
-
     def update_tfvars_file(self):
         if (self.instance["k8"]):
             var_file = open(os.path.join(self.terraform_dir, 'var.tfvars'),"r")
@@ -79,7 +78,7 @@ class Deployment:
             os.chdir(self.k3_dir)
         os.system("rm -rf terraform.* && rm -rf .terraform/")
         os.system("terraform init")
-        os.system("terraform apply -var-file=var.tfvars -auto-approve && terraform output -json | jq 'with_entries(.value |= .value)' > ../config.json")
+        os.system("DEBUG=TF_LOG terraform apply -var-file=var.tfvars -auto-approve && terraform output -json | jq 'with_entries(.value |= .value)' > ../config.json")
         os.system("cp var.tfvars ../var_old.tfvars")
         os.chdir(self.grafana_dir)
         os.system("rm -rf terraform.* && rm -rf .terraform/")
@@ -113,7 +112,6 @@ class Deployment:
                 print(cmd)
         except Exception as e:
             print(e)
-
 
     def function_deployment(self):
         function_deployment = "faas-cli "
@@ -248,7 +246,7 @@ class Deployment:
             fig, axs = plt.subplots(3, 3)
             plot_array = "33"
         else:
-            fig, axs = plt.subplots(4, 3)
+            fig, axs = plt.subplots(4, 4)
             plot_array = "44"
         for col, ax in zip(range(1,len(self.df.columns)), axs.flatten()):
             ax.plot(self.df.index,self.df[self.df.columns[col]])
