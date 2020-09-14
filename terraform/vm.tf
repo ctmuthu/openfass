@@ -76,7 +76,9 @@ resource "aws_instance" "Master" {
       "sudo sh ./scripts/docker.sh",
       "sudo sh ./scripts/kubeadm.sh",
       "scp -r -oStrictHostKeyChecking=no -i id_rsa ./scripts ubuntu@${aws_instance.Worker[0].private_ip}:/home/ubuntu/",
+      "scp -r -oStrictHostKeyChecking=no -i id_rsa ./scripts ubuntu@${aws_instance.Worker[1].private_ip}:/home/ubuntu/",
       "ssh -oStrictHostKeyChecking=no -i id_rsa ubuntu@${aws_instance.Worker[0].private_ip} 'sudo sh scripts/docker.sh && sudo sh scripts/kubeadm.sh'",
+      "ssh -oStrictHostKeyChecking=no -i id_rsa ubuntu@${aws_instance.Worker[1].private_ip} 'sudo sh scripts/docker.sh && sudo sh scripts/kubeadm.sh'",
       "sudo kubeadm init",
       "mkdir -p $HOME/.kube",
       "sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config",
@@ -84,7 +86,9 @@ resource "aws_instance" "Master" {
       "sudo sh ./scripts/weave.sh",
       "sudo kubeadm token create --print-join-command | grep 'kubeadm join' | grep 'kubeadm join' > join.sh",
       "scp -oStrictHostKeyChecking=no -i id_rsa join.sh ubuntu@${aws_instance.Worker[0].private_ip}:/home/ubuntu/join.sh",
+      "scp -oStrictHostKeyChecking=no -i id_rsa join.sh ubuntu@${aws_instance.Worker[1].private_ip}:/home/ubuntu/join.sh",
       "ssh -oStrictHostKeyChecking=no -i id_rsa ubuntu@${aws_instance.Worker[0].private_ip} 'sudo sh join.sh ; '",
+      "ssh -oStrictHostKeyChecking=no -i id_rsa ubuntu@${aws_instance.Worker[1].private_ip} 'sudo sh join.sh ; '",
       "echo 'nameserver 10.96.0.10' > sudo /etc/resolv.conf",
       "sudo sh ./scripts/openfaas.sh"
     ]

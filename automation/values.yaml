@@ -14,7 +14,7 @@ model_functions:
             master_nodes: '["master"]'
             memory: 8
             region: '"us-east-1"'
-            worker_nodes: '["worker1"]'
+            worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
             name: figlet
@@ -49,7 +49,7 @@ model_functions:
             master_nodes: '["master"]'
             memory: 16
             region: '"us-east-1"'
-            worker_nodes: '["worker1"]'
+            worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
             name: figlet
@@ -84,7 +84,7 @@ model_functions:
             master_nodes: '["master"]'
             memory: 32
             region: '"us-east-1"'
-            worker_nodes: '["worker1"]'
+            worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
             name: figlet
@@ -119,7 +119,7 @@ model_functions:
             master_nodes: '["master"]'
             memory: 64
             region: '"us-east-1"'
-            worker_nodes: '["worker1"]'
+            worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
             name: figlet
