@@ -39,8 +39,8 @@ model_functions:
                     stage: 120
             test_run: k6_run_script.py
         time:
-            end: '1599841542.432807'
-            start: '1599841241.312723'
+            end: '1600102870.54598'
+            start: '1600095649.398219'
     instance2:
         clusterconfig:
             core: 4
@@ -74,8 +74,8 @@ model_functions:
                     stage: 120
             test_run: k6_run_script.py
         time:
-            end: '1598740620.804923'
-            start: '1598734490.481231'
+            end: '1600128105.425223'
+            start: '1600120881.794155'
     instance3:
         clusterconfig:
             core: 8
@@ -109,8 +109,8 @@ model_functions:
                     stage: 120
             test_run: k6_run_script.py
         time:
-            end: '1598740620.804923'
-            start: '1598734490.481231'
+            end: '1600148960.815726'
+            start: '1600147422.482011'
     instance4:
         clusterconfig:
             core: 16
@@ -144,15 +144,156 @@ model_functions:
                     stage: 120
             test_run: k6_run_script.py
         time:
-            end: '1598740620.804923'
-            start: '1598734490.481231'
+            end: '1600157376.912417'
+            start: '1600150139.198612'
+    instance5:
+        clusterconfig:
+            core: 4
+            image: '"ami-055df5de4f42cf331"'
+            instance: '"t2.medium"'
+            master_nodes: '["master"]'
+            memory: 8
+            region: '"us-east-1"'
+            worker_nodes: '["worker1", "worker2"]'
+        function:
+            image: null
+            name: figlet
+            openfaas:
+                com.openfaas.scale.factor: 8
+                com.openfaas.scale.max: 50
+                com.openfaas.scale.min: 1
+                com.openfaas.scale.zero: true
+            store: true
+        k8: true
+        post_test:
+            data_extraction: true
+            modeling: true
+            plot: true
+        pre_test:
+            cluster_deployment: true
+            function_deployment: true
+        test:
+            function_params: '"Muthu"'
+            k6:
+                customized:
+                    stage: 120
+            test_run: k6_run_script.py
+        time:
+            end: '1600102870.54598'
+            start: '1600095649.398219'
+    instance6:
+        clusterconfig:
+            core: 4
+            image: '"ami-055df5de4f42cf331"'
+            instance: '"t2.large"'
+            master_nodes: '["master"]'
+            memory: 16
+            region: '"us-east-1"'
+            worker_nodes: '["worker1", "worker2"]'
+        function:
+            image: null
+            name: figlet
+            openfaas:
+                com.openfaas.scale.factor: 8
+                com.openfaas.scale.max: 50
+                com.openfaas.scale.min: 1
+                com.openfaas.scale.zero: true
+            store: true
+        k8: true
+        post_test:
+            data_extraction: true
+            modeling: true
+            plot: true
+        pre_test:
+            cluster_deployment: true
+            function_deployment: true
+        test:
+            function_params: '"Muthu"'
+            k6:
+                customized:
+                    stage: 120
+            test_run: k6_run_script.py
+        time:
+            end: '1600128105.425223'
+            start: '1600120881.794155'
+    instance7:
+        clusterconfig:
+            core: 8
+            image: '"ami-055df5de4f42cf331"'
+            instance: '"t2.xlarge"'
+            master_nodes: '["master"]'
+            memory: 32
+            region: '"us-east-1"'
+            worker_nodes: '["worker1", "worker2"]'
+        function:
+            image: null
+            name: figlet
+            openfaas:
+                com.openfaas.scale.factor: 8
+                com.openfaas.scale.max: 50
+                com.openfaas.scale.min: 1
+                com.openfaas.scale.zero: true
+            store: true
+        k8: true
+        post_test:
+            data_extraction: true
+            modeling: true
+            plot: true
+        pre_test:
+            cluster_deployment: true
+            function_deployment: true
+        test:
+            function_params: '"Muthu"'
+            k6:
+                customized:
+                    stage: 120
+            test_run: k6_run_script.py
+        time:
+            end: '1600148960.815726'
+            start: '1600147422.482011'
+    instance8:
+        clusterconfig:
+            core: 16
+            image: '"ami-055df5de4f42cf331"'
+            instance: '"t2.2xlarge"'
+            master_nodes: '["master"]'
+            memory: 64
+            region: '"us-east-1"'
+            worker_nodes: '["worker1", "worker2"]'
+        function:
+            image: null
+            name: figlet
+            openfaas:
+                com.openfaas.scale.factor: 8
+                com.openfaas.scale.max: 50
+                com.openfaas.scale.min: 1
+                com.openfaas.scale.zero: true
+            store: true
+        k8: true
+        post_test:
+            data_extraction: true
+            modeling: true
+            plot: true
+        pre_test:
+            cluster_deployment: true
+            function_deployment: true
+        test:
+            function_params: '"Muthu"'
+            k6:
+                customized:
+                    stage: 120
+            test_run: k6_run_script.py
+        time:
+            end: '1600157376.912417'
+            start: '1600150139.198612'
+
 prometheus:
     api: api/v1/query_range?query=
     host: 138.246.234.122
     port: 9090
 query:
     cpu:
-        formatter: 4
+        formatter: 16
         name: cpu
         percent: 50
         query: sum(rate(container_cpu_usage_seconds_total{container=~%22
@@ -181,7 +322,7 @@ query:
         query_split: false
         step: 15
     mem:
-        formatter: 8589934592
+        formatter: 68719476736
         name: mem
         percent: 14.28
         query: sum(container_memory_working_set_bytes{container=~%22
