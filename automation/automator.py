@@ -6,12 +6,12 @@ from subprocess import Popen, PIPE
 import datetime as dt
 import requests
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
 import statsmodels.api as sm
 from sklearn import linear_model
 from pylab import rcParams
 import telegram
+
 
 class Deployment:
 
@@ -24,31 +24,31 @@ class Deployment:
         self.grafana_dir = os.path.join(self.cwd, "grafana")
         self.k6_dir = os.path.join(self.cwd, "k6")
         self.k3_dir = os.path.join(self.cwd, "k3s")
-        #self.df = pd.DataFrame()
+        # self.df = pd.DataFrame()
 
         self.datafile = open(os.path.join(self.automation_dir, self.value), "r")
-        #self.datastore = json.loads(self.datafile.read())
+        # self.datastore = json.loads(self.datafile.read())
         self.datastore = yaml.load(self.datafile, Loader=yaml.FullLoader)
-        #print(self.datastore)
+        # print(self.datastore)
         for instance in self.datastore["model_functions"]:
             self.instance_name = instance
             self.instance = self.datastore["model_functions"][instance]
-            if (self.instance["pre_test"]["cluster_deployment"] == True):
+            if (self.instance["pre_test"]["cluster_deployment"]):
                 self.update_tfvars_file()
                 self.cluster_deployment()
             self.master_ip = self.datastore["master_ip"]
-            if (self.instance["pre_test"]["function_deployment"] == True):
+            if (self.instance["pre_test"]["function_deployment"]):
                 self.function_deployment()
                 self.k6_run()
                 self.delete_function()
                 pass
-            if (self.instance["post_test"]["data_extraction"] == True):
+            if (self.instance["post_test"]["data_extraction"]):
                 self.query()
-            if (self.instance["post_test"]["plot"] == True):
+            if (self.instance["post_test"]["plot"]):
                 self.plot()
-            if (self.instance["post_test"]["modeling"] == True):
+            if (self.instance["post_test"]["modeling"]):
                 self.model()
-            if (self.instance["pre_test"]["cluster_deployment"] == True):
+            if (self.instance["pre_test"]["cluster_deployment"]):
                 self.destroy_cluster()
             self.telegram_send()
 
@@ -84,7 +84,7 @@ class Deployment:
         os.system("rm -rf terraform.* && rm -rf .terraform/")
         os.system("terraform init && terraform apply --auto-approve")
         os.chdir(self.cwd)
-        #print(cwd)
+        # print(cwd)
         configfile = open(os.path.join(self.cwd, 'config.json'),"r")
         configstore = json.loads(configfile.read())
         self.datastore["master_ip"] = configstore["master_ip"]
@@ -189,13 +189,13 @@ class Deployment:
                         + "&step=" + str(self.datastore["query"][i]["step"])
             print(url)
             receive = requests.get(url)
-            #print(receive.json())
+            # print(receive.json())
             self.data_formatter(receive.json(), self.datastore["query"][i]["name"])
         filename = self.instance["function"]["name"] + self.instance["time"]["start"] + "_" + self.instance["time"]["end"] + ".csv"
         self.df.to_csv(os.path.join(self.output_dir, filename), index=True)
 
     def data_formatter(self, result, column):
-        #print(result["data"]["result"][0]["values"])
+        # print(result["data"]["result"][0]["values"])
         self.time = []
         data = []
         try:
@@ -290,6 +290,8 @@ class Deployment:
         for file in os.listdir(self.output_dir):
             if '.png' in file:
                 bot.send_photo(chat_id=chat_id, photo=open(os.path.join(self.output_dir, file), 'rb'))
+            else:
+                bot.sendDocument(chat_id=chat_id, document=open(os.path.join(self.output_dir, file), 'rb'))
         os.system("rm -rf OutputtoTelegram/*")
         delete_tar = "rm -rf " + filename
         os.system(delete_tar)

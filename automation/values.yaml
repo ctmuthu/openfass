@@ -19,7 +19,7 @@ model_functions:
             image: null
             name: figlet
             openfaas:
-                com.openfaas.scale.factor: 2
+                com.openfaas.scale.factor: 4
                 com.openfaas.scale.max: 50
                 com.openfaas.scale.min: 1
                 com.openfaas.scale.zero: true
@@ -54,7 +54,7 @@ model_functions:
             image: null
             name: figlet
             openfaas:
-                com.openfaas.scale.factor: 2
+                com.openfaas.scale.factor: 4
                 com.openfaas.scale.max: 50
                 com.openfaas.scale.min: 1
                 com.openfaas.scale.zero: true
@@ -89,7 +89,7 @@ model_functions:
             image: null
             name: figlet
             openfaas:
-                com.openfaas.scale.factor: 2
+                com.openfaas.scale.factor: 4
                 com.openfaas.scale.max: 50
                 com.openfaas.scale.min: 1
                 com.openfaas.scale.zero: true
@@ -124,7 +124,7 @@ model_functions:
             image: null
             name: figlet
             openfaas:
-                com.openfaas.scale.factor: 2
+                com.openfaas.scale.factor: 4
                 com.openfaas.scale.max: 50
                 com.openfaas.scale.min: 1
                 com.openfaas.scale.zero: true
