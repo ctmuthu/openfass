@@ -117,20 +117,22 @@ class Deployment:
         function_deployment = "faas-cli "
         function = self.instance["function"]
         print(function["name"])
-        if (function["name"] == "mydb"):
-            self.ssh("sh scripts/mysql.sh")
+        if (function["store"] == True):
+            function_deployment += "store deploy " + function["name"]
         else:
-            if (function["store"] == True):
-                function_deployment += "store deploy " + function["name"]
-            else:
-                function_deployment += "deploy --image=" + function["image"] + " --name=" + function["name"]
-            cmd = "faas-cli login --tls-no-verify --username admin --password $(cat password.txt) --gateway http://127.0.0.1:31112"
-            self.ssh(cmd)
-            function_deployment += " --gateway http://127.0.0.1:31112"
-            for label in function["openfaas"]:
-                function_deployment += " --label '" + label + "=" + str(function["openfaas"][label]) + "'"
-            cmd = function_deployment
-            self.ssh(cmd)
+            function_deployment += "deploy --image=" + function["image"] + " --name=" + function["name"]
+        cmd = "faas-cli login --tls-no-verify --username admin --password $(cat password.txt) --gateway http://127.0.0.1:31112"
+        self.ssh(cmd)
+        if (function["name"] == "mydb"):
+            self.ssh("cd mysql-function-openfaas/")
+            self.ssh("kubectl create secret generic secret-mysql-key --from-file=secret-mysql-key=$HOME/secrets/secret_mysql_key.txt --namespace openfaas-fn")
+            self.ssh("faas-cli template pull")
+            function_deployment = "sudo faas deploy"
+        function_deployment += " --gateway http://127.0.0.1:31112"
+        for label in function["openfaas"]:
+            function_deployment += " --label '" + label + "=" + str(function["openfaas"][label]) + "'"
+        cmd = function_deployment
+        self.ssh(cmd)
 
     def delete_function(self):
         function = self.instance["function"]
