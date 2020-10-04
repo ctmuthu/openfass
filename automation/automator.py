@@ -124,10 +124,8 @@ class Deployment:
         cmd = "faas-cli login --tls-no-verify --username admin --password $(cat password.txt) --gateway http://127.0.0.1:31112"
         self.ssh(cmd)
         if (function["name"] == "mydb"):
-            self.ssh("cd mysql-function-openfaas/")
-            self.ssh("kubectl create secret generic secret-mysql-key --from-file=secret-mysql-key=$HOME/secrets/secret_mysql_key.txt --namespace openfaas-fn")
-            self.ssh("faas-cli template pull")
-            function_deployment = "sudo faas deploy"
+            self.ssh("cd mysql-function-openfaas/ && kubectl create secret generic secret-mysql-key --from-file=secret-mysql-key=$HOME/secrets/secret_mysql_key.txt --namespace openfaas-fn && faas-cli template pull")
+            function_deployment = "cd mysql-function-openfaas/ && sudo faas deploy"
         function_deployment += " --gateway http://127.0.0.1:31112"
         for label in function["openfaas"]:
             function_deployment += " --label '" + label + "=" + str(function["openfaas"][label]) + "'"
