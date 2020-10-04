@@ -117,17 +117,20 @@ class Deployment:
         function_deployment = "faas-cli "
         function = self.instance["function"]
         print(function["name"])
-        if (function["store"] == True):
-            function_deployment += "store deploy " + function["name"]
+        if (function["name"] == "mydb"):
+            self.ssh("sh scripts/mysql.sh")
         else:
-            function_deployment += "deploy --image=" + function["image"] + " --name=" + function["name"]
-        cmd = "faas-cli login --tls-no-verify --username admin --password $(cat password.txt) --gateway http://127.0.0.1:31112"
-        self.ssh(cmd)
-        function_deployment += " --gateway http://127.0.0.1:31112"
-        for label in function["openfaas"]:
-            function_deployment += " --label '" + label + "=" + str(function["openfaas"][label]) + "'"
-        cmd = function_deployment
-        self.ssh(cmd)
+            if (function["store"] == True):
+                function_deployment += "store deploy " + function["name"]
+            else:
+                function_deployment += "deploy --image=" + function["image"] + " --name=" + function["name"]
+            cmd = "faas-cli login --tls-no-verify --username admin --password $(cat password.txt) --gateway http://127.0.0.1:31112"
+            self.ssh(cmd)
+            function_deployment += " --gateway http://127.0.0.1:31112"
+            for label in function["openfaas"]:
+                function_deployment += " --label '" + label + "=" + str(function["openfaas"][label]) + "'"
+            cmd = function_deployment
+            self.ssh(cmd)
 
     def delete_function(self):
         function = self.instance["function"]
@@ -142,13 +145,14 @@ class Deployment:
         payload = self.instance["test"]["function_params"]
         file_name = self.instance["test"]["test_run"]
         k6 ="MASTER_IP=" + self.master_ip + " PAYLOAD=" + payload + " FUNCTION=" + function +  \
-            " k6 run k6_run_script.js --out influxdb=http://"  \
+            " k6 run " + file_name + " --out influxdb=http://"  \
             + str(self.datastore["database"]["host"])  \
             + ":" + str(self.datastore["database"]["port"]) +"/" + self.datastore["database"]["name"]
+        print(k6)
         for options in self.instance["test"]["k6"]:
             if(options == "customized"):
                 for m in range(1, self.instance["test"]["k6"][options]["stage"]+1):
-                    m=m*4
+                    #m=m*4
                     k6 += " --stage" + " 1m:" + str(m)
             elif(type(self.instance["test"]["k6"][options]) == list):
                 for i in self.instance["test"]["k6"][options]:
