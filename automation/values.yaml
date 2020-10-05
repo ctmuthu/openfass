@@ -17,7 +17,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: mydb
+            name: sentimentanalysis
             openfaas:
                 com.openfaas.scale.factor: 4
                 com.openfaas.scale.max: 50
@@ -33,7 +33,7 @@ model_functions:
             cluster_deployment: true
             function_deployment: true
         test:
-            function_params: '"Muthu"'
+            function_params: '"To test sentimentanalysis function. Enjoy the ride"'
             k6:
                 customized:
                     stage: 120
@@ -52,7 +52,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: mydb
+            name: sentimentanalysis
             openfaas:
                 com.openfaas.scale.factor: 4
                 com.openfaas.scale.max: 50
@@ -68,11 +68,11 @@ model_functions:
             cluster_deployment: true
             function_deployment: true
         test:
-            function_params: '"Muthu"'
+            function_params: '"To test sentimentanalysis function. Enjoy the ride"'
             k6:
                 customized:
                     stage: 120
-            test_run: k6_run_script.py
+            test_run: k6_run_script.js
         time:
             end: '1601660966.570787'
             start: '1601653754.786741'
@@ -87,7 +87,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: mydb
+            name: sentimentanalysis
             openfaas:
                 com.openfaas.scale.factor: 4
                 com.openfaas.scale.max: 50
@@ -103,11 +103,11 @@ model_functions:
             cluster_deployment: true
             function_deployment: true
         test:
-            function_params: '"Muthu"'
+            function_params: '"To test sentimentanalysis function. Enjoy the ride"'
             k6:
                 customized:
                     stage: 120
-            test_run: k6_run_script.py
+            test_run: k6_run_script.js
         time:
             end: '1601669402.386158'
             start: '1601662188.57758'
@@ -122,7 +122,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: mydb
+            name: sentimentanalysis
             openfaas:
                 com.openfaas.scale.factor: 4
                 com.openfaas.scale.max: 50
@@ -138,11 +138,11 @@ model_functions:
             cluster_deployment: true
             function_deployment: true
         test:
-            function_params: '"Muthu"'
+            function_params: '"To test sentimentanalysis function. Enjoy the ride"'
             k6:
                 customized:
                     stage: 120
-            test_run: k6_run_script.py
+            test_run: k6_run_script.js
         time:
             end: '1601677764.97502'
             start: '1601670555.321656'
@@ -157,7 +157,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: mydb
+            name: sentimentanalysis
             openfaas:
                 com.openfaas.scale.factor: 8
                 com.openfaas.scale.max: 50
@@ -173,11 +173,11 @@ model_functions:
             cluster_deployment: true
             function_deployment: true
         test:
-            function_params: '"Muthu"'
+            function_params: '"To test sentimentanalysis function. Enjoy the ride"'
             k6:
                 customized:
                     stage: 120
-            test_run: k6_run_script.py
+            test_run: k6_run_script.js
         time:
             end: '1601686159.700843'
             start: '1601678951.568324'
@@ -192,7 +192,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: mydb
+            name: sentimentanalysis
             openfaas:
                 com.openfaas.scale.factor: 8
                 com.openfaas.scale.max: 50
@@ -208,11 +208,11 @@ model_functions:
             cluster_deployment: true
             function_deployment: true
         test:
-            function_params: '"Muthu"'
+            function_params: '"To test sentimentanalysis function. Enjoy the ride"'
             k6:
                 customized:
                     stage: 120
-            test_run: k6_run_script.py
+            test_run: k6_run_script.js
         time:
             end: '1601694546.294297'
             start: '1601687337.83285'
@@ -227,7 +227,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: mydb
+            name: sentimentanalysis
             openfaas:
                 com.openfaas.scale.factor: 8
                 com.openfaas.scale.max: 50
@@ -243,11 +243,11 @@ model_functions:
             cluster_deployment: true
             function_deployment: true
         test:
-            function_params: '"Muthu"'
+            function_params: '"To test sentimentanalysis function. Enjoy the ride"'
             k6:
                 customized:
                     stage: 120
-            test_run: k6_run_script.py
+            test_run: k6_run_script.js
         time:
             end: '1601702894.850257'
             start: '1601695684.714853'
@@ -262,7 +262,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: mydb
+            name: sentimentanalysis
             openfaas:
                 com.openfaas.scale.factor: 8
                 com.openfaas.scale.max: 50
@@ -278,11 +278,11 @@ model_functions:
             cluster_deployment: true
             function_deployment: true
         test:
-            function_params: '"Muthu"'
+            function_params: '"To test sentimentanalysis function. Enjoy the ride"'
             k6:
                 customized:
                     stage: 120
-            test_run: k6_run_script.py
+            test_run: k6_run_script.js
         time:
             end: '1601711244.426088'
             start: '1601704034.259742'
