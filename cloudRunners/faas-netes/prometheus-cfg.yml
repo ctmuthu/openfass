@@ -61,7 +61,7 @@ data:
         - alert: service_down
           expr: up == 0
         - alert: APIHighInvocationRate
-          expr: (rate(gateway_functions_seconds_sum[20s]) / rate(gateway_functions_seconds_count[20s])) > 2
+          expr: sum(rate(gateway_function_invocation_total{code="200"}[2m])) BY (function_name) > 2
           for: 2m
           labels:
             service: gateway
