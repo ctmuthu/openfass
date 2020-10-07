@@ -152,8 +152,8 @@ class Deployment:
         for options in self.instance["test"]["k6"]:
             if(options == "customized"):
                 for m in range(1, self.instance["test"]["k6"][options]["stage"]+1):
-                    if(m > 30):
-                        m = 30
+                    if(m > 6):
+                        m = 6
                     k6 += " --stage" + " 1m:" + str(m)
             elif(type(self.instance["test"]["k6"][options]) == list):
                 for i in self.instance["test"]["k6"][options]:
