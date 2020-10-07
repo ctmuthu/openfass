@@ -17,7 +17,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: colorise
+            name: nodeinfo
             openfaas:
                 com.openfaas.scale.factor: 4
                 com.openfaas.scale.max: 50
@@ -33,7 +33,7 @@ model_functions:
             cluster_deployment: true
             function_deployment: true
         test:
-            function_params: '"https://i.kinja-img.com/gawker-media/image/upload/s--hs_50-b2--/c_scale,f_auto,fl_progressive,q_80,w_800/wv7kqqfxxtswupj2zhqi.jpg"'
+            function_params: ''
             k6:
                 customized:
                     stage: 120
@@ -52,7 +52,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: colorise
+            name: nodeinfo
             openfaas:
                 com.openfaas.scale.factor: 4
                 com.openfaas.scale.max: 50
@@ -68,7 +68,7 @@ model_functions:
             cluster_deployment: true
             function_deployment: true
         test:
-            function_params: '"https://i.kinja-img.com/gawker-media/image/upload/s--hs_50-b2--/c_scale,f_auto,fl_progressive,q_80,w_800/wv7kqqfxxtswupj2zhqi.jpg"'
+            function_params: ''
             k6:
                 customized:
                     stage: 120
@@ -87,7 +87,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: colorise
+            name: nodeinfo
             openfaas:
                 com.openfaas.scale.factor: 4
                 com.openfaas.scale.max: 50
@@ -103,7 +103,7 @@ model_functions:
             cluster_deployment: true
             function_deployment: true
         test:
-            function_params: '"https://i.kinja-img.com/gawker-media/image/upload/s--hs_50-b2--/c_scale,f_auto,fl_progressive,q_80,w_800/wv7kqqfxxtswupj2zhqi.jpg"'
+            function_params: ''
             k6:
                 customized:
                     stage: 120
@@ -122,7 +122,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: colorise
+            name: nodeinfo
             openfaas:
                 com.openfaas.scale.factor: 4
                 com.openfaas.scale.max: 50
@@ -138,7 +138,7 @@ model_functions:
             cluster_deployment: true
             function_deployment: true
         test:
-            function_params: '"https://i.kinja-img.com/gawker-media/image/upload/s--hs_50-b2--/c_scale,f_auto,fl_progressive,q_80,w_800/wv7kqqfxxtswupj2zhqi.jpg"'
+            function_params: ''
             k6:
                 customized:
                     stage: 120
@@ -157,7 +157,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: colorise
+            name: nodeinfo
             openfaas:
                 com.openfaas.scale.factor: 8
                 com.openfaas.scale.max: 50
@@ -173,7 +173,7 @@ model_functions:
             cluster_deployment: true
             function_deployment: true
         test:
-            function_params: '"https://i.kinja-img.com/gawker-media/image/upload/s--hs_50-b2--/c_scale,f_auto,fl_progressive,q_80,w_800/wv7kqqfxxtswupj2zhqi.jpg"'
+            function_params: ''
             k6:
                 customized:
                     stage: 120
@@ -192,7 +192,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: colorise
+            name: nodeinfo
             openfaas:
                 com.openfaas.scale.factor: 8
                 com.openfaas.scale.max: 50
@@ -208,7 +208,7 @@ model_functions:
             cluster_deployment: true
             function_deployment: true
         test:
-            function_params: '"https://i.kinja-img.com/gawker-media/image/upload/s--hs_50-b2--/c_scale,f_auto,fl_progressive,q_80,w_800/wv7kqqfxxtswupj2zhqi.jpg"'
+            function_params: ''
             k6:
                 customized:
                     stage: 120
@@ -227,7 +227,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: colorise
+            name: nodeinfo
             openfaas:
                 com.openfaas.scale.factor: 8
                 com.openfaas.scale.max: 50
@@ -243,7 +243,7 @@ model_functions:
             cluster_deployment: true
             function_deployment: true
         test:
-            function_params: '"https://i.kinja-img.com/gawker-media/image/upload/s--hs_50-b2--/c_scale,f_auto,fl_progressive,q_80,w_800/wv7kqqfxxtswupj2zhqi.jpg"'
+            function_params: ''
             k6:
                 customized:
                     stage: 120
@@ -262,7 +262,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: colorise
+            name: nodeinfo
             openfaas:
                 com.openfaas.scale.factor: 8
                 com.openfaas.scale.max: 50
@@ -278,7 +278,7 @@ model_functions:
             cluster_deployment: true
             function_deployment: true
         test:
-            function_params: '"https://i.kinja-img.com/gawker-media/image/upload/s--hs_50-b2--/c_scale,f_auto,fl_progressive,q_80,w_800/wv7kqqfxxtswupj2zhqi.jpg"'
+            function_params: ''
             k6:
                 customized:
                     stage: 120
