@@ -224,7 +224,7 @@ class Deployment:
             df2.set_index("Time", inplace = True)
             #print(df2.Value.values)
             if (self.length < len(df2.Value.values)):
-                df2.drop(df2.index[:len(df2.Value.values)-self.length], inplace=True)
+                df2.drop(df2.index[self.length:], inplace=True)
             print(len(df2.Value.values),self.length)
             if (len(df2.Value.values) < self.length):
                 for i in range(len(df2.Value.values), self.length):
