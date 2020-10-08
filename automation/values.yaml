@@ -4,8 +4,148 @@ database:
     password: admin
     port: 8086
     username: admin
-master_ip: 3.237.99.96
+master_ip: 3.85.54.226
 model_functions:
+    instance1:
+        clusterconfig:
+            core: 4
+            image: '"ami-055df5de4f42cf331"'
+            instance: '"t2.medium"'
+            master_nodes: '["master"]'
+            memory: 8
+            region: '"us-east-1"'
+            worker_nodes: '["worker1", "worker2"]'
+        function:
+            image: null
+            name: mydb
+            openfaas:
+                com.openfaas.scale.factor: 4
+                com.openfaas.scale.max: 50
+                com.openfaas.scale.min: 1
+                com.openfaas.scale.zero: true
+            store: true
+        k8: true
+        post_test:
+            data_extraction: true
+            modeling: false
+            plot: true
+        pre_test:
+            cluster_deployment: true
+            function_deployment: true
+        test:
+            function_params: '"Muthu"'
+            k6:
+                customized:
+                    stage: 120
+            test_run: k6_run_script.js
+        time:
+            end: '1601843034.797456'
+            start: '1601835829.864526'
+    instance2:
+        clusterconfig:
+            core: 4
+            image: '"ami-055df5de4f42cf331"'
+            instance: '"t2.large"'
+            master_nodes: '["master"]'
+            memory: 16
+            region: '"us-east-1"'
+            worker_nodes: '["worker1", "worker2"]'
+        function:
+            image: null
+            name: mydb
+            openfaas:
+                com.openfaas.scale.factor: 4
+                com.openfaas.scale.max: 50
+                com.openfaas.scale.min: 1
+                com.openfaas.scale.zero: true
+            store: true
+        k8: true
+        post_test:
+            data_extraction: true
+            modeling: false
+            plot: true
+        pre_test:
+            cluster_deployment: true
+            function_deployment: true
+        test:
+            function_params: '"Muthu"'
+            k6:
+                customized:
+                    stage: 120
+            test_run: k6_run_script.js
+        time:
+            end: '1601851594.968933'
+            start: '1601844390.962432'
+    instance3:
+        clusterconfig:
+            core: 8
+            image: '"ami-055df5de4f42cf331"'
+            instance: '"t2.xlarge"'
+            master_nodes: '["master"]'
+            memory: 32
+            region: '"us-east-1"'
+            worker_nodes: '["worker1", "worker2"]'
+        function:
+            image: null
+            name: mydb
+            openfaas:
+                com.openfaas.scale.factor: 4
+                com.openfaas.scale.max: 50
+                com.openfaas.scale.min: 1
+                com.openfaas.scale.zero: true
+            store: true
+        k8: true
+        post_test:
+            data_extraction: true
+            modeling: false
+            plot: true
+        pre_test:
+            cluster_deployment: true
+            function_deployment: true
+        test:
+            function_params: '"Muthu"'
+            k6:
+                customized:
+                    stage: 120
+            test_run: k6_run_script.js
+        time:
+            end: '1601859958.272946'
+            start: '1601852754.180491'
+    instance4:
+        clusterconfig:
+            core: 16
+            image: '"ami-055df5de4f42cf331"'
+            instance: '"t2.2xlarge"'
+            master_nodes: '["master"]'
+            memory: 64
+            region: '"us-east-1"'
+            worker_nodes: '["worker1", "worker2"]'
+        function:
+            image: null
+            name: mydb
+            openfaas:
+                com.openfaas.scale.factor: 4
+                com.openfaas.scale.max: 50
+                com.openfaas.scale.min: 1
+                com.openfaas.scale.zero: true
+            store: true
+        k8: true
+        post_test:
+            data_extraction: true
+            modeling: false
+            plot: true
+        pre_test:
+            cluster_deployment: true
+            function_deployment: true
+        test:
+            function_params: '"Muthu"'
+            k6:
+                customized:
+                    stage: 120
+            test_run: k6_run_script.js
+        time:
+            end: '1601868315.924558'
+            start: '1601861111.760151'
     instance5:
         clusterconfig:
             core: 4
