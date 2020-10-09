@@ -126,6 +126,8 @@ class Deployment:
         if (function["name"] == "mydb"):
             self.ssh("cd mysql-function-openfaas/ && kubectl create secret generic secret-mysql-key --from-file=secret-mysql-key=$HOME/secrets/secret_mysql_key.txt --namespace openfaas-fn && faas-cli template pull")
             function_deployment = "cd mysql-function-openfaas/ && sudo faas deploy"
+        if (function["name"] == "miniodb"):
+            function_deployment = "cd minio/ && faas-cli template pull && sudo faas deploy"
         function_deployment += " --gateway http://127.0.0.1:31112"
         for label in function["openfaas"]:
             function_deployment += " --label '" + label + "=" + str(function["openfaas"][label]) + "'"

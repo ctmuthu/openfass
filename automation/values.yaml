@@ -4,7 +4,7 @@ database:
     password: admin
     port: 8086
     username: admin
-master_ip: 3.85.54.226
+master_ip: 54.162.222.47
 model_functions:
     instance1:
         clusterconfig:
@@ -17,7 +17,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: mydb
+            name: miniodb
             openfaas:
                 com.openfaas.scale.factor: 4
                 com.openfaas.scale.max: 50
@@ -39,8 +39,8 @@ model_functions:
                     stage: 120
             test_run: k6_run_script.js
         time:
-            end: '1601843034.797456'
-            start: '1601835829.864526'
+            end: '1602161006.381984'
+            start: '1602153801.718173'
     instance2:
         clusterconfig:
             core: 4
@@ -52,7 +52,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: mydb
+            name: miniodb
             openfaas:
                 com.openfaas.scale.factor: 4
                 com.openfaas.scale.max: 50
@@ -74,8 +74,8 @@ model_functions:
                     stage: 120
             test_run: k6_run_script.js
         time:
-            end: '1601851594.968933'
-            start: '1601844390.962432'
+            end: '1602169633.039588'
+            start: '1602162427.907734'
     instance3:
         clusterconfig:
             core: 8
@@ -87,7 +87,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: mydb
+            name: miniodb
             openfaas:
                 com.openfaas.scale.factor: 4
                 com.openfaas.scale.max: 50
@@ -109,8 +109,8 @@ model_functions:
                     stage: 120
             test_run: k6_run_script.js
         time:
-            end: '1601859958.272946'
-            start: '1601852754.180491'
+            end: '1602178111.046827'
+            start: '1602170906.959528'
     instance4:
         clusterconfig:
             core: 16
@@ -122,7 +122,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: mydb
+            name: miniodb
             openfaas:
                 com.openfaas.scale.factor: 4
                 com.openfaas.scale.max: 50
@@ -144,8 +144,8 @@ model_functions:
                     stage: 120
             test_run: k6_run_script.js
         time:
-            end: '1601868315.924558'
-            start: '1601861111.760151'
+            end: '1602186474.653115'
+            start: '1602179270.549135'
     instance5:
         clusterconfig:
             core: 4
@@ -157,7 +157,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: mydb
+            name: miniodb
             openfaas:
                 com.openfaas.scale.factor: 8
                 com.openfaas.scale.max: 50
@@ -179,8 +179,8 @@ model_functions:
                     stage: 120
             test_run: k6_run_script.js
         time:
-            end: '1601876722.804883'
-            start: '1601869518.300482'
+            end: '1602194958.128743'
+            start: '1602187751.204621'
     instance6:
         clusterconfig:
             core: 4
@@ -192,7 +192,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: mydb
+            name: miniodb
             openfaas:
                 com.openfaas.scale.factor: 8
                 com.openfaas.scale.max: 50
@@ -214,8 +214,8 @@ model_functions:
                     stage: 120
             test_run: k6_run_script.js
         time:
-            end: '1601885224.710518'
-            start: '1601878020.101492'
+            end: '1602203650.417508'
+            start: '1602196446.366634'
     instance7:
         clusterconfig:
             core: 8
@@ -227,7 +227,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: mydb
+            name: miniodb
             openfaas:
                 com.openfaas.scale.factor: 8
                 com.openfaas.scale.max: 50
@@ -249,8 +249,8 @@ model_functions:
                     stage: 120
             test_run: k6_run_script.js
         time:
-            end: '1601893633.360774'
-            start: '1601886429.186122'
+            end: '1602211989.581206'
+            start: '1602204785.814748'
     instance8:
         clusterconfig:
             core: 16
@@ -262,7 +262,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: mydb
+            name: miniodb
             openfaas:
                 com.openfaas.scale.factor: 8
                 com.openfaas.scale.max: 50
@@ -284,8 +284,8 @@ model_functions:
                     stage: 120
             test_run: k6_run_script.js
         time:
-            end: '1601902008.645487'
-            start: '1601894804.678717'
+            end: '1602220361.498281'
+            start: '1602213157.495378'
 prometheus:
     api: api/v1/query_range?query=
     host: 138.246.234.122
