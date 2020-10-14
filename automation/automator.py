@@ -39,9 +39,9 @@ class Deployment:
             self.master_ip = self.datastore["master_ip"]
             if (self.instance["pre_test"]["function_deployment"]):
                 self.function_deployment()
+                time.sleep(120)
                 self.k6_run()
                 self.delete_function()
-                pass
             if (self.instance["post_test"]["data_extraction"]):
                 self.query()
             if (self.instance["post_test"]["plot"]):
@@ -91,7 +91,7 @@ class Deployment:
         self.write_to_json()
 
     def destroy_cluster(self):
-        time.sleep(300)
+        time.sleep(120)
         if (self.instance["k8"]):
             os.chdir(self.terraform_dir)
         else:
