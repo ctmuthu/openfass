@@ -126,6 +126,9 @@ class Deployment:
         if (function["name"] == "mydb"):
             self.ssh("cd mysql-function-openfaas/ && kubectl create secret generic secret-mysql-key --from-file=secret-mysql-key=$HOME/secrets/secret_mysql_key.txt --namespace openfaas-fn && faas-cli template pull")
             function_deployment = "cd mysql-function-openfaas/ && sudo faas deploy"
+        if (function["name"] == "miniodbmysql"):
+            self.ssh("cd mysql-side/ && kubectl create secret generic secret-mysql-key --from-file=secret-mysql-key=$HOME/secrets/secret_mysql_key.txt --namespace openfaas-fn && faas-cli template pull")
+            function_deployment = "cd mysql-side/ && sudo faas deploy"
         if (function["name"] == "miniodb"):
             function_deployment = "cd minio/ && faas-cli template pull && sudo faas deploy"
         function_deployment += " --gateway http://127.0.0.1:31112"
@@ -133,11 +136,20 @@ class Deployment:
             function_deployment += " --label '" + label + "=" + str(function["openfaas"][label]) + "'"
         cmd = function_deployment
         self.ssh(cmd)
+        if (function["name"] == "miniodbmysql"):
+            function_deployment = "sh scripts/miniodbmysql.sh && cd miniodbmysql/ && sudo faas deploy"
+            for label in function["openfaas"]:
+                function_deployment += " --label '" + label + "=" + str(function["openfaas"][label]) + "'"
+            cmd = function_deployment
+            self.ssh(cmd)
 
     def delete_function(self):
         function = self.instance["function"]
         cmd = "faas-cli remove " + function["name"] + " --gateway http://127.0.0.1:31112"
         self.ssh(cmd)
+        if (function["name"]=="miniodbmysql"):
+            cmd = "faas-cli remove mysqlside --gateway http://127.0.0.1:31112"
+            self.ssh(cmd)
         os.system("sleep 10")
 
     def k6_run(self):
