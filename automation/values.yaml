@@ -17,7 +17,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: miniodb
+            name: miniodbmysql
             openfaas:
                 com.openfaas.scale.factor: 4
                 com.openfaas.scale.max: 50
@@ -37,7 +37,7 @@ model_functions:
             k6:
                 customized:
                     stage: 120
-            test_run: k6_run_script.js
+            test_run: k6_run_script_communication.js
         time:
             end: '1602161006.381984'
             start: '1602153801.718173'
@@ -52,7 +52,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: miniodb
+            name: miniodbmysql
             openfaas:
                 com.openfaas.scale.factor: 4
                 com.openfaas.scale.max: 50
@@ -72,7 +72,7 @@ model_functions:
             k6:
                 customized:
                     stage: 120
-            test_run: k6_run_script.js
+            test_run: k6_run_script_communication.js
         time:
             end: '1602169633.039588'
             start: '1602162427.907734'
@@ -87,7 +87,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: miniodb
+            name: miniodbmysql
             openfaas:
                 com.openfaas.scale.factor: 4
                 com.openfaas.scale.max: 50
@@ -107,7 +107,7 @@ model_functions:
             k6:
                 customized:
                     stage: 120
-            test_run: k6_run_script.js
+            test_run: k6_run_script_communication.js
         time:
             end: '1602178111.046827'
             start: '1602170906.959528'
@@ -122,7 +122,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: miniodb
+            name: miniodbmysql
             openfaas:
                 com.openfaas.scale.factor: 4
                 com.openfaas.scale.max: 50
@@ -142,7 +142,7 @@ model_functions:
             k6:
                 customized:
                     stage: 120
-            test_run: k6_run_script.js
+            test_run: k6_run_script_communication.js
         time:
             end: '1602186474.653115'
             start: '1602179270.549135'
@@ -157,7 +157,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: miniodb
+            name: miniodbmysql
             openfaas:
                 com.openfaas.scale.factor: 8
                 com.openfaas.scale.max: 50
@@ -177,7 +177,7 @@ model_functions:
             k6:
                 customized:
                     stage: 120
-            test_run: k6_run_script.js
+            test_run: k6_run_script_communication.js
         time:
             end: '1602194958.128743'
             start: '1602187751.204621'
@@ -192,7 +192,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: miniodb
+            name: miniodbmysql
             openfaas:
                 com.openfaas.scale.factor: 8
                 com.openfaas.scale.max: 50
@@ -212,7 +212,7 @@ model_functions:
             k6:
                 customized:
                     stage: 120
-            test_run: k6_run_script.js
+            test_run: k6_run_script_communication.js
         time:
             end: '1602203650.417508'
             start: '1602196446.366634'
@@ -227,7 +227,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: miniodb
+            name: miniodbmysql
             openfaas:
                 com.openfaas.scale.factor: 8
                 com.openfaas.scale.max: 50
@@ -247,7 +247,7 @@ model_functions:
             k6:
                 customized:
                     stage: 120
-            test_run: k6_run_script.js
+            test_run: k6_run_script_communication.js
         time:
             end: '1602211989.581206'
             start: '1602204785.814748'
@@ -262,7 +262,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: miniodb
+            name: miniodbmysql
             openfaas:
                 com.openfaas.scale.factor: 8
                 com.openfaas.scale.max: 50
@@ -282,7 +282,7 @@ model_functions:
             k6:
                 customized:
                     stage: 120
-            test_run: k6_run_script.js
+            test_run: k6_run_script_communication.js
         time:
             end: '1602220361.498281'
             start: '1602213157.495378'
