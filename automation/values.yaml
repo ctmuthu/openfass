@@ -1,0 +1,393 @@
+database:
+    host: 138.246.234.122
+    name: prometheus
+    password: admin
+    port: 8086
+    username: admin
+master_ip: 54.162.222.47
+model_functions:
+    instance1:
+        clusterconfig:
+            core: 4
+            image: '"ami-055df5de4f42cf331"'
+            instance: '"t2.medium"'
+            master_nodes: '["master"]'
+            memory: 8
+            region: '"us-east-1"'
+            worker_nodes: '["worker1", "worker2"]'
+        function:
+            image: null
+            name: miniodbmysql
+            openfaas:
+                com.openfaas.scale.factor: 4
+                com.openfaas.scale.max: 50
+                com.openfaas.scale.min: 1
+                com.openfaas.scale.zero: true
+            store: true
+        k8: true
+        post_test:
+            data_extraction: true
+            modeling: false
+            plot: true
+        pre_test:
+            cluster_deployment: true
+            function_deployment: true
+        test:
+            function_params: '"Muthu"'
+            k6:
+                customized:
+                    stage: 120
+            test_run: k6_run_script_communication.js
+        time:
+            end: '1602161006.381984'
+            start: '1602153801.718173'
+    instance2:
+        clusterconfig:
+            core: 4
+            image: '"ami-055df5de4f42cf331"'
+            instance: '"t2.large"'
+            master_nodes: '["master"]'
+            memory: 16
+            region: '"us-east-1"'
+            worker_nodes: '["worker1", "worker2"]'
+        function:
+            image: null
+            name: miniodbmysql
+            openfaas:
+                com.openfaas.scale.factor: 4
+                com.openfaas.scale.max: 50
+                com.openfaas.scale.min: 1
+                com.openfaas.scale.zero: true
+            store: true
+        k8: true
+        post_test:
+            data_extraction: true
+            modeling: false
+            plot: true
+        pre_test:
+            cluster_deployment: true
+            function_deployment: true
+        test:
+            function_params: '"Muthu"'
+            k6:
+                customized:
+                    stage: 120
+            test_run: k6_run_script_communication.js
+        time:
+            end: '1602169633.039588'
+            start: '1602162427.907734'
+    instance3:
+        clusterconfig:
+            core: 8
+            image: '"ami-055df5de4f42cf331"'
+            instance: '"t2.xlarge"'
+            master_nodes: '["master"]'
+            memory: 32
+            region: '"us-east-1"'
+            worker_nodes: '["worker1", "worker2"]'
+        function:
+            image: null
+            name: miniodbmysql
+            openfaas:
+                com.openfaas.scale.factor: 4
+                com.openfaas.scale.max: 50
+                com.openfaas.scale.min: 1
+                com.openfaas.scale.zero: true
+            store: true
+        k8: true
+        post_test:
+            data_extraction: true
+            modeling: false
+            plot: true
+        pre_test:
+            cluster_deployment: true
+            function_deployment: true
+        test:
+            function_params: '"Muthu"'
+            k6:
+                customized:
+                    stage: 120
+            test_run: k6_run_script_communication.js
+        time:
+            end: '1602178111.046827'
+            start: '1602170906.959528'
+    instance4:
+        clusterconfig:
+            core: 16
+            image: '"ami-055df5de4f42cf331"'
+            instance: '"t2.2xlarge"'
+            master_nodes: '["master"]'
+            memory: 64
+            region: '"us-east-1"'
+            worker_nodes: '["worker1", "worker2"]'
+        function:
+            image: null
+            name: miniodbmysql
+            openfaas:
+                com.openfaas.scale.factor: 4
+                com.openfaas.scale.max: 50
+                com.openfaas.scale.min: 1
+                com.openfaas.scale.zero: true
+            store: true
+        k8: true
+        post_test:
+            data_extraction: true
+            modeling: false
+            plot: true
+        pre_test:
+            cluster_deployment: true
+            function_deployment: true
+        test:
+            function_params: '"Muthu"'
+            k6:
+                customized:
+                    stage: 120
+            test_run: k6_run_script_communication.js
+        time:
+            end: '1602186474.653115'
+            start: '1602179270.549135'
+    instance5:
+        clusterconfig:
+            core: 4
+            image: '"ami-055df5de4f42cf331"'
+            instance: '"t2.medium"'
+            master_nodes: '["master"]'
+            memory: 8
+            region: '"us-east-1"'
+            worker_nodes: '["worker1", "worker2"]'
+        function:
+            image: null
+            name: miniodbmysql
+            openfaas:
+                com.openfaas.scale.factor: 8
+                com.openfaas.scale.max: 50
+                com.openfaas.scale.min: 1
+                com.openfaas.scale.zero: true
+            store: true
+        k8: true
+        post_test:
+            data_extraction: true
+            modeling: false
+            plot: true
+        pre_test:
+            cluster_deployment: true
+            function_deployment: true
+        test:
+            function_params: '"Muthu"'
+            k6:
+                customized:
+                    stage: 120
+            test_run: k6_run_script_communication.js
+        time:
+            end: '1602194958.128743'
+            start: '1602187751.204621'
+    instance6:
+        clusterconfig:
+            core: 4
+            image: '"ami-055df5de4f42cf331"'
+            instance: '"t2.large"'
+            master_nodes: '["master"]'
+            memory: 16
+            region: '"us-east-1"'
+            worker_nodes: '["worker1", "worker2"]'
+        function:
+            image: null
+            name: miniodbmysql
+            openfaas:
+                com.openfaas.scale.factor: 8
+                com.openfaas.scale.max: 50
+                com.openfaas.scale.min: 1
+                com.openfaas.scale.zero: true
+            store: true
+        k8: true
+        post_test:
+            data_extraction: true
+            modeling: false
+            plot: true
+        pre_test:
+            cluster_deployment: true
+            function_deployment: true
+        test:
+            function_params: '"Muthu"'
+            k6:
+                customized:
+                    stage: 120
+            test_run: k6_run_script_communication.js
+        time:
+            end: '1602203650.417508'
+            start: '1602196446.366634'
+    instance7:
+        clusterconfig:
+            core: 8
+            image: '"ami-055df5de4f42cf331"'
+            instance: '"t2.xlarge"'
+            master_nodes: '["master"]'
+            memory: 32
+            region: '"us-east-1"'
+            worker_nodes: '["worker1", "worker2"]'
+        function:
+            image: null
+            name: miniodbmysql
+            openfaas:
+                com.openfaas.scale.factor: 8
+                com.openfaas.scale.max: 50
+                com.openfaas.scale.min: 1
+                com.openfaas.scale.zero: true
+            store: true
+        k8: true
+        post_test:
+            data_extraction: true
+            modeling: false
+            plot: true
+        pre_test:
+            cluster_deployment: true
+            function_deployment: true
+        test:
+            function_params: '"Muthu"'
+            k6:
+                customized:
+                    stage: 120
+            test_run: k6_run_script_communication.js
+        time:
+            end: '1602211989.581206'
+            start: '1602204785.814748'
+    instance8:
+        clusterconfig:
+            core: 16
+            image: '"ami-055df5de4f42cf331"'
+            instance: '"t2.2xlarge"'
+            master_nodes: '["master"]'
+            memory: 64
+            region: '"us-east-1"'
+            worker_nodes: '["worker1", "worker2"]'
+        function:
+            image: null
+            name: miniodbmysql
+            openfaas:
+                com.openfaas.scale.factor: 8
+                com.openfaas.scale.max: 50
+                com.openfaas.scale.min: 1
+                com.openfaas.scale.zero: true
+            store: true
+        k8: true
+        post_test:
+            data_extraction: true
+            modeling: false
+            plot: true
+        pre_test:
+            cluster_deployment: true
+            function_deployment: true
+        test:
+            function_params: '"Muthu"'
+            k6:
+                customized:
+                    stage: 120
+            test_run: k6_run_script_communication.js
+        time:
+            end: '1602220361.498281'
+            start: '1602213157.495378'
+prometheus:
+    api: api/v1/query_range?query=
+    host: 138.246.234.122
+    port: 9090
+query:
+    cpu:
+        formatter: 16
+        name: cpu
+        percent: 50
+        query: sum(rate(container_cpu_usage_seconds_total{container=~%22
+        query1: '%22}[1m]))%2F'
+        query_split: true
+        step: 15
+    diskio:
+        formatter: ''
+        name: diskio
+        percent: ''
+        query: rate(node_disk_io_time_seconds_total%7Bjob%3D%22node-exporter%22%2C%20device%3D~%22nvme.%2B%7Crbd.%2B%7Csd.%2B%7Cvd.%2B%7Cxvd.%2B%7Cdm-.%2B%7Cdasd.%2B%22%7D%5B60s%5D)
+        query_split: false
+        step: 15
+    diskioRead:
+        formatter: ''
+        name: diskioRead
+        percent: ''
+        query: rate(node_disk_read_bytes_total%7Bjob%3D%22node-exporter%22%2C%20device%3D~%22nvme.%2B%7Crbd.%2B%7Csd.%2B%7Cvd.%2B%7Cxvd.%2B%7Cdm-.%2B%7Cdasd.%2B%22%7D%5B60s%5D)
+        query_split: false
+        step: 15
+    diskioWritten:
+        formatter: ''
+        name: diskioWritten
+        percent: ''
+        query: rate(node_disk_written_bytes_total%7Bjob%3D%22node-exporter%22%2C%20device%3D~%22nvme.%2B%7Crbd.%2B%7Csd.%2B%7Cvd.%2B%7Cxvd.%2B%7Cdm-.%2B%7Cdasd.%2B%22%7D%5B60s%5D)
+        query_split: false
+        step: 15
+    mem:
+        formatter: 68719476736
+        name: mem
+        percent: 14.28
+        query: sum(container_memory_working_set_bytes{container=~%22
+        query1: '%22})%2F'
+        query_split: true
+        step: 15
+    networkReceived:
+        formatter: ''
+        name: networkReceived
+        percent: ''
+        query: rate(node_network_receive_bytes_total%7Bjob%3D%22node-exporter%22%2C%20device%3D%22eth0%22%7D%5B60s%5D)
+        query_split: false
+        step: 15
+    networkTransmitted:
+        formatter: ''
+        name: networkTransmitted
+        percent: ''
+        query: rate(node_network_transmit_bytes_total%7Bjob%3D%22node-exporter%22%2C%20device%3D%22eth0%22%7D%5B60s%5D)
+        query_split: false
+        step: 15
+    replica:
+        formatter: ''
+        name: replica
+        percent: ''
+        query: gateway_service_count
+        query_split: false
+        step: 15
+    requests:
+        formatter: ''
+        name: requests
+        percent: 1.66
+        query: sum(sum_over_time(http_reqs%5B1m%5D))
+        query_split: false
+        step: 15
+    responsetime:
+        formatter: ''
+        name: responsetime
+        percent: 1.66
+        query: max(http_req_duration)%2F1000
+        query_split: false
+        step: 15
+    totalcpu:
+        formatter: ''
+        name: totalcpu
+        percent: ''
+        query: sum(instance:node_num_cpu:sum)
+        query_split: false
+        step: 15
+    totalcpuUtilization:
+        formatter: ''
+        name: totalcpuUtilization
+        percent: ''
+        query: sum(instance%3Anode_cpu_utilisation%3Arate1m%7Bjob%3D%22node-exporter%22%7D)%2F2*100
+        query_split: false
+        step: 15
+    totalmemory:
+        formatter: ''
+        name: totalmemory
+        percent: ''
+        query: sum(node_memory_MemTotal_bytes)
+        query_split: false
+        step: 15
+    totalmemoryUtilization:
+        formatter: ''
+        name: totalmemoryUtilization
+        percent: ''
+        query: sum(instance%3Anode_memory_utilisation%3Aratio%7Bjob%3D%22node-exporter%22%7D)%2F2*100
+        query_split: false
+        step: 15

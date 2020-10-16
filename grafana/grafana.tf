@@ -1,5 +1,5 @@
 locals {
-  json_data = jsondecode(file("../terraform/config.json"))
+  json_data = jsondecode(file("../config.json"))
 }
 
 provider "grafana" {
