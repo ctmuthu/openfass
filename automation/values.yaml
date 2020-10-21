@@ -4,7 +4,7 @@ database:
     password: admin
     port: 8086
     username: admin
-master_ip: 54.162.222.47
+master_ip: 35.175.64.204
 model_functions:
     instance1:
         clusterconfig:
@@ -17,7 +17,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: miniodb
+            name: nodeinfo
             openfaas:
                 com.openfaas.scale.factor: 4
                 com.openfaas.scale.max: 50
@@ -37,10 +37,10 @@ model_functions:
             k6:
                 customized:
                     stage: 120
-            test_run: k6_run_script_communication.js
+            test_run: k6_run_script.js
         time:
-            end: '1602161006.381984'
-            start: '1602153801.718173'
+            end: '1602707170.856473'
+            start: '1602699966.194157'
     instance2:
         clusterconfig:
             core: 4
@@ -52,7 +52,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: miniodb
+            name: nodeinfo
             openfaas:
                 com.openfaas.scale.factor: 4
                 com.openfaas.scale.max: 50
@@ -72,10 +72,10 @@ model_functions:
             k6:
                 customized:
                     stage: 120
-            test_run: k6_run_script_communication.js
+            test_run: k6_run_script.js
         time:
-            end: '1602169633.039588'
-            start: '1602162427.907734'
+            end: '1602715538.185881'
+            start: '1602708333.810187'
     instance3:
         clusterconfig:
             core: 8
@@ -87,7 +87,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: miniodb
+            name: nodeinfo
             openfaas:
                 com.openfaas.scale.factor: 4
                 com.openfaas.scale.max: 50
@@ -107,10 +107,10 @@ model_functions:
             k6:
                 customized:
                     stage: 120
-            test_run: k6_run_script_communication.js
+            test_run: k6_run_script.js
         time:
-            end: '1602178111.046827'
-            start: '1602170906.959528'
+            end: '1602723829.49938'
+            start: '1602716625.57997'
     instance4:
         clusterconfig:
             core: 16
@@ -122,7 +122,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: miniodb
+            name: nodeinfo
             openfaas:
                 com.openfaas.scale.factor: 4
                 com.openfaas.scale.max: 50
@@ -142,10 +142,10 @@ model_functions:
             k6:
                 customized:
                     stage: 120
-            test_run: k6_run_script_communication.js
+            test_run: k6_run_script.js
         time:
-            end: '1602186474.653115'
-            start: '1602179270.549135'
+            end: '1602732103.634097'
+            start: '1602724899.192132'
     instance5:
         clusterconfig:
             core: 4
@@ -157,7 +157,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: miniodb
+            name: nodeinfo
             openfaas:
                 com.openfaas.scale.factor: 8
                 com.openfaas.scale.max: 50
@@ -177,10 +177,10 @@ model_functions:
             k6:
                 customized:
                     stage: 120
-            test_run: k6_run_script_communication.js
+            test_run: k6_run_script.js
         time:
-            end: '1602194958.128743'
-            start: '1602187751.204621'
+            end: '1602740461.681522'
+            start: '1602733257.664576'
     instance6:
         clusterconfig:
             core: 4
@@ -192,7 +192,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: miniodb
+            name: nodeinfo
             openfaas:
                 com.openfaas.scale.factor: 8
                 com.openfaas.scale.max: 50
@@ -212,10 +212,10 @@ model_functions:
             k6:
                 customized:
                     stage: 120
-            test_run: k6_run_script_communication.js
+            test_run: k6_run_script.js
         time:
-            end: '1602203650.417508'
-            start: '1602196446.366634'
+            end: '1602748830.740555'
+            start: '1602741626.738945'
     instance7:
         clusterconfig:
             core: 8
@@ -227,7 +227,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: miniodb
+            name: nodeinfo
             openfaas:
                 com.openfaas.scale.factor: 8
                 com.openfaas.scale.max: 50
@@ -247,10 +247,10 @@ model_functions:
             k6:
                 customized:
                     stage: 120
-            test_run: k6_run_script_communication.js
+            test_run: k6_run_script.js
         time:
-            end: '1602211989.581206'
-            start: '1602204785.814748'
+            end: '1602757116.25229'
+            start: '1602749912.020531'
     instance8:
         clusterconfig:
             core: 16
@@ -262,7 +262,7 @@ model_functions:
             worker_nodes: '["worker1", "worker2"]'
         function:
             image: null
-            name: miniodb
+            name: nodeinfo
             openfaas:
                 com.openfaas.scale.factor: 8
                 com.openfaas.scale.max: 50
@@ -282,10 +282,10 @@ model_functions:
             k6:
                 customized:
                     stage: 120
-            test_run: k6_run_script_communication.js
+            test_run: k6_run_script.js
         time:
-            end: '1602220361.498281'
-            start: '1602213157.495378'
+            end: '1602765395.334076'
+            start: '1602758191.057124'
 prometheus:
     api: api/v1/query_range?query=
     host: 138.246.234.122
