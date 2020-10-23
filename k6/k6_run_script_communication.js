@@ -8,5 +8,5 @@ export default function() {
     check(r, {
         'status is 200': r => r.status === 200,
     });
-    sleep(10)
+    sleep(20)
 }
