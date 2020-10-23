@@ -37,7 +37,7 @@ model_functions:
             k6:
                 customized:
                     stage: 120
-            test_run: k6_run_script.js
+            test_run: k6_run_script_communication.js
         time:
             end: '1602707170.856473'
             start: '1602699966.194157'
@@ -72,7 +72,7 @@ model_functions:
             k6:
                 customized:
                     stage: 120
-            test_run: k6_run_script.js
+            test_run: k6_run_script_communication.js
         time:
             end: '1602715538.185881'
             start: '1602708333.810187'
@@ -107,7 +107,7 @@ model_functions:
             k6:
                 customized:
                     stage: 120
-            test_run: k6_run_script.js
+            test_run: k6_run_script_communication.js
         time:
             end: '1602723829.49938'
             start: '1602716625.57997'
@@ -142,7 +142,7 @@ model_functions:
             k6:
                 customized:
                     stage: 120
-            test_run: k6_run_script.js
+            test_run: k6_run_script_communication.js
         time:
             end: '1602732103.634097'
             start: '1602724899.192132'
@@ -177,7 +177,7 @@ model_functions:
             k6:
                 customized:
                     stage: 120
-            test_run: k6_run_script.js
+            test_run: k6_run_script_communication.js
         time:
             end: '1602740461.681522'
             start: '1602733257.664576'
@@ -212,7 +212,7 @@ model_functions:
             k6:
                 customized:
                     stage: 120
-            test_run: k6_run_script.js
+            test_run: k6_run_script_communication.js
         time:
             end: '1602748830.740555'
             start: '1602741626.738945'
@@ -247,7 +247,7 @@ model_functions:
             k6:
                 customized:
                     stage: 120
-            test_run: k6_run_script.js
+            test_run: k6_run_script_communication.js
         time:
             end: '1602757116.25229'
             start: '1602749912.020531'
@@ -282,7 +282,7 @@ model_functions:
             k6:
                 customized:
                     stage: 120
-            test_run: k6_run_script.js
+            test_run: k6_run_script_communication.js
         time:
             end: '1602765395.334076'
             start: '1602758191.057124'
