@@ -126,10 +126,15 @@ class Deployment:
         if (function["name"] == "mydb"):
             self.ssh("cd mysql-function-openfaas/ && kubectl create secret generic secret-mysql-key --from-file=secret-mysql-key=$HOME/secrets/secret_mysql_key.txt --namespace openfaas-fn && faas-cli template pull")
             function_deployment = "cd mysql-function-openfaas/ && sudo faas deploy"
-        if (function["name"] == "miniodbmysql"):
+        if (function["name"] == "miniodbmysql" or function["name"] == "queryfunction"):
             self.ssh("cd mysql-side/ && kubectl create secret generic secret-mysql-key --from-file=secret-mysql-key=$HOME/secrets/secret_mysql_key.txt --namespace openfaas-fn && faas-cli template pull")
             function_deployment = "cd mysql-side/ && sudo faas deploy"
-        if (function["name"] == "miniodb"):
+            if (function["name"] == "queryfunction"):
+                for label in function["openfaas"]:
+                    function_deployment += " --label '" + label + "=" + str(function["openfaas"][label]) + "'"
+                cmd = function_deployment
+                self.ssh(cmd)
+        if (function["name"] == "miniodb" or function["name"] == "queryfunction"):
             function_deployment = "cd minio/ && faas-cli template pull && sudo faas deploy"
         function_deployment += " --gateway http://127.0.0.1:31112"
         for label in function["openfaas"]:
@@ -138,6 +143,12 @@ class Deployment:
         self.ssh(cmd)
         if (function["name"] == "miniodbmysql"):
             function_deployment = "sh scripts/miniodbmysql.sh && cd miniodbmysql/ && sudo faas deploy"
+            for label in function["openfaas"]:
+                function_deployment += " --label '" + label + "=" + str(function["openfaas"][label]) + "'"
+            cmd = function_deployment
+            self.ssh(cmd)
+        if (function["name"] == "queryfunction"):
+            function_deployment = "sh scripts/queryfunction.sh && cd queryfunction/ && sudo faas deploy"
             for label in function["openfaas"]:
                 function_deployment += " --label '" + label + "=" + str(function["openfaas"][label]) + "'"
             cmd = function_deployment
