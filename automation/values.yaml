@@ -4,7 +4,11 @@ database:
     password: admin
     port: 8086
     username: admin
-master_ip: 35.175.64.204
+master_ip: 34.207.134.53
+model:
+    generate: true
+    patience: 0
+    sla: 10
 model_functions:
     instance1:
         clusterconfig:
@@ -27,11 +31,10 @@ model_functions:
         k8: true
         post_test:
             data_extraction: true
-            modeling: false
             plot: true
         pre_test:
-            cluster_deployment: true
-            function_deployment: true
+            cluster_deployment: false
+            function_deployment: false
         test:
             function_params: '"Muthu"'
             k6:
@@ -39,8 +42,9 @@ model_functions:
                     stage: 120
             test_run: k6_run_script_communication.js
         time:
-            end: '1602707170.856473'
-            start: '1602699966.194157'
+            end: '1603474922.497634'
+            start: '1603467712.338004'
+        training: true
     instance2:
         clusterconfig:
             core: 4
@@ -62,11 +66,10 @@ model_functions:
         k8: true
         post_test:
             data_extraction: true
-            modeling: false
             plot: true
         pre_test:
-            cluster_deployment: true
-            function_deployment: true
+            cluster_deployment: false
+            function_deployment: false
         test:
             function_params: '"Muthu"'
             k6:
@@ -74,8 +77,9 @@ model_functions:
                     stage: 120
             test_run: k6_run_script_communication.js
         time:
-            end: '1602715538.185881'
-            start: '1602708333.810187'
+            end: '1603483457.072827'
+            start: '1603476248.639444'
+        training: true
     instance3:
         clusterconfig:
             core: 8
@@ -97,11 +101,10 @@ model_functions:
         k8: true
         post_test:
             data_extraction: true
-            modeling: false
             plot: true
         pre_test:
-            cluster_deployment: true
-            function_deployment: true
+            cluster_deployment: false
+            function_deployment: false
         test:
             function_params: '"Muthu"'
             k6:
@@ -109,8 +112,9 @@ model_functions:
                     stage: 120
             test_run: k6_run_script_communication.js
         time:
-            end: '1602723829.49938'
-            start: '1602716625.57997'
+            end: '1603491902.716179'
+            start: '1603484693.77076'
+        training: true
     instance4:
         clusterconfig:
             core: 16
@@ -132,11 +136,10 @@ model_functions:
         k8: true
         post_test:
             data_extraction: true
-            modeling: false
             plot: true
         pre_test:
-            cluster_deployment: true
-            function_deployment: true
+            cluster_deployment: false
+            function_deployment: false
         test:
             function_params: '"Muthu"'
             k6:
@@ -144,8 +147,9 @@ model_functions:
                     stage: 120
             test_run: k6_run_script_communication.js
         time:
-            end: '1602732103.634097'
-            start: '1602724899.192132'
+            end: '1603500317.374679'
+            start: '1603493108.139289'
+        training: true
     instance5:
         clusterconfig:
             core: 4
@@ -167,11 +171,10 @@ model_functions:
         k8: true
         post_test:
             data_extraction: true
-            modeling: false
             plot: true
         pre_test:
-            cluster_deployment: true
-            function_deployment: true
+            cluster_deployment: false
+            function_deployment: false
         test:
             function_params: '"Muthu"'
             k6:
@@ -179,8 +182,9 @@ model_functions:
                     stage: 120
             test_run: k6_run_script_communication.js
         time:
-            end: '1602740461.681522'
-            start: '1602733257.664576'
+            end: '1603508774.308767'
+            start: '1603501565.571048'
+        training: true
     instance6:
         clusterconfig:
             core: 4
@@ -202,11 +206,10 @@ model_functions:
         k8: true
         post_test:
             data_extraction: true
-            modeling: false
             plot: true
         pre_test:
-            cluster_deployment: true
-            function_deployment: true
+            cluster_deployment: false
+            function_deployment: false
         test:
             function_params: '"Muthu"'
             k6:
@@ -214,8 +217,9 @@ model_functions:
                     stage: 120
             test_run: k6_run_script_communication.js
         time:
-            end: '1602748830.740555'
-            start: '1602741626.738945'
+            end: '1603517341.698258'
+            start: '1603510133.267384'
+        training: true
     instance7:
         clusterconfig:
             core: 8
@@ -237,11 +241,10 @@ model_functions:
         k8: true
         post_test:
             data_extraction: true
-            modeling: false
             plot: true
         pre_test:
-            cluster_deployment: true
-            function_deployment: true
+            cluster_deployment: false
+            function_deployment: false
         test:
             function_params: '"Muthu"'
             k6:
@@ -249,8 +252,9 @@ model_functions:
                     stage: 120
             test_run: k6_run_script_communication.js
         time:
-            end: '1602757116.25229'
-            start: '1602749912.020531'
+            end: '1603525859.049361'
+            start: '1603518650.008921'
+        training: true
     instance8:
         clusterconfig:
             core: 16
@@ -272,11 +276,10 @@ model_functions:
         k8: true
         post_test:
             data_extraction: true
-            modeling: false
             plot: true
         pre_test:
-            cluster_deployment: true
-            function_deployment: true
+            cluster_deployment: false
+            function_deployment: false
         test:
             function_params: '"Muthu"'
             k6:
@@ -284,8 +287,9 @@ model_functions:
                     stage: 120
             test_run: k6_run_script_communication.js
         time:
-            end: '1602765395.334076'
-            start: '1602758191.057124'
+            end: '1603534264.244697'
+            start: '1603527055.595322'
+        training: false
 prometheus:
     api: api/v1/query_range?query=
     host: 138.246.234.122

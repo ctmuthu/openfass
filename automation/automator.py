@@ -11,6 +11,16 @@ import statsmodels.api as sm
 from sklearn import linear_model
 from pylab import rcParams
 import telegram
+import numpy as np
+import seaborn as sns
+np.set_printoptions(precision=3, suppress=True)
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras import layers
+from tensorflow.keras.layers.experimental import preprocessing
+from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import KFold
+from sklearn.metrics import r2_score
 
 
 class Deployment:
@@ -50,7 +60,10 @@ class Deployment:
             #    self.model()
             if (self.instance["pre_test"]["cluster_deployment"]):
                 self.destroy_cluster()
-            self.telegram_send()
+        self.mergeallcsv()
+        if (self.datastore["model"]["generate"]):
+            self.model()
+        self.telegram_send()
 
     def update_tfvars_file(self):
         if (self.instance["k8"]):
@@ -221,7 +234,10 @@ class Deployment:
             # print(receive.json())
             self.data_formatter(receive.json(), self.datastore["query"][i]["name"])
         filename = self.instance["function"]["name"] + self.instance["time"]["start"] + "_" + self.instance["time"]["end"] + ".csv"
-        self.df.to_csv(os.path.join(self.output_dir, filename), index=True)
+        if(self.instance["training"] is True):
+            self.df.to_csv(os.path.join(self.output_dir, "training",filename), index=True)
+        else:
+            self.df.to_csv(os.path.join(self.output_dir, "testing", filename), index=True)
 
     def data_formatter(self, result, column):
         # print(result["data"]["result"][0]["values"])
@@ -267,7 +283,10 @@ class Deployment:
         fig = plt.subplots()
         #print(self.df.columns)
         filename = self.instance["function"]["name"] + self.instance["time"]["start"] + "_" + self.instance["time"]["end"] + ".csv"
-        self.df = pd.read_csv(os.path.join(self.output_dir, filename))
+        if(self.instance["training"] is True):
+            self.df = pd.read_csv(os.path.join(self.output_dir, "training", filename))
+        else:
+            self.df = pd.read_csv(os.path.join(self.output_dir, "testing", filename))
         #self.df.set_index("Time", inplace = True)
         if len(self.df.columns) <= 4:
             fig, axs = plt.subplots(2, 2)
@@ -280,32 +299,158 @@ class Deployment:
         for col, ax in zip(range(1,len(self.df.columns)), axs.flatten()):
             ax.plot(self.df.index,self.df[self.df.columns[col]])
             ax.set_title(self.df.columns[col])
+        fig.delaxes(axs[3][2])
+        fig.delaxes(axs[3][3])
         filename = "updated" + self.instance["function"]["name"] + self.instance["time"]["start"] + "_" + self.instance["time"]["end"] + ".png"
         #plt.show()
-        plt.savefig(os.path.join(self.output_dir, filename))
+        if(self.instance["training"] is True):
+            plt.savefig(os.path.join(self.output_dir, "training", filename))
+        else:
+            plt.savefig(os.path.join(self.output_dir, "testing", filename))
 
     def model(self):
-        X = self.df[['cpu','mem']] 
-        Y = self.df['responsetime']
-        regr = linear_model.LinearRegression()
-        regr.fit(X, Y)
-        print('Intercept: \n', regr.intercept_)
-        print('Coefficients: \n', regr.coef_)
-        X = sm.add_constant(X)
-        model = sm.OLS(Y, X).fit()
-        predictions = model.predict(X) 
-        print_model = model.summary()
-        print(print_model)
-        filename = self.instance["function"]["name"] + self.instance["time"]["start"] + "_" + self.instance["time"]["end"] + "_model.txt"
-        file = open(os.path.join(self.output_dir, filename), "w")
-        file.write(str(print_model))
-        file.close()
+        df = pd.read_csv(os.path.join(self.output_dir, "training", "combined_" + self.instance["function"]["name"] + "training.csv"))
+        df_test = pd.read_csv(os.path.join(self.output_dir, "testing" , "combined_" + self.instance["function"]["name"] + "testing.csv"))
+        df = df.drop(df[df.responsetime > self.datastore["model"]["sla"]].index)
+        df.pop('Time')
+        df_test = df_test.drop(df_test[df_test.responsetime > self.datastore["model"]["sla"]].index)
+        df_test.pop('Time')
+        df = df.drop(df[df.totalcpu > 16].index)
+        df_t = pd.DataFrame()
+        df_ttest = pd.DataFrame()
+        # training data
+        df_t['total_cpu_util'] = (df['totalcpuUtilization']*(df['totalcpu']*0.67))/100                    
+        df_t['total_mem_util'] = (df['totalmemoryUtilization']*df['totalmemory'])*1e-9
+        df_t['responsetime'] = df['responsetime']
+        df_t['requests'] = df['requests']
+        # testing data
+        df_ttest['total_cpu_util'] = (df_test['totalcpuUtilization']*(df_test['totalcpu']*0.67))/100
+        df_ttest['total_mem_util'] = (df_test['totalmemoryUtilization']*df_test['totalmemory'])*1e-9
+        df_ttest['responsetime'] = df_test['responsetime']
+        df_ttest['requests'] = df_test['requests']
+        df_t = pd.get_dummies(df_t, prefix='', prefix_sep='')
+        i = 0
+        test_dataset = df_ttest
+        test_features = test_dataset.copy()
+        test_labels = test_features.pop('requests')
+        loss, score, model = [], [], []
+        # k fold
+        callback = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=self.datastore["model"]["patience"])
+        X = df_t.loc[:,['total_cpu_util','total_mem_util', 'responsetime']].values
+        y = df_t.loc[:,['requests']].values
+        kf = KFold(n_splits=6, random_state=42, shuffle=True)
+        for train_index, test_index in kf.split(X):
+            #print("TRAIN:", train_index, "TEST:", test_index)
+            train_features, val_features = X[train_index], X[test_index]
+            train_labels, val_labels = y[train_index], y[test_index]
+
+        # Divide dataset
+        #train_dataset = df_t.sample(frac=0.8, random_state=0)
+        #val_dataset = df_t.drop(train_dataset.index)
+        #test_dataset = df_ttest
+
+        #train_features = train_dataset.copy()
+        #val_features = val_dataset.copy()
+        #test_features = test_dataset.copy()
+
+        # Create labels
+        #train_labels = train_features.pop('requests')
+        #val_labels = val_features.pop('requests')
+        #test_labels = test_features.pop('requests')
+
+        # Normalization
+            input = np.array(train_features)
+            input_normalizer = preprocessing.Normalization(input_shape=[3,])
+            input_normalizer.adapt(input)
+
+        # Create Model
+            dnn_model = None
+            dnn_model = self.build_and_compile_model(input_normalizer)
+
+            print(dnn_model.summary())
+            self.modelname = 'dnn_model_'+str(i)
+
+            history = dnn_model.fit(
+                train_features, train_labels,
+                validation_split=0.2,
+                verbose=0, epochs=3000,callbacks=[callback])
+            #print(history)
+            self.plot_loss(history)
+            loss.append(dnn_model.evaluate(val_features, val_labels,verbose=0))
+            ## Make Predictions
+            test_predictions = dnn_model.predict(test_features).flatten()
+
+            self.plot_prediction(test_labels, test_predictions)
+            R = r2_score(test_labels, test_predictions)*100
+            model.append('dnn_model_'+str(i))
+            score.append(R)
+            i = i+1
+            #test_results['dnn_model_'+str(i)] = [dnn_model.evaluate(
+            #    val_features, val_labels,
+            #    verbose=0), R]
+        model = np.array(model)
+        score = np.array(score)
+        loss = np.array(loss)
+        data = np.array([model, loss, score]).T
+        data = pd.DataFrame(data,columns=["model", "loss", "score"])
+        filename = "model" +self.instance["function"]["name"]  + ".csv"
+        data.to_csv(os.path.join(self.output_dir, "model",filename), index=True)
+    
+    def plot_loss(self, history):
+        plot_loss = plt.axes()
+        plot_loss.plot(history.history['loss'], label='loss')
+        plot_loss.plot(history.history['val_loss'], label='val_loss')
+        plot_loss.set_ylim([0, max(history.history['loss']+history.history['val_loss'])+100])
+        plot_loss.set_xlabel('Epoch')
+        plot_loss.set_ylabel('Error [requests]')
+        plot_loss.legend()
+        plot_loss.grid(True)
+        plt.savefig(os.path.join(self.output_dir, "model", self.modelname+"loss.png"))
+
+    def plot_prediction(self, test_labels, test_predictions):
+        plot_prediction = plt.axes(aspect='equal')
+        #a = plot_prediction.axes(aspect='equal')
+        plot_prediction.scatter(test_labels, test_predictions)
+        plot_prediction.set_xlabel('True Values requests')
+        plot_prediction.set_ylabel('Predictions requests')
+        lims = [0, max(list(test_labels)+list(test_predictions))+100]
+        plot_prediction.set_xlim(lims)
+        plot_prediction.set_ylim(lims)
+        #_ = plot_prediction.plot(lims, lims)
+        plt.savefig(os.path.join(self.output_dir, "model", self.modelname+"prediction.png"))
+
+    def build_and_compile_model(self, norm):
+        model = None
+        model = keras.Sequential([
+            norm,
+            layers.Dense(64, activation='relu',name="dense_one"),
+            layers.Dense(64, activation='relu',name="dense_two"),
+            layers.Dense(1,name="dense_three")
+        ])
+
+        model.compile(loss='mean_absolute_error',
+                        optimizer=tf.keras.optimizers.Adam(0.001))
+        return model
 
     def write_to_json(self):
         os.remove(os.path.join(self.automation_dir, self.value))
         self.datafile = open(os.path.join(self.automation_dir, self.value), "w")
         yaml.dump(self.datastore, self.datafile, indent=4)
         self.datafile.close()
+
+    def mergeallcsv(self):
+        dir = ["testing", "training"]
+        for dir_name in dir:
+            dir_list= []
+            for p,n,f in os.walk(os.path.join(self.output_dir, dir_name)):
+                for a in f:
+                    a = str(a)
+                    if a.endswith('.csv'):
+                        dir_list.append(os.path.join(p,a))
+            combined_csv = pd.concat([pd.read_csv(f) for f in dir_list ])
+            filename= "combined_" + self.instance["function"]["name"] + dir_name + ".csv"
+            filepath=os.path.join(self.output_dir, dir_name, filename)
+            combined_csv.to_csv( filepath, index=False, encoding='utf-8-sig')
 
     def telegram_send(self, chat_id="749187782", token='1300315664:AAGxGYytlA9Dk1xnZjpF7w_qmk-2gbs_2k4'):
         bot = telegram.Bot(token=token)
@@ -316,12 +461,12 @@ class Deployment:
         os.chdir(self.cwd)
         os.system(compress)
         bot.send_document(chat_id=chat_id, document=open(os.path.join(self.cwd, filename), 'rb'))
-        for file in os.listdir(self.output_dir):
-            if '.png' in file:
-                bot.send_photo(chat_id=chat_id, photo=open(os.path.join(self.output_dir, file), 'rb'))
-            else:
-                bot.sendDocument(chat_id=chat_id, document=open(os.path.join(self.output_dir, file), 'rb'))
-        os.system("rm -rf OutputtoTelegram/*")
+        #for file in os.listdir(self.output_dir):
+        #    if '.png' in file:
+        #        bot.send_photo(chat_id=chat_id, photo=open(os.path.join(self.output_dir, file), 'rb'))
+        #    else:
+        #        bot.sendDocument(chat_id=chat_id, document=open(os.path.join(self.output_dir, file), 'rb'))
+        os.system("rm -rf OutputtoTelegram/testing/* && rm -rf OutputtoTelegram/training/* && rm -rf OutputtoTelegram/model/*")
         delete_tar = "rm -rf " + filename
         os.system(delete_tar)
 
